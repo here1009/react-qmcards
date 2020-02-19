@@ -1,25 +1,43 @@
 import React from 'react';
 import logo from './logo.svg';
+import STRUCTURE from './Structure'
+import CALCULATION from './Calculation'
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, ButtonToolbar, Container, Row, Col } from 'react-bootstrap';
+import { ButtonGroup, Tab, Nav, Dropdown } from 'react-bootstrap';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div class="App-area">
+        <Tab.Container defaultActiveKey="first">
+          <Nav variant="pills" defaultActiveKey="/home" style={{marginBottom:10}}>
+            <Nav.Item>
+              <Nav.Link href="/home" eventKey="first">Model</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="second">Calculation</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="third" disabled>Preference</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="forth" disabled>About</Nav.Link>
+            </Nav.Item>
+          </Nav>
+          <Tab.Content>
+            <Tab.Pane eventKey="first">
+              <STRUCTURE />
+            </Tab.Pane>
+            <Tab.Pane eventKey="second">
+              <CALCULATION />
+            </Tab.Pane>
+          </Tab.Content>
+        </Tab.Container>
+      </div>
     </div>
+
   );
 }
 

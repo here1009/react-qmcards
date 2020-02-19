@@ -1,0 +1,6 @@
+.modal-dialog.vesta-full-screen{
+    width:90%; 
+    height:90%;
+    background-color:blue;
+    max-width: none!important;
+}
