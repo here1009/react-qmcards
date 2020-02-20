@@ -4,3 +4,8 @@
     background-color:blue;
     max-width: none!important;
 }
+
+.card.vesta{
+    widows: 300px;
+    height: 300px;
+}

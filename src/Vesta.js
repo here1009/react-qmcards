@@ -14,17 +14,17 @@ function Vesta() {
     return (
         <div id="modal_vesta">
             <Card>
-                    <Card.Header>
-                        <Row>
-                            <Col>
-                            </Col>
-                            <Button variant="outline-warning" onClick={() => setShow(true)} id="set_btn">Zoom</Button>
-                        </Row>
+                <Card.Header>
+                    <Row>
+                        <Col>
+                        </Col>
+                        <Button variant="outline-warning" onClick={() => setShow(true)} id="set_btn">Zoom</Button>
+                    </Row>
 
-                    </Card.Header>
-                    <Card.Body>
-                        <Vesta_view></Vesta_view>
-                    </Card.Body>
+                </Card.Header>
+                <Card.Body>
+                    <Vesta_view></Vesta_view>
+                </Card.Body>
             </Card>
         </div>
     );

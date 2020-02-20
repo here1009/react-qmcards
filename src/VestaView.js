@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'VestaView.css'
+import './VestaView.css'
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { PDBLoader } from 'three/examples/jsm/loaders/PDBLoader';
@@ -10,6 +10,7 @@ import ball from './ball.png'
 var camera, scene, renderer;
 var controls;
 var root;
+var gmount;
 
 var objects = [];
 var tmpVec1 = new THREE.Vector3();
@@ -47,7 +48,7 @@ var baseSprite = document.createElement('img');
 
 function init() {
 
-    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 5000);
+    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth/gmount.clientHeight, 1, 5000);
     camera.position.z = 1000;
 
     scene = new THREE.Scene();
@@ -58,8 +59,8 @@ function init() {
     //
 
     renderer = new CSS3DRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    renderer.setSize(gmount.clientWidth, gmount.clientHeight);
+    gmount.appendChild(renderer.domElement);
 
     //
 
@@ -76,6 +77,7 @@ function init() {
 
     baseSprite.src = ball;
 
+    window.addEventListener('resize', onWindowResize, false);
     //
 }
 function showAtoms() {
@@ -373,15 +375,30 @@ function render() {
 
 }
 
+function onWindowResize() {
 
-function VestaView() {
-    return (<div>
-        <button onClick={() => {
-            init();
-            animate();
-        }}>TEST</button>
-    </div>);
+    camera.aspect = gmount.clientWidth/gmount.clientHeight;
+    camera.updateProjectionMatrix();
 
+    renderer.setSize(gmount.clientWidth, gmount.clientHeight);
+}
+
+class VestaView extends Component {
+    componentDidMount()
+    {
+        init();
+        animate();
+    }
+    render() {
+        return (
+            <div
+                class="canvas_vesta"
+                ref={(mount) => { gmount = mount }}
+            >
+
+            </div>
+        );
+    }
 }
 
 export default VestaView;
