@@ -6,7 +6,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonToolbar, Container, Row, Col } from 'react-bootstrap';
 import { ButtonGroup, Tab, Nav, Dropdown } from 'react-bootstrap';
-
+import VestaView from './VestaView'
+import Vesta from './Vesta';
 function App() {
   return (
     <div className="App">
@@ -36,6 +37,7 @@ function App() {
           </Tab.Content>
         </Tab.Container>
       </div>
+      <VestaView></VestaView>
     </div>
 
   );

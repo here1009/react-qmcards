@@ -14,10 +14,6 @@ function Structure() {
                 <Col>
                 <CardColumns>
                     <Vesta></Vesta>
-                    <Vesta></Vesta>
-                    <Vesta></Vesta>
-                    <Vesta></Vesta>
-                    <Vesta></Vesta>
                 </CardColumns>
                 </Col>
             </Row>
