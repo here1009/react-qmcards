@@ -58,7 +58,6 @@ function init() {
 
     root = new THREE.Object3D();
     scene.add(root);
-
     //
 
     renderer = new CSS3DRenderer();
@@ -212,6 +211,8 @@ function loadMolecule(url) {
         var position = new THREE.Vector3();
         var color = new THREE.Color();
 
+        var al = json.al;
+
         for (var i = 0; i < positions.count; i++) {
 
             position.x = positions.getX(i);
@@ -261,6 +262,108 @@ function loadMolecule(url) {
         var start = new THREE.Vector3();
         var end = new THREE.Vector3();
 
+        var box_positions=[
+            [0,0,0],[0,0,1],
+            [0,0,0],[0,1,0],
+            [0,0,0],[1,0,0],
+            [1,0,0],[1,1,0],
+            [1,0,0],[1,0,1],
+            [1,1,0],[0,1,0],
+            [1,1,0],[1,1,1],
+            [1,1,1],[0,1,1],
+            [1,1,1],[1,0,1],
+            [0,1,1],[0,0,1],
+            [0,1,1],[0,1,0],
+            [0,0,1],[1,0,1]
+        ];
+        for (var i=0;i<24;i+=2) {
+           var [x,y,z]=box_positions[i];
+            
+           var fx = al[0][0]*x + al[1][0]*y + al[2][0]*z;
+			var fy = al[0][1]*x + al[1][1]*y + al[2][1]*z;
+			var fz = al[0][2]*x + al[1][2]*y + al[2][2]*z;
+            
+            start.x=fx;
+            start.y=fy;
+            start.z=fz;
+
+           [x,y,z]=box_positions[i+1];
+			var fx = al[0][0]*x + al[1][0]*y + al[2][0]*z;
+			var fy = al[0][1]*x + al[1][1]*y + al[2][1]*z;
+            var fz = al[0][2]*x + al[1][2]*y + al[2][2]*z;
+
+            end.x = fx;
+            end.y = fy;
+            end.z = fz;
+
+            start.multiplyScalar(75);
+            end.multiplyScalar(75);
+
+            tmpVec1.subVectors(end, start);
+            var bondLength = tmpVec1.length()
+            //
+
+            var bond = document.createElement('div');
+            bond.className = "box-bond";
+            bond.style.height = bondLength + "px";
+
+            var object = new CSS3DObject(bond);
+            object.position.copy(start);
+            object.position.lerp(end, 0.5);
+
+            object.userData.bondLengthShort = bondLength + "px";
+            object.userData.bondLengthFull = (bondLength + 55) + "px";
+
+            //
+
+            var axis = tmpVec2.set(0, 1, 0).cross(tmpVec1);
+            var radians = Math.acos(tmpVec3.set(0, 1, 0).dot(tmpVec4.copy(tmpVec1).normalize()));
+
+            var objMatrix = new THREE.Matrix4().makeRotationAxis(axis.normalize(), radians);
+            object.matrix = objMatrix;
+            object.quaternion.setFromRotationMatrix(object.matrix);
+
+            object.matrixAutoUpdate = false;
+            object.updateMatrix();
+
+            root.add(object);
+
+            objects.push(object);
+
+            //
+
+            var bond = document.createElement('div');
+            bond.className = "box-bond";
+            bond.style.height = bondLength + "px";
+
+            var joint = new THREE.Object3D(bond);
+            joint.position.copy(start);
+            joint.position.lerp(end, 0.5);
+
+            joint.matrix.copy(objMatrix);
+            joint.quaternion.setFromRotationMatrix(joint.matrix);
+
+            joint.matrixAutoUpdate = false;
+            joint.updateMatrix();
+
+            var object = new CSS3DObject(bond);
+            object.rotation.y = Math.PI / 2;
+
+            object.matrixAutoUpdate = false;
+            object.updateMatrix();
+
+            object.userData.bondLengthShort = bondLength + "px";
+            object.userData.bondLengthFull = (bondLength + 55) + "px";
+
+            object.userData.joint = joint;
+
+            joint.add(object);
+            root.add(joint);
+
+            objects.push(object);
+
+
+        }
         for (var i = 0; i < positions.count; i += 2) {
 
             start.x = positions.getX(i);

@@ -38,6 +38,20 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 	// Based on CanvasMol PDB parser
 
 	parse: function ( text ) {
+		function check_in_atom(atoms,natom,a){
+			for(var i=0;i<natom;i++){
+				var c=[];
+				c[0] = atoms[i][0];
+				c[1] = atoms[i][1];
+				c[2] = atoms[i][2];
+				if(gen_dis(a,c)<1.e-5) {
+					return 1;
+				}
+
+			}
+			return 0;
+
+		}
 		function gen_dis_per(al, a, b) {
 			var dr = []
 			dr[0] = a[0] - b[0]
@@ -82,6 +96,19 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
 			var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
 			var dis = fx * fx + fy * fy + fz * fz;
+			dis = Math.sqrt(dis);
+			return dis;
+		}
+		function gen_dis(a, b) {
+			var dr = []
+			dr[0] = a[0] - b[0]
+			dr[1] = a[1] - b[1]
+			dr[2] = a[2] - b[2]
+			
+			var x = dr[0];
+			var y = dr[1];
+			var z = dr[2];
+			var dis = x * x + y * y + z * z;
 			dis = Math.sqrt(dis);
 			return dis;
 		}
@@ -137,7 +164,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				geometryBonds: new BufferGeometry(),
 				json: {
 					atoms: atoms,
-					bonds: bonds
+					bonds: bonds,
+					al: al
 				}
 			};
 
@@ -298,25 +326,32 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			{
 				var a = [atoms[i][6], atoms[i][7], atoms[i][8]];
 				var b = [atoms[j][6], atoms[j][7], atoms[j][8]];
+				dis_bond = 1.2*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
 				//
 				for (var ii = -1; ii < 1; ii++) {
 					for (var jj = -1; jj < 1; jj++) {
 						for (var kk = -1; kk < 1; kk++) {
+							if(ii==0 && jj==0 && kk==0) {
+								continue;
+							}
+							var pb = [];
+							pb[0]=b[0]+ii;
+							pb[1]=b[1]+jj;
+							pb[2]=b[2]+kk;
+							dis=gen_dis_dir(al,a,pb);
+							if(dis<=dis_bond){
+								var fx = al[0][0] * pb[0] + al[1][0] * pb[1] + al[2][0] * pb[2];
+								var fy = al[0][1] * pb[0] + al[1][1] * pb[1] + al[2][1] * pb[2];
+								var fz = al[0][2] * pb[0] + al[1][2] * pb[1] + al[2][2] * pb[2];
+								var ff=[fx,fy,fz];
+								if(check_in_atom(atoms,matom,ff)==0) {
+									atoms[matom] = [fx, fy, fz, atoms[j][3], atoms[j][4], atoms[j][5], pb[0], pb[1], pb[2]];
+									matom = matom + 1;
+								}
+							}
 
 						}
 					}
-				}
-				//
-				dis = gen_dis_dir(al, a, b);
-				[dis_per,c,fc]= gen_dis_per(al,a,b);
-				dis_bond = 1.2*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
-				if (dis <= dis_bond) {
-					
-				}else if(dis_per<=dis_bond){
-					atoms[matom] = [fc[0], fc[1], fc[2], atoms[j][3], atoms[j][4], atoms[j][5], c[0], c[1], c[2]];
-					eatom = matom;
-					var h = hash(satom, eatom);
-					matom=matom+1;
 				}
 			}
 		}
@@ -334,9 +369,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			var fc=[];
 			for (var j = i+1; j < natom; j ++)
 			{
-				var a = [atoms[i][6], atoms[i][7], atoms[i][8]];
-				var b = [atoms[j][6], atoms[j][7], atoms[j][8]];
-				dis = gen_dis_dir(al, a, b);
+				var a = [atoms[i][0], atoms[i][1], atoms[i][2]];
+				var b = [atoms[j][0], atoms[j][1], atoms[j][2]];
+				dis = gen_dis(a, b);
 				dis_bond = 1.2*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
 				if (dis <= dis_bond) {
 					eatom = j + 1;

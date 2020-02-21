@@ -48,3 +48,9 @@ button {
     background: #eee;
     display: block;
 }
+.box-bond {
+    width: 5px;
+    height: 10px;
+    background:#0000ff;
+    display: block;
+}
