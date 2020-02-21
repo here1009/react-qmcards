@@ -7,8 +7,8 @@ import { ButtonGroup, Tab, Nav } from 'react-bootstrap';
 function Calculation() {
     return (
         <div>
-            <div class="App-area">
-                <span>计算</span>
+            <div className="App-area">
+                <span>Calculation</span>
             </div>
         </div>
 

@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import './VestaView.css'
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
-import { PDBLoader } from 'three/examples/jsm/loaders/PDBLoader';
+//import { PDBLoader } from 'three/examples/jsm/loaders/PDBLoader';
+import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import Caf from './caffeine.pdb'
-import ball from './ball.png'
+import Caf from './caffeine.pdb';
+import NB from './c2.config';
+import ATOM from './atom.config';
+import ball from './ball.png';
 
 var camera, scene, renderer;
 var controls;
@@ -42,7 +45,7 @@ var MOLECULES = {
     "Graphite": "graphite.pdb"
 };
 
-var loader = new PDBLoader();
+var loader = new ATOMCONFIGLoader();
 var colorSpriteMap = {};
 var baseSprite = document.createElement('img');
 
@@ -71,7 +74,8 @@ function init() {
 
     baseSprite.onload = function () {
 
-        loadMolecule(Caf);
+        //loadMolecule(Caf);
+        loadMolecule(ATOM);
 
     };
 
@@ -392,7 +396,7 @@ class VestaView extends Component {
     render() {
         return (
             <div
-                class="canvas_vesta"
+                className="canvas_vesta"
                 ref={(mount) => { gmount = mount }}
             >
 

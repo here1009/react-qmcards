@@ -10,7 +10,7 @@ import Vesta from './Vesta';
 function App() {
   return (
     <div className="App">
-      <div class="App-area">
+      <div className="App-area">
         <Tab.Container defaultActiveKey="first">
           <Nav variant="pills" defaultActiveKey="/home" style={{marginBottom:10}}>
             <Nav.Item>
