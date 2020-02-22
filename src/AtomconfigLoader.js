@@ -177,12 +177,25 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			return 0;
 
 		}
+		function per_dr(a){
+			var dr=[];
+			dr=a.slice();
+			for (var i = 0; i < 3; i++) {
+				while (dr[i] > 1.0) {
+					dr[i] = dr[i] - 1.0;
+				}
+				while (dr[i] < -0.0) {
+					dr[i] = dr[i] + 1.0;
+				}
+			}
+			return dr;
+		}
 		function gen_dis_per(al, a, b) {
 			var dr = []
 			dr[0] = a[0] - b[0]
 			dr[1] = a[1] - b[1]
 			dr[2] = a[2] - b[2]
-			for (var i = 0; i < 2; i++) {
+			for (var i = 0; i < 3; i++) {
 				while (dr[i] > 0.5) {
 					dr[i] = dr[i] - 1.0;
 				}
@@ -418,6 +431,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			x = parseFloat(alline[1]);
 			y = parseFloat(alline[2]);
 			z = parseFloat(alline[3]);
+			var tmp=[x,y,z];
+			[x,y,z]=per_dr(tmp);
+			console.log([x,y,z]);
 			
 			var fx = al[0][0]*x + al[1][0]*y + al[2][0]*z;
 			var fy = al[0][1]*x + al[1][1]*y + al[2][1]*z;
@@ -517,7 +533,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var a = [atoms[i][0], atoms[i][1], atoms[i][2]];
 				var b = [atoms[j][0], atoms[j][1], atoms[j][2]];
 				dis = gen_dis(a, b);
-				dis_bond = 1.1*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
+				dis_bond = 0.9*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
 				if (dis <= dis_bond) {
 					eatom = j + 1;
 					var h = hash(satom, eatom);
