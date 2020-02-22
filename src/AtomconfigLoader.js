@@ -97,7 +97,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			var f=dot_product(n,b);
 			return f;
 		}
-		function check_in_box(al,p){
+		function check_in_box_wrong(al,p){
 			var tol=1.e-5;
 			for (var i=0;i<3;i++){
 				if(Math.abs(p[i])<=tol){
@@ -487,6 +487,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		//atoms=big_atoms.slice();
 		//natom=big_natom;
 		//al=big_al.slice();
+		//big_atoms=atoms.slice();
+		//big_natom=natom;
+		//big_al=al.slice();
 
 		//cut cell
 		atoms=[];
@@ -496,25 +499,35 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			al[0][1] + al[1][1] + al[2][1],
 			al[0][2] + al[1][2] + al[2][2]
 		];
+		var sp=[0.3333333,0.33333333,0.3333333];
+		var fsp=matmul(big_al,sp);
+		var dal=[
+			[1,0,0],
+			[0,1,0],
+			[0,0,1]
+		];
 		for(var i=0;i<big_natom;i++){
 			var patom=big_atoms[i].slice();
-			var xp=[patom[0],patom[1],patom[2]];
-			xp[0]=xp[0]-sp[0];
-			xp[1]=xp[1]-sp[1];
-			xp[2]=xp[2]-sp[2];
+			var fxp=[patom[0],patom[1],patom[2]];
+			fxp[0]=fxp[0]-fsp[0];
+			fxp[1]=fxp[1]-fsp[1];
+			fxp[2]=fxp[2]-fsp[2];
+			var ali=gen_ali(al);
+			var xp=matmul(ali,fxp);
+
 			//console.log(xp);
-			//console.log(check_in_box(al,xp));
-			if(check_in_box(al,xp)==1) {
-				patom[0] =xp[0];
-				patom[1] =xp[1];
-				patom[2] =xp[2];
+			var t1=(xp[0]>=0.0||Math.abs(xp[0])<1.e-5)&&(xp[0]<=1.0||Math.abs(xp[0]-1.0)<1.e-5);
+			var t2=(xp[1]>=0.0||Math.abs(xp[1])<1.e-5)&&(xp[1]<=1.0||Math.abs(xp[1]-1.0)<1.e-5);
+			var t3=(xp[2]>=0.0||Math.abs(xp[2])<1.e-5)&&(xp[2]<=1.0||Math.abs(xp[2]-1.0)<1.e-5);
+			if(t1&&t2&&t3){
 				atoms[natom]=patom.slice();
+				atoms[natom][6]=xp[0];
+				atoms[natom][7]=xp[1];
+				atoms[natom][8]=xp[2];
+				atoms[natom][0]=fxp[0];
+				atoms[natom][1]=fxp[1];
+				atoms[natom][2]=fxp[2];
 				natom=natom+1;
-				var ali=gen_ali(al);
-				var fxp=matmul(ali,xp);
-				patom[6]=fxp[0];
-				patom[7]=fxp[1];
-				patom[8]=fxp[2];
 			}
 		}
 		console.log(natom);
@@ -533,7 +546,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var a = [atoms[i][0], atoms[i][1], atoms[i][2]];
 				var b = [atoms[j][0], atoms[j][1], atoms[j][2]];
 				dis = gen_dis(a, b);
-				dis_bond = 0.9*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
+				dis_bond = 1.0*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
 				if (dis <= dis_bond) {
 					eatom = j + 1;
 					var h = hash(satom, eatom);

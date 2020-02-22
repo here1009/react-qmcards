@@ -75,6 +75,7 @@ function init() {
 
         //loadMolecule(Caf);
         loadMolecule(ATOM);
+        //loadMolecule(NB);
 
     };
 

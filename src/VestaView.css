@@ -43,8 +43,8 @@ button {
     }
 
 .bond {
-    width: 2px;
-    height: 5px;
+    width: 5px;
+    height: 10px;
     background: rgb(128, 143, 139);
     display: block;
 }
