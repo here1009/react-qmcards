@@ -38,6 +38,131 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 	// Based on CanvasMol PDB parser
 
 	parse: function ( text ) {
+		function det(al){
+			return al[0][0]*(al[1][1]*al[2][2]-al[1][2]*al[2][1])-al[1][0]*(al[0][1]*al[2][2]-al[0][2]*al[2][1])+al[2][0]*(al[0][1]*al[1][2]-al[0][2]*al[1][1]);
+		}
+		function matmul(al,p){
+			var res=[];
+			var [x,y,z]=p.slice();
+			var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+			var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+			var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+			res=[fx,fy,fz];
+			return res;
+
+		}
+		function gen_ali(al){
+			var a = al[0][0];
+			var d = al[0][1];
+			var g = al[0][2];
+			var b = al[1][0];
+			var e = al[1][1];
+			var h = al[1][2];
+			var c = al[2][0];
+			var f = al[2][1];
+			var i = al[2][2];
+			var ali=[];
+			var dd=det(al);
+			ali[0] = [
+				(e * i - h * f) / dd,
+				(f * g - i * d) / dd,
+				(d * h - g * e) / dd
+			];
+			ali[1] = [
+				(-(b * i - h * c)) / dd,
+				(-(c * g - i * a)) / dd,
+				(-(a * h - g * b)) / dd
+			];
+			ali[2] = [
+				(b * f - c * e) / dd,
+				(c * d - a * f) / dd,
+				(a * e - b * d) / dd
+			];
+			return ali;
+		}
+		function cross_product(a,b){
+			var r=[
+				a[1]*b[2]-a[2]*b[1],
+				a[2]*b[0]-a[0]*b[2],
+				a[0]*b[1]-a[1]*b[0]
+			];
+			return r;
+		}
+		function dot_product(a,b){
+			var r=a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+			return r;
+		}
+		function fplane(a,n,p){
+			var b=[p[0]-a[0],p[1]-a[1],p[2]-a[2]];
+			var f=dot_product(n,b);
+			return f;
+		}
+		function check_in_box(al,p){
+			var tol=1.e-5;
+			for (var i=0;i<3;i++){
+				if(Math.abs(p[i])<=tol){
+					p[i]=0.0;
+				}
+			}
+			var o1 = [0.0,0.0,0.0];
+			var l1 = al[0].slice();
+			var l2 = al[1].slice();
+			var l3 = al[2].slice();
+			//console.log(al);
+			var p1=l1.map((v,i)=>o1[i]+v);
+			var p2=l2.map((v,i)=>o1[i]+v);
+			var p3=l3.map((v,i)=>o1[i]+v);
+			//
+			var ll=l1.map((v,i)=>v+l2[i]+l3[i]);
+			var o2 = ll.slice();
+			//
+			p1 = l1.map((v,i)=>v+l2[i]);
+			p2 = l1.map((v,i)=>v+l3[i]);
+			p1 = l2.map((v,i)=>v+l3[i]);
+			//
+			var l4=p1.map((v,i)=>v-o2[i]);
+			var l5=p2.map((v,i)=>v-o2[i]);
+			var l6=p3.map((v,i)=>v-o2[i]);
+			//
+			var pin = [0.5*o2[0],0.5*o2[1],0.5*o2[2]];
+			var pin_2= pin.map((v,i)=>v-o2[i]);
+			
+			//plane1,l1,l2,o1
+			var n=cross_product(l1,l2);
+			var r1=fplane(o1,n,p);
+			var r1_in=fplane(o1,n,pin);
+			var f1=(r1*r1_in>0.0 || Math.abs(r1*r1_in)<1.e-5) ?  1:0;
+			//plane2,l1,l3,o1
+			var n=cross_product(l1,l3);
+			var r2=fplane(o1,n,p);
+			var r2_in=fplane(o1,n,pin);
+			var f2=(r2*r2_in>0.0 || Math.abs(r2*r2_in)<1.e-5) ?  1:0;
+			//plane3,l2,l3,o1
+			var n=cross_product(l2,l3);
+			var r3=fplane(o1,n,p);
+			var r3_in=fplane(o1,n,pin);
+			var f3=(r3*r3_in>0.0 || Math.abs(r3*r3_in)<1.e-5) ?  1:0;
+			//plane4,l4,l5,o2
+			var n=cross_product(l4,l5);
+			var r4=fplane(o2,n,p);
+			var r4_in=fplane(o2,n,pin_2);
+			var f4=(r4*r4_in>0.0 || Math.abs(r4*r4_in)<1.e-5) ?  1:0;
+			//plane5,l4,l6,o2
+			var n=cross_product(l4,l6);
+			var r5 = fplane(o2, n, p);
+			var r5_in=fplane(o2,n,pin_2);
+			var f5=(r5*r5_in>0.0 || Math.abs(r5*r5_in)<1.e-5) ?  1:0;
+			//plane6,l5,l6,o2
+			var n = cross_product(l5, l6);
+			var r6 = fplane(o2, n, p);
+			var r6_in=fplane(o2,n,pin_2);
+			var f6=(r6*r6_in>0.0 || Math.abs(r6*r6_in)<1.e-5) ?  1:0;
+			if(f1&&f2&&f3&&f4&&f5&&f6) {
+				return 1;
+			}
+
+			return 0;
+		}
 		function check_in_atom(atoms,natom,a){
 			for(var i=0;i<natom;i++){
 				var c=[];
@@ -309,56 +434,76 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 			}
 		}
-		//
-		// calculate bond
-		//console.log(natom);
-		//console.log(atoms);
-		var matom=natom;
-		for ( var i=0; i<natom; i ++) {
-			var satom=i+1;
-			var dis=1.e10;
-			var dis_per;
-			var dis_bond=0.0;
-			var eatom = parseInt("null");	
-			var c=[];
-			var fc=[];
-			for (var j = 0; j < natom; j ++)
-			{
-				var a = [atoms[i][6], atoms[i][7], atoms[i][8]];
-				var b = [atoms[j][6], atoms[j][7], atoms[j][8]];
-				dis_bond = 1.2*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
-				//
-				for (var ii = -1; ii < 1; ii++) {
-					for (var jj = -1; jj < 1; jj++) {
-						for (var kk = -1; kk < 1; kk++) {
-							if(ii==0 && jj==0 && kk==0) {
-								continue;
-							}
-							var pb = [];
-							pb[0]=b[0]+ii;
-							pb[1]=b[1]+jj;
-							pb[2]=b[2]+kk;
-							dis=gen_dis_dir(al,a,pb);
-							if(dis<=dis_bond){
-								var fx = al[0][0] * pb[0] + al[1][0] * pb[1] + al[2][0] * pb[2];
-								var fy = al[0][1] * pb[0] + al[1][1] * pb[1] + al[2][1] * pb[2];
-								var fz = al[0][2] * pb[0] + al[1][2] * pb[1] + al[2][2] * pb[2];
-								var ff=[fx,fy,fz];
-								if(check_in_atom(atoms,matom,ff)==0) {
-									atoms[matom] = [fx, fy, fz, atoms[j][3], atoms[j][4], atoms[j][5], pb[0], pb[1], pb[2]];
-									matom = matom + 1;
-								}
-							}
+		//expand cell
+		var n1=3;
+		var n2=3;
+		var n3=3;
+		var big_al=[];
+		big_al[0]=[al[0][0]*n1,al[0][1]*n1,al[0][2]*n1];
+		big_al[1]=[al[1][0]*n2,al[1][1]*n2,al[1][2]*n2];
+		big_al[2]=[al[2][0]*n3,al[2][1]*n3,al[2][2]*n3];
+		var big_atoms=[];
+		var big_natom=0;
+		for (var i=1;i<=n1;i++){
+			for(var j=1;j<=n2;j++){
+				for(var k=1;k<=n3;k++){
+					for(var ia=0;ia<natom;ia++){
+						big_atoms[big_natom] = atoms[ia].slice();
 
-						}
+						var x = (atoms[ia][6]+i-1)*1.0/n1;
+						var y = (atoms[ia][7]+j-1)*1.0/n2;
+						var z = (atoms[ia][8]+k-1)*1.0/n3;
+						var fx = big_al[0][0] * x + big_al[1][0] * y + big_al[2][0] * z;
+						var fy = big_al[0][1] * x + big_al[1][1] * y + big_al[2][1] * z;
+						var fz = big_al[0][2] * x + big_al[1][2] * y + big_al[2][2] * z;
+						big_atoms[big_natom][0]=fx;
+						big_atoms[big_natom][1]=fy;
+						big_atoms[big_natom][2]=fz;
+						big_atoms[big_natom][6]=x;
+						big_atoms[big_natom][7]=y;
+						big_atoms[big_natom][8]=z;
+
+						big_natom = big_natom + 1;
 					}
 				}
 			}
 		}
-		natom=matom
-		//console.log(natom);
-		//console.log(atoms);
-		//
+		//atoms=big_atoms.slice();
+		//natom=big_natom;
+		//al=big_al.slice();
+
+		//cut cell
+		atoms=[];
+		natom=0;
+		var sp = [
+			al[0][0] + al[1][0] + al[2][0],
+			al[0][1] + al[1][1] + al[2][1],
+			al[0][2] + al[1][2] + al[2][2]
+		];
+		for(var i=0;i<big_natom;i++){
+			var patom=big_atoms[i].slice();
+			var xp=[patom[0],patom[1],patom[2]];
+			xp[0]=xp[0]-sp[0];
+			xp[1]=xp[1]-sp[1];
+			xp[2]=xp[2]-sp[2];
+			//console.log(xp);
+			//console.log(check_in_box(al,xp));
+			if(check_in_box(al,xp)==1) {
+				patom[0] =xp[0];
+				patom[1] =xp[1];
+				patom[2] =xp[2];
+				atoms[natom]=patom.slice();
+				natom=natom+1;
+				var ali=gen_ali(al);
+				var fxp=matmul(ali,xp);
+				patom[6]=fxp[0];
+				patom[7]=fxp[1];
+				patom[8]=fxp[2];
+			}
+		}
+		console.log(natom);
+		console.log(atoms);
+		// calculate bond
 		for ( var i=0; i<natom; i ++) {
 			var satom=i+1;
 			var dis=1.e10;
@@ -372,7 +517,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var a = [atoms[i][0], atoms[i][1], atoms[i][2]];
 				var b = [atoms[j][0], atoms[j][1], atoms[j][2]];
 				dis = gen_dis(a, b);
-				dis_bond = 1.2*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
+				dis_bond = 1.1*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
 				if (dis <= dis_bond) {
 					eatom = j + 1;
 					var h = hash(satom, eatom);

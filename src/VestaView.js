@@ -213,6 +213,7 @@ function loadMolecule(url) {
 
         var al = json.al;
 
+        //plot atoms
         for (var i = 0; i < positions.count; i++) {
 
             position.x = positions.getX(i);
@@ -258,11 +259,11 @@ function loadMolecule(url) {
 
         }
 
-        positions = geometryBonds.getAttribute('position');
 
         var start = new THREE.Vector3();
         var end = new THREE.Vector3();
 
+        //plot box
         var box_positions = [
             [0, 0, 0], [0, 0, 1],
             [0, 0, 0], [0, 1, 0],
@@ -365,6 +366,8 @@ function loadMolecule(url) {
 
 
         }
+        //plot bond
+        positions = geometryBonds.getAttribute('position');
         for (var i = 0; i < positions.count; i += 2) {
 
             start.x = positions.getX(i);

@@ -1,6 +1,7 @@
 .canvas_vesta {
-    background-color: #050505;
-    background: radial-gradient(ellipse at center,  rgba(43,45,48,1) 0%,rgba(0,0,0,1) 100%);
+    background-color: #fff;
+    /*background: radial-gradient(ellipse at center,  rgba(43,45,48,1) 0%,rgba(0,0,0,1) 100%);
+    */
     width: 100%;
     height: 300px;
 }
@@ -43,14 +44,14 @@ button {
     }
 
 .bond {
-    width: 5px;
-    height: 10px;
-    background: #eee;
+    width: 10px;
+    height: 3px;
+    background: rgb(47, 49, 39);
     display: block;
 }
 .box-bond {
-    width: 5px;
-    height: 10px;
-    background:#0000ff;
+    width: 2px;
+    height: 5px;
+    background:#0f0f0f;
     display: block;
 }
