@@ -15,6 +15,7 @@ var controls;
 var root;
 var gmount;
 
+
 var objects = [];
 var tmpVec1 = new THREE.Vector3();
 var tmpVec2 = new THREE.Vector3();
