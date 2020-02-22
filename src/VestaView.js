@@ -51,7 +51,7 @@ var baseSprite = document.createElement('img');
 
 function init() {
 
-    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth/gmount.clientHeight, 1, 5000);
+    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
     camera.position.z = 1000;
 
     scene = new THREE.Scene();
@@ -219,6 +219,7 @@ function loadMolecule(url) {
             position.y = positions.getY(i);
             position.z = positions.getZ(i);
 
+
             color.r = colors.getX(i);
             color.g = colors.getY(i);
             color.b = colors.getZ(i);
@@ -262,39 +263,39 @@ function loadMolecule(url) {
         var start = new THREE.Vector3();
         var end = new THREE.Vector3();
 
-        var box_positions=[
-            [0,0,0],[0,0,1],
-            [0,0,0],[0,1,0],
-            [0,0,0],[1,0,0],
-            [1,0,0],[1,1,0],
-            [1,0,0],[1,0,1],
-            [1,1,0],[0,1,0],
-            [1,1,0],[1,1,1],
-            [1,1,1],[0,1,1],
-            [1,1,1],[1,0,1],
-            [0,1,1],[0,0,1],
-            [0,1,1],[0,1,0],
-            [0,0,1],[1,0,1]
+        var box_positions = [
+            [0, 0, 0], [0, 0, 1],
+            [0, 0, 0], [0, 1, 0],
+            [0, 0, 0], [1, 0, 0],
+            [1, 0, 0], [1, 1, 0],
+            [1, 0, 0], [1, 0, 1],
+            [1, 1, 0], [0, 1, 0],
+            [1, 1, 0], [1, 1, 1],
+            [1, 1, 1], [0, 1, 1],
+            [1, 1, 1], [1, 0, 1],
+            [0, 1, 1], [0, 0, 1],
+            [0, 1, 1], [0, 1, 0],
+            [0, 0, 1], [1, 0, 1]
         ];
-        for (var i=0;i<24;i+=2) {
-           var [x,y,z]=box_positions[i];
-            
-           var fx = al[0][0]*x + al[1][0]*y + al[2][0]*z;
-			var fy = al[0][1]*x + al[1][1]*y + al[2][1]*z;
-			var fz = al[0][2]*x + al[1][2]*y + al[2][2]*z;
-            
-            start.x=fx;
-            start.y=fy;
-            start.z=fz;
+        for (var i = 0; i < 24; i += 2) {
+            var [x, y, z] = box_positions[i];
 
-           [x,y,z]=box_positions[i+1];
-			var fx = al[0][0]*x + al[1][0]*y + al[2][0]*z;
-			var fy = al[0][1]*x + al[1][1]*y + al[2][1]*z;
-            var fz = al[0][2]*x + al[1][2]*y + al[2][2]*z;
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
 
-            end.x = fx;
-            end.y = fy;
-            end.z = fz;
+            start.x = fx + offset.x;
+            start.y = fy + offset.y;
+            start.z = fz + offset.z;
+
+            [x, y, z] = box_positions[i + 1];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+
+            end.x = fx + offset.x;
+            end.y = fy + offset.y;
+            end.z = fz + offset.z;
 
             start.multiplyScalar(75);
             end.multiplyScalar(75);
@@ -484,15 +485,14 @@ function render() {
 
 function onWindowResize() {
 
-    camera.aspect = gmount.clientWidth/gmount.clientHeight;
+    camera.aspect = gmount.clientWidth / gmount.clientHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize(gmount.clientWidth, gmount.clientHeight);
 }
 
 class VestaView extends Component {
-    componentDidMount()
-    {
+    componentDidMount() {
         init();
         animate();
     }

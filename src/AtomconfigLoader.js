@@ -220,6 +220,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			// build geometry
 
 			geometryAtoms.setAttribute( 'position', new Float32BufferAttribute( verticesAtoms, 3 ) );
+
 			geometryAtoms.setAttribute( 'color', new Float32BufferAttribute( colorsAtoms, 3 ) );
 
 			geometryBonds.setAttribute( 'position', new Float32BufferAttribute( verticesBonds, 3 ) );
@@ -277,7 +278,6 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var al=[];
 		var ial=0;
 		for ( var i= 2; i<=4; i ++) {
-			//console.log(lines[i]);
 			var alline=trim(lines[i]).split(/\s+/);
 			x = parseFloat(alline[0]);
 			y = parseFloat(alline[1]);
@@ -311,8 +311,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		}
 		//
 		// calculate bond
-		console.log(natom);
-		console.log(atoms);
+		//console.log(natom);
+		//console.log(atoms);
 		var matom=natom;
 		for ( var i=0; i<natom; i ++) {
 			var satom=i+1;
@@ -356,8 +356,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			}
 		}
 		natom=matom
-		console.log(natom);
-		console.log(atoms);
+		//console.log(natom);
+		//console.log(atoms);
 		//
 		for ( var i=0; i<natom; i ++) {
 			var satom=i+1;
