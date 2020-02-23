@@ -5,9 +5,8 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 //import { PDBLoader } from 'three/examples/jsm/loaders/PDBLoader';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import Caf from './caffeine.pdb';
 import NB from './c2.config';
-import ATOM from './atom.config';
+import ATOM from './c2.config';
 import ball from './ball.png';
 
 var camera, scene, renderer;
@@ -209,13 +208,97 @@ function loadMolecule(url) {
 
         var positions = geometryAtoms.getAttribute('position');
         var colors = geometryAtoms.getAttribute('color');
+        var al = json.al;
 
         var position = new THREE.Vector3();
         var color = new THREE.Color();
+        var start = new THREE.Vector3();
+        var end = new THREE.Vector3();
 
-        var al = json.al;
 
+        //plot bond
+        positions = geometryBonds.getAttribute('position');
+        for (var i = 0; i < positions.count; i += 2) {
+
+            start.x = positions.getX(i);
+            start.y = positions.getY(i);
+            start.z = positions.getZ(i);
+
+            end.x = positions.getX(i + 1);
+            end.y = positions.getY(i + 1);
+            end.z = positions.getZ(i + 1);
+
+            start.multiplyScalar(75);
+            end.multiplyScalar(75);
+
+            tmpVec1.subVectors(end, start);
+            //var bondLength = tmpVec1.length() - 50;
+            var bondLength = tmpVec1.length();
+
+            //
+
+            var bond = document.createElement('div');
+            bond.className = "bond";
+            bond.style.height = bondLength + "px";
+
+            var object = new CSS3DObject(bond);
+            object.position.copy(start);
+            object.position.lerp(end, 0.5);
+
+            object.userData.bondLengthShort = bondLength + "px";
+            object.userData.bondLengthFull = (bondLength + 55) + "px";
+
+            //
+
+            var axis = tmpVec2.set(0, 1, 0).cross(tmpVec1);
+            var radians = Math.acos(tmpVec3.set(0, 1, 0).dot(tmpVec4.copy(tmpVec1).normalize()));
+
+            var objMatrix = new THREE.Matrix4().makeRotationAxis(axis.normalize(), radians);
+            object.matrix = objMatrix;
+            object.quaternion.setFromRotationMatrix(object.matrix);
+
+            object.matrixAutoUpdate = false;
+            object.updateMatrix();
+
+            root.add(object);
+
+            objects.push(object);
+
+            //
+
+            var bond = document.createElement('div');
+            bond.className = "bond";
+            bond.style.height = bondLength + "px";
+
+            var joint = new THREE.Object3D(bond);
+            joint.position.copy(start);
+            joint.position.lerp(end, 0.5);
+
+            joint.matrix.copy(objMatrix);
+            joint.quaternion.setFromRotationMatrix(joint.matrix);
+
+            joint.matrixAutoUpdate = false;
+            joint.updateMatrix();
+
+            var object = new CSS3DObject(bond);
+            object.rotation.y = Math.PI / 2;
+
+            object.matrixAutoUpdate = false;
+            object.updateMatrix();
+
+            object.userData.bondLengthShort = bondLength + "px";
+            object.userData.bondLengthFull = (bondLength + 55) + "px";
+
+            object.userData.joint = joint;
+
+            joint.add(object);
+            root.add(joint);
+
+            objects.push(object);
+
+        }
         //plot atoms
+        positions = geometryAtoms.getAttribute('position');
         for (var i = 0; i < positions.count; i++) {
 
             position.x = positions.getX(i);
@@ -260,11 +343,6 @@ function loadMolecule(url) {
             objects.push(object);
 
         }
-
-
-        var start = new THREE.Vector3();
-        var end = new THREE.Vector3();
-
         //plot box
         var box_positions = [
             [0, 0, 0], [0, 0, 1],
@@ -368,87 +446,6 @@ function loadMolecule(url) {
 
 
         }
-        //plot bond
-        positions = geometryBonds.getAttribute('position');
-        for (var i = 0; i < positions.count; i += 2) {
-
-            start.x = positions.getX(i);
-            start.y = positions.getY(i);
-            start.z = positions.getZ(i);
-
-            end.x = positions.getX(i + 1);
-            end.y = positions.getY(i + 1);
-            end.z = positions.getZ(i + 1);
-
-            start.multiplyScalar(75);
-            end.multiplyScalar(75);
-
-            tmpVec1.subVectors(end, start);
-            var bondLength = tmpVec1.length() - 50;
-
-            //
-
-            var bond = document.createElement('div');
-            bond.className = "bond";
-            bond.style.height = bondLength + "px";
-
-            var object = new CSS3DObject(bond);
-            object.position.copy(start);
-            object.position.lerp(end, 0.5);
-
-            object.userData.bondLengthShort = bondLength + "px";
-            object.userData.bondLengthFull = (bondLength + 55) + "px";
-
-            //
-
-            var axis = tmpVec2.set(0, 1, 0).cross(tmpVec1);
-            var radians = Math.acos(tmpVec3.set(0, 1, 0).dot(tmpVec4.copy(tmpVec1).normalize()));
-
-            var objMatrix = new THREE.Matrix4().makeRotationAxis(axis.normalize(), radians);
-            object.matrix = objMatrix;
-            object.quaternion.setFromRotationMatrix(object.matrix);
-
-            object.matrixAutoUpdate = false;
-            object.updateMatrix();
-
-            root.add(object);
-
-            objects.push(object);
-
-            //
-
-            var bond = document.createElement('div');
-            bond.className = "bond";
-            bond.style.height = bondLength + "px";
-
-            var joint = new THREE.Object3D(bond);
-            joint.position.copy(start);
-            joint.position.lerp(end, 0.5);
-
-            joint.matrix.copy(objMatrix);
-            joint.quaternion.setFromRotationMatrix(joint.matrix);
-
-            joint.matrixAutoUpdate = false;
-            joint.updateMatrix();
-
-            var object = new CSS3DObject(bond);
-            object.rotation.y = Math.PI / 2;
-
-            object.matrixAutoUpdate = false;
-            object.updateMatrix();
-
-            object.userData.bondLengthShort = bondLength + "px";
-            object.userData.bondLengthFull = (bondLength + 55) + "px";
-
-            object.userData.joint = joint;
-
-            joint.add(object);
-            root.add(joint);
-
-            objects.push(object);
-
-        }
-
 
         switch (visualizationType) {
 

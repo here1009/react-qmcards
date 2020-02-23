@@ -484,9 +484,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				}
 			}
 		}
-		//atoms=big_atoms.slice();
-		//natom=big_natom;
-		//al=big_al.slice();
+		atoms=big_atoms.slice();
+		natom=big_natom;
+		al=big_al.slice();
 		//big_atoms=atoms.slice();
 		//big_natom=natom;
 		//big_al=al.slice();
