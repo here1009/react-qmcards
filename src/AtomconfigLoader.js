@@ -491,6 +491,26 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		//big_natom=natom;
 		//big_al=al.slice();
 
+		// all bond
+		var bond_fact=1.1;
+		var all_bond = [];
+		for (var i=0;i<big_natom;i++){
+			all_bond[i]=[];
+			for (var j=0;j<big_natom;j++){
+				if(i==j) continue
+				var a = [big_atoms[i][0], big_atoms[i][1],big_atoms[i][2]];
+				var b = [big_atoms[j][0], big_atoms[j][1],big_atoms[j][2]];
+				dis = gen_dis(a, b);
+				dis_bond = bond_fact*parseFloat(COVR[big_atoms[i][5]]) + parseFloat(COVR[big_atoms[j][5]]);
+				if (dis <= dis_bond) {
+					all_bond[i].push(j);
+				}
+			}
+		}
+		//console.log("TEST");
+		//console.log(all_bond);
+
+
 		//cut cell
 		atoms=[];
 		natom=0;
@@ -528,6 +548,30 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				atoms[natom][1]=fxp[1];
 				atoms[natom][2]=fxp[2];
 				natom=natom+1;
+				if(all_bond[i].length){
+					console.log(i);
+					console.log(all_bond[i]);
+					for(var j=0;j<all_bond[i].length;j++){
+						var ind=all_bond[i][j];
+						var tatom=big_atoms[ind].slice();
+						var txp=[
+							tatom[0]-fsp[0],
+							tatom[1]-fsp[1],
+							tatom[2]-fsp[2]
+						];
+						var tfxp=matmul(ali,txp);
+						if(!check_in_atom(atoms,natom,t2)){
+							atoms[natom] = tatom.slice();
+							atoms[natom][6] = tfxp[0];
+							atoms[natom][7] = tfxp[1];
+							atoms[natom][8] = tfxp[2];
+							atoms[natom][0] = txp[0];
+							atoms[natom][1] = txp[1];
+							atoms[natom][2] = txp[2];
+							natom = natom + 1;
+						}
+					}
+				}
 			}
 		}
 		console.log(natom);
@@ -546,7 +590,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var a = [atoms[i][0], atoms[i][1], atoms[i][2]];
 				var b = [atoms[j][0], atoms[j][1], atoms[j][2]];
 				dis = gen_dis(a, b);
-				dis_bond = 1.1*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
+				dis_bond = bond_fact*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
 				if (dis <= dis_bond) {
 					eatom = j + 1;
 					var h = hash(satom, eatom);
