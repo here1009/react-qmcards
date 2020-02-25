@@ -6,7 +6,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer';
 import NB from './c2.config';
-import ATOM from './c2.config';
+import ATOM from './atom5.config';
 import ball from './ball.png';
 
 var camera, scene, renderer;
@@ -52,7 +52,7 @@ var baseSprite = document.createElement('img');
 function init() {
 
     camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
-    camera.position.z = 1000;
+    camera.position.z = 2000;
 
     scene = new THREE.Scene();
 
@@ -501,7 +501,7 @@ class VestaView extends Component {
     render() {
         return (
             <div
-                className="canvas_vesta"
+                id="canvas_vesta"
                 ref={(mount) => { gmount = mount }}
             >
 
@@ -509,5 +509,21 @@ class VestaView extends Component {
         );
     }
 }
+class VestaViewModal extends Component {
+    componentDidMount() {
+        init();
+        animate();
+    }
+    render() {
+        return (
+            <div
+                id="canvas_vesta_modal"
+                ref={(mount) => { gmount = mount }}
+            >
 
+            </div>
+        );
+    }
+}
+export {VestaViewModal};
 export default VestaView;

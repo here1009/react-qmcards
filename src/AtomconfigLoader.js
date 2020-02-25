@@ -1,6 +1,6 @@
 /**
- * @author alteredq / http://alteredqualia.com/
- * @author Mugen87 / https://github.com/Mugen87
+ * 
+ * 
  */
 
 import {
@@ -433,7 +433,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			z = parseFloat(alline[3]);
 			var tmp=[x,y,z];
 			[x,y,z]=per_dr(tmp);
-			console.log([x,y,z]);
+			//console.log([x,y,z]);
 			
 			var fx = al[0][0]*x + al[1][0]*y + al[2][0]*z;
 			var fy = al[0][1]*x + al[1][1]*y + al[2][1]*z;
@@ -484,9 +484,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				}
 			}
 		}
-		atoms=big_atoms.slice();
-		natom=big_natom;
-		al=big_al.slice();
+		//atoms=big_atoms.slice();
+		//natom=big_natom;
+		//al=big_al.slice();
 		//big_atoms=atoms.slice();
 		//big_natom=natom;
 		//big_al=al.slice();
@@ -549,8 +549,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				atoms[natom][2]=fxp[2];
 				natom=natom+1;
 				if(all_bond[i].length){
-					console.log(i);
-					console.log(all_bond[i]);
+					//console.log(i);
+					//console.log(all_bond[i]);
 					for(var j=0;j<all_bond[i].length;j++){
 						var ind=all_bond[i][j];
 						var tatom=big_atoms[ind].slice();
@@ -574,8 +574,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				}
 			}
 		}
-		console.log(natom);
-		console.log(atoms);
+		//console.log(natom);
+		//console.log(atoms);
 		// calculate bond
 		for ( var i=0; i<natom; i ++) {
 			var satom=i+1;
