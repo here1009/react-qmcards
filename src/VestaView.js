@@ -5,7 +5,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './atom5.config';
+import ATOM from './c2.config';
 import { MixOperation } from 'three';
 
 var camera, scene, renderer,labelRenderer;
@@ -51,8 +51,8 @@ function init() {
     light.position.set(-1, -1, -1);
     scene.add(light);
 
-   // var light = new THREE.AmbientLight(0xffffff, 0.3);
-    //scene.add(light);
+    var light = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(light);
 
     root = new THREE.Group();
     scene.add(root);
@@ -310,12 +310,13 @@ function render() {
 
 function onWindowResize() {
 
-    camera.aspect = gmount.clientWidth / gmount.clientHeight;
-    var size=gmount.clientWidth/2;
-    camera.left=-size;
-    camera.right=size;
-    camera.bottom=-size;
-    camera.top=size;
+    //camera.aspect = gmount.clientWidth / gmount.clientHeight;
+    var width = gmount.clientWidth;
+    var height = gmount.clientHeight;
+    camera.left=-width;
+    camera.right=width;
+    camera.bottom=-height;
+    camera.top=height;
     camera.updateProjectionMatrix();
 
     renderer.setSize(gmount.clientWidth, gmount.clientHeight);
