@@ -6,7 +6,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer';
 import NB from './c2.config';
-import ATOM from './c2.config';
+import ATOM from './atom7.config';
 import ball from './ball.png';
 
 var camera, scene, renderer;
@@ -29,8 +29,11 @@ var baseSprite = document.createElement('img');
 
 function init() {
 
-    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
-    camera.position.z = 2000;
+    //camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
+    var size=gmount.clientWidth/2;
+    camera = new THREE.OrthographicCamera(-size, size,-size, size, -1, 5000);
+    camera.zoom=1;
+    camera.position.z = 1000;
 
     scene = new THREE.Scene();
 
@@ -465,7 +468,12 @@ function render() {
 
 function onWindowResize() {
 
-    camera.aspect = gmount.clientWidth / gmount.clientHeight;
+    //camera.aspect = gmount.clientWidth / gmount.clientHeight;
+    var size=gmount.clientWidth/2;
+    camera.left=-size;
+    camera.right=size;
+    camera.bottom=-size;
+    camera.top=size;
     camera.updateProjectionMatrix();
 
     renderer.setSize(gmount.clientWidth, gmount.clientHeight);
