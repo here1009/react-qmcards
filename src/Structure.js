@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonToolbar, Container, Row, Col } from 'react-bootstrap';
 import { ButtonGroup, Tab, Nav } from 'react-bootstrap';
 import { Card, CardColumns } from 'react-bootstrap';
+import ThreeTest from './threeTEST'
 
 function Structure() {
     return (
@@ -14,6 +15,7 @@ function Structure() {
                 <Col>
                 <CardColumns>
                     <Vesta></Vesta>
+                    <ThreeTest></ThreeTest>
                 </CardColumns>
                 </Col>
             </Row>

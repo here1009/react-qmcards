@@ -6,7 +6,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer';
 import NB from './c2.config';
-import ATOM from './atom5.config';
+import ATOM from './c2.config';
 import ball from './ball.png';
 
 var camera, scene, renderer;
@@ -23,28 +23,6 @@ var tmpVec4 = new THREE.Vector3();
 var offset = new THREE.Vector3();
 
 var visualizationType = 2;
-
-var MOLECULES = {
-    "Ethanol": "ethanol.pdb",
-    "Aspirin": "aspirin.pdb",
-    "Caffeine": "caffeine.pdb",
-    "Nicotine": "nicotine.pdb",
-    "LSD": "lsd.pdb",
-    "Cocaine": "cocaine.pdb",
-    "Cholesterol": "cholesterol.pdb",
-    "Lycopene": "lycopene.pdb",
-    "Glucose": "glucose.pdb",
-    "Aluminium oxide": "Al2O3.pdb",
-    "Cubane": "cubane.pdb",
-    "Copper": "cu.pdb",
-    "Fluorite": "caf2.pdb",
-    "Salt": "nacl.pdb",
-    "YBCO superconductor": "ybco.pdb",
-    "Buckyball": "buckyball.pdb",
-    //"Diamond": "diamond.pdb",
-    "Graphite": "graphite.pdb"
-};
-
 var loader = new ATOMCONFIGLoader();
 var colorSpriteMap = {};
 var baseSprite = document.createElement('img');

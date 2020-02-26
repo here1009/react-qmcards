@@ -492,7 +492,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		//big_al=al.slice();
 
 		// all bond
-		var bond_fact=1.1;
+		var bond_fact=1.2;
 		var all_bond = [];
 		for (var i=0;i<big_natom;i++){
 			all_bond[i]=[];
@@ -559,16 +559,18 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 							tatom[1]-fsp[1],
 							tatom[2]-fsp[2]
 						];
-						var tfxp=matmul(ali,txp);
-						if(!check_in_atom(atoms,natom,t2)){
-							atoms[natom] = tatom.slice();
-							atoms[natom][6] = tfxp[0];
-							atoms[natom][7] = tfxp[1];
-							atoms[natom][8] = tfxp[2];
-							atoms[natom][0] = txp[0];
-							atoms[natom][1] = txp[1];
-							atoms[natom][2] = txp[2];
-							natom = natom + 1;
+						var tfxp = matmul(ali, txp);
+						if (!check_in_atom(atoms, natom, t2)) {
+							//if (tfxp[0] < 1.0 && tfxp[1] > 0.0 && tfxp[2] < 1.0) {
+								atoms[natom] = tatom.slice();
+								atoms[natom][6] = tfxp[0];
+								atoms[natom][7] = tfxp[1];
+								atoms[natom][8] = tfxp[2];
+								atoms[natom][0] = txp[0];
+								atoms[natom][1] = txp[1];
+								atoms[natom][2] = txp[2];
+								natom = natom + 1;
+							//}
 						}
 					}
 				}
