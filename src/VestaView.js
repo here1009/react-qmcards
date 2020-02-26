@@ -23,8 +23,8 @@ var colorSpriteMap = {};
 function init() {
 
     var size=gmount.clientWidth/2;
-    //camera = new THREE.OrthographicCamera(-size, size,-size, size, -1, 5000);
-    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
+    camera = new THREE.OrthographicCamera(-size, size,-size, size, -1, 5000);
+    //camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
     //camera.zoom=1;
     camera.position.z = 1000;
 
@@ -38,8 +38,8 @@ function init() {
     light.position.set(-1, -1, -1);
     scene.add(light);
 
-    var light = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(light);
+   // var light = new THREE.AmbientLight(0xffffff, 0.3);
+    //scene.add(light);
 
     root = new THREE.Group();
     scene.add(root);
@@ -102,52 +102,12 @@ function loadMolecule(url) {
         geometryAtoms.translate(offset.x, offset.y, offset.z);
         geometryBonds.translate(offset.x, offset.y, offset.z);
 
-        var positions = geometryAtoms.getAttribute('position');
-        var colors = geometryAtoms.getAttribute('color');
         var al = json.al;
 
         var position = new THREE.Vector3();
         var color = new THREE.Color();
 
-        //plot atoms
-        positions = geometryAtoms.getAttribute('position');
-        for (var i = 0; i < positions.count; i++) {
-
-            position.x = positions.getX(i);
-            position.y = positions.getY(i);
-            position.z = positions.getZ(i);
-
-
-            color.r = colors.getX(i);
-            color.g = colors.getY(i);
-            color.b = colors.getZ(i);
-            
-            var material = new THREE.MeshPhongMaterial({ color: color });
-
-            var atom = json.atoms[i];
-
-            var object = new THREE.Mesh(sphereGeometry, material);
-            object.position.copy(position);
-            object.position.multiplyScalar(75);
-            if(atom[9]){
-                object.scale.multiplyScalar(atom[9] * 0.3);
-            }
-            else {
-                object.scale.multiplyScalar(25);
-            }
-
-            root.add(object);
-
-
-            var text = document.createElement('div');
-            text.className = 'label';
-            text.style.color = 'rgb(' + atom[3][0] + ',' + atom[3][1] + ',' + atom[3][2] + ')';
-            text.textContent = atom[4];
-
-            var label = new CSS2DObject(text);
-            label.position.copy(object.position);
-            //root.add(label);
-        }
+        
 
         //plot bond
         var start = new THREE.Vector3();
@@ -211,6 +171,46 @@ function loadMolecule(url) {
             root.add(object2);
 
         }
+        //plot atoms
+        var positions = geometryAtoms.getAttribute('position');
+        var colors = geometryAtoms.getAttribute('color');
+        for (var i = 0; i < positions.count; i++) {
+
+            position.x = positions.getX(i);
+            position.y = positions.getY(i);
+            position.z = positions.getZ(i);
+
+
+            color.r = colors.getX(i);
+            color.g = colors.getY(i);
+            color.b = colors.getZ(i);
+            
+            var material = new THREE.MeshPhysicalMaterial({ color: color });
+
+            var atom = json.atoms[i];
+
+            var object = new THREE.Mesh(sphereGeometry, material);
+            object.position.copy(position);
+            object.position.multiplyScalar(75);
+            if(atom[9]){
+                object.scale.multiplyScalar(atom[9] * 0.3);
+            }
+            else {
+                object.scale.multiplyScalar(25);
+            }
+
+            root.add(object);
+
+
+            var text = document.createElement('div');
+            text.className = 'label';
+            text.style.color = 'rgb(' + atom[3][0] + ',' + atom[3][1] + ',' + atom[3][2] + ')';
+            text.textContent = atom[4];
+
+            var label = new CSS2DObject(text);
+            label.position.copy(object.position);
+            //root.add(label);
+        }
         //plot box
         var box_positions = [
             [0, 0, 0], [0, 0, 1],
@@ -256,7 +256,24 @@ function loadMolecule(url) {
             object.lookAt(end);
             root.add(object);
         }
-
+  {
+    const cubeSize = 1200;
+    const cubeGeo = new THREE.BoxBufferGeometry(cubeSize, cubeSize, cubeSize);
+    const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
+    const mesh = new THREE.Mesh(cubeGeo, cubeMat);
+    mesh.position.set(400 + 1, 400 / 2, 0);
+    scene.add(mesh);
+  }
+  {
+    const sphereRadius = 500;
+    const sphereWidthDivisions = 32;
+    const sphereHeightDivisions = 16;
+    const sphereGeo = new THREE.SphereBufferGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
+    const sphereMat = new THREE.MeshPhongMaterial({color: '#CA8'});
+    const mesh = new THREE.Mesh(sphereGeo, sphereMat);
+    mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
+    scene.add(mesh);
+  }
         switch (visualizationType) {
 
             case 0:
