@@ -12,6 +12,9 @@ var camera, scene, renderer,labelRenderer;
 var controls;
 var root;
 var gmount;
+var sf=40;   // position scaling
+var asf=0.2; // atom size
+var wb=5.0;  // bond size
 
 var offset = new THREE.Vector3();
 
@@ -22,10 +25,20 @@ var colorSpriteMap = {};
 
 function init() {
 
-    var size=gmount.clientWidth/2;
-    camera = new THREE.OrthographicCamera(-size, size,-size, size, -1, 5000);
+    var width = gmount.clientWidth;
+    var height = gmount.clientHeight;
+    camera =
+        new THREE.OrthographicCamera(
+            -width,
+            width,
+            height,
+            -height,
+            .1,
+            5000);
+
+
     //camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
-    //camera.zoom=1;
+    camera.zoom=1;
     camera.position.z = 1000;
 
     scene = new THREE.Scene();
@@ -93,7 +106,7 @@ function loadMolecule(url) {
         var json = pdb.json;
 
         var boxGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(10,10,1,32);
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(wb,wb,1,32);
         var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
 
         geometryAtoms.computeBoundingBox();
@@ -139,9 +152,9 @@ function loadMolecule(url) {
             mid.y = ( start.y + end.y ) / 2;
             mid.z = ( start.z + end.z ) / 2;
 
-            start.multiplyScalar(75);
-            end.multiplyScalar(75);
-            mid.multiplyScalar(75);
+            start.multiplyScalar(sf);
+            end.multiplyScalar(sf);
+            mid.multiplyScalar(sf);
             
             
             var material = new THREE.MeshPhongMaterial({color:color_start});
@@ -191,9 +204,9 @@ function loadMolecule(url) {
 
             var object = new THREE.Mesh(sphereGeometry, material);
             object.position.copy(position);
-            object.position.multiplyScalar(75);
+            object.position.multiplyScalar(sf);
             if(atom[9]){
-                object.scale.multiplyScalar(atom[9] * 0.3);
+                object.scale.multiplyScalar(atom[9] * asf);
             }
             else {
                 object.scale.multiplyScalar(25);
@@ -246,8 +259,8 @@ function loadMolecule(url) {
             end.y = fy + offset.y;
             end.z = fz + offset.z;
 
-            start.multiplyScalar(75);
-            end.multiplyScalar(75);
+            start.multiplyScalar(sf);
+            end.multiplyScalar(sf);
 
             var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial(0xffffff));
             object.position.copy(start);
@@ -256,24 +269,6 @@ function loadMolecule(url) {
             object.lookAt(end);
             root.add(object);
         }
-  {
-    const cubeSize = 1200;
-    const cubeGeo = new THREE.BoxBufferGeometry(cubeSize, cubeSize, cubeSize);
-    const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
-    const mesh = new THREE.Mesh(cubeGeo, cubeMat);
-    mesh.position.set(400 + 1, 400 / 2, 0);
-    scene.add(mesh);
-  }
-  {
-    const sphereRadius = 500;
-    const sphereWidthDivisions = 32;
-    const sphereHeightDivisions = 16;
-    const sphereGeo = new THREE.SphereBufferGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions);
-    const sphereMat = new THREE.MeshPhongMaterial({color: '#CA8'});
-    const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-    mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0);
-    scene.add(mesh);
-  }
         switch (visualizationType) {
 
             case 0:
