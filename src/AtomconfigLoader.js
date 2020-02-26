@@ -315,6 +315,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			var verticesAtoms = [];
 			var colorsAtoms = [];
 			var verticesBonds = [];
+			var colorsBonds = [];
 
 			// atoms
 
@@ -353,6 +354,14 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				verticesBonds.push( verticesAtoms[ ( end * 3 ) + 1 ] );
 				verticesBonds.push( verticesAtoms[ ( end * 3 ) + 2 ] );
 
+				colorsBonds.push( colorsAtoms[ ( start * 3 ) + 0 ] );
+				colorsBonds.push( colorsAtoms[ ( start * 3 ) + 1 ] );
+				colorsBonds.push( colorsAtoms[ ( start * 3 ) + 2 ] );
+				colorsBonds.push( colorsAtoms[ ( end * 3 ) + 0 ] );
+				colorsBonds.push( colorsAtoms[ ( end * 3 ) + 1 ] );
+				colorsBonds.push( colorsAtoms[ ( end * 3 ) + 2 ] );
+
+
 			}
 
 			// build geometry
@@ -362,6 +371,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			geometryAtoms.setAttribute( 'color', new Float32BufferAttribute( colorsAtoms, 3 ) );
 
 			geometryBonds.setAttribute( 'position', new Float32BufferAttribute( verticesBonds, 3 ) );
+
+			geometryBonds.setAttribute( 'color', new Float32BufferAttribute( colorsBonds, 3 ) );
 
 			return build;
 

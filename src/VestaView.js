@@ -5,7 +5,8 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './atom5.config';
+import ATOM from './atom.config';
+import { MixOperation } from 'three';
 
 var camera, scene, renderer,labelRenderer;
 var controls;
@@ -21,10 +22,10 @@ var colorSpriteMap = {};
 
 function init() {
 
-    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
     var size=gmount.clientWidth/2;
     //camera = new THREE.OrthographicCamera(-size, size,-size, size, -1, 5000);
-    camera.zoom=1;
+    camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
+    //camera.zoom=1;
     camera.position.z = 1000;
 
     scene = new THREE.Scene();
@@ -43,7 +44,7 @@ function init() {
     root = new THREE.Group();
     scene.add(root);
     //
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer = new THREE.WebGLRenderer( { antialias: true, alpha:true } );
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(gmount.clientWidth, gmount.clientHeight);
     gmount.appendChild(renderer.domElement);
@@ -92,7 +93,8 @@ function loadMolecule(url) {
         var json = pdb.json;
 
         var boxGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
-        var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 2);
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(10,10,1,32);
+        var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
 
         geometryAtoms.computeBoundingBox();
         geometryAtoms.boundingBox.getCenter(offset).negate();
@@ -143,26 +145,64 @@ function loadMolecule(url) {
         //plot bond
         var start = new THREE.Vector3();
         var end = new THREE.Vector3();
+        var mid = new THREE.Vector3();
+        var color_start=new THREE.Color();
+        var color_end=new THREE.Color();
         positions = geometryBonds.getAttribute('position');
+        colors = geometryBonds.getAttribute('color');
         for (var i = 0; i < positions.count; i += 2) {
 
             start.x = positions.getX(i);
             start.y = positions.getY(i);
             start.z = positions.getZ(i);
+            
+            color_start.r = colors.getX(i);
+            color_start.g = colors.getY(i);
+            color_start.b = colors.getZ(i);
 
             end.x = positions.getX(i + 1);
             end.y = positions.getY(i + 1);
             end.z = positions.getZ(i + 1);
 
+            color_end.r = colors.getX(i+1);
+            color_end.g = colors.getY(i+1);
+            color_end.b = colors.getZ(i+1);
+
+            mid.x = ( start.x + end.x ) / 2;
+            mid.y = ( start.y + end.y ) / 2;
+            mid.z = ( start.z + end.z ) / 2;
+
             start.multiplyScalar(75);
             end.multiplyScalar(75);
-
-            var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial(0xffffff));
+            mid.multiplyScalar(75);
+            
+            
+            var material = new THREE.MeshPhongMaterial({color:color_start});
+            var object = new THREE.Mesh(cylinderGeometry,material);
             object.position.copy(start);
-            object.position.lerp(end, 0.5);
-            object.scale.set(5, 5, start.distanceTo(end));
-            object.lookAt(end);
+            object.position.lerp(mid, 0.5);
+            
+            var direction = new THREE.Vector3().subVectors(mid, start);
+            var axis = new THREE.Vector3(0,1,0);
+            object.quaternion.setFromUnitVectors(axis,direction.clone().normalize());
+
+            object.scale.set(1,start.distanceTo(mid),1);
+
+
+            var material = new THREE.MeshPhongMaterial({color:color_end});
+            var object2 = new THREE.Mesh(cylinderGeometry,material);
+            object2.position.copy(end);
+            object2.position.lerp(mid, 0.5);
+            
+            var direction = new THREE.Vector3().subVectors(mid, end);
+            var axis = new THREE.Vector3(0,1,0);
+            object2.quaternion.setFromUnitVectors(axis,direction.clone().normalize());
+
+            object2.scale.set(1,end.distanceTo(mid),1);
+
             root.add(object);
+            root.add(object2);
+
         }
         //plot box
         var box_positions = [
@@ -205,7 +245,7 @@ function loadMolecule(url) {
             var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial(0xffffff));
             object.position.copy(start);
             object.position.lerp(end, 0.5);
-            object.scale.set(5, 5, start.distanceTo(end));
+            object.scale.set(1, 1, start.distanceTo(end));
             object.lookAt(end);
             root.add(object);
         }
@@ -251,7 +291,7 @@ function render() {
 
 function onWindowResize() {
 
-    //camera.aspect = gmount.clientWidth / gmount.clientHeight;
+    camera.aspect = gmount.clientWidth / gmount.clientHeight;
     var size=gmount.clientWidth/2;
     camera.left=-size;
     camera.right=size;
@@ -260,7 +300,7 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(gmount.clientWidth, gmount.clientHeight);
-    //labelRenderer.setSize(gmount.clientWidth, gmount.clientHeight);
+    labelRenderer.setSize(gmount.clientWidth, gmount.clientHeight);
 }
 
 class VestaView extends Component {
