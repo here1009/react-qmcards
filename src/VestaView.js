@@ -5,7 +5,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './c2.config';
+import ATOM from './atom6.config';
 import { MixOperation } from 'three';
 
 var camera, scene, renderer,labelRenderer;
@@ -43,15 +43,15 @@ function init() {
 
     scene = new THREE.Scene();
 
-    var light = new THREE.DirectionalLight(0xffffff, 0.8);
+    var light = new THREE.DirectionalLight(0xffffff, 0.7);
     light.position.set(1, 1, 1);
     scene.add(light);
 
-    var light = new THREE.DirectionalLight(0xffffff, 0.5);
+    var light = new THREE.DirectionalLight(0xffffff, 0.7);
     light.position.set(-1, -1, -1);
     scene.add(light);
 
-    var light = new THREE.AmbientLight(0xffffff, 0.3);
+    var light = new THREE.AmbientLight(0xffffff, 0.2);
     scene.add(light);
 
     root = new THREE.Group();
