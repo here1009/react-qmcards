@@ -2,11 +2,15 @@
     background-color:#000;
     width: 100%;
     height: 300px;
+    margin: 0;
+    padding: 0;
 }
 #canvas_vesta_modal {
     background-color:#000;
     width: 90%;
     height: 700px;
+    margin: 0;
+    padding: 0;
 }
 #topmenu {
     position: absolute;

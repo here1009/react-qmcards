@@ -5,7 +5,7 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './atom.config';
+import ATOM from './atom5.config';
 import { MixOperation } from 'three';
 
 var camera, scene, renderer,labelRenderer;
@@ -124,13 +124,20 @@ function loadMolecule(url) {
             
             var material = new THREE.MeshPhongMaterial({ color: color });
 
+            var atom = json.atoms[i];
+
             var object = new THREE.Mesh(sphereGeometry, material);
             object.position.copy(position);
             object.position.multiplyScalar(75);
-            object.scale.multiplyScalar(25);
+            if(atom[9]){
+                object.scale.multiplyScalar(atom[9] * 0.3);
+            }
+            else {
+                object.scale.multiplyScalar(25);
+            }
+
             root.add(object);
 
-            var atom = json.atoms[i];
 
             var text = document.createElement('div');
             text.className = 'label';
