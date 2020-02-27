@@ -7,3 +7,4 @@
 6. 设置：扩胞，切割，旋转，平动
 7. MeshStandardMaterial, MeshPhysicalMaterial
 8. 怎么不扩包的情况下切割完整结构
+9. 渲染的大小自动调整

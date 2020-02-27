@@ -34,12 +34,13 @@ function init() {
             height,
             -height,
             .1,
-            5000);
+            8000);
 
 
     //camera = new THREE.PerspectiveCamera(70, gmount.clientWidth / gmount.clientHeight, 1, 5000);
     camera.zoom=1;
-    camera.position.z = 1000;
+    camera.position.set(0,0,4000);
+    camera.updateProjectionMatrix();
 
     scene = new THREE.Scene();
 
@@ -262,10 +263,14 @@ function loadMolecule(url) {
             start.multiplyScalar(sf);
             end.multiplyScalar(sf);
 
-            var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial(0xffffff));
+            //var color=new THREE.Color();
+            color.r = 0;
+            color.g = 0;
+            color.b = 0;
+            var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({color:color}));
             object.position.copy(start);
             object.position.lerp(end, 0.5);
-            object.scale.set(1, 1, start.distanceTo(end));
+            object.scale.set(0.5, 0.5, start.distanceTo(end));
             object.lookAt(end);
             root.add(object);
         }
