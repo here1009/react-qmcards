@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './VestaView.css'
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
@@ -72,24 +73,15 @@ function init() {
     gmount.appendChild(labelRenderer.domElement);
     //
     controls = new TrackballControls(camera, renderer.domElement);
+    //controls = new OrbitControls(camera, renderer.domElement);
     controls.minDistance = 500;
     controls.maxDistance = 2000;
-
+    
     //
     loadMolecule(ATOM);
     
     window.addEventListener('resize', onWindowResize, false);
     //
-}
-function showAtoms() {
-
-}
-function showBonds() {
-
-}
-
-function showAtomsBonds() {
-
 }
 
 function loadMolecule(url) {
@@ -363,7 +355,7 @@ class VestaViewModal extends Component {
 
                             </div>
                         </Col>
-                        <Col xs={2} lg={2} style={{textAlign:"left"}}>
+                        <Col xs={2} lg={2} style={{textAlign:"center"}}>
                             <ButtonGroup vertical>
                                 <Button>Button</Button>
                                 <Button>Button</Button>
