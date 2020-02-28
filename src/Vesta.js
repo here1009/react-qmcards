@@ -45,11 +45,13 @@ class VestaModal extends Component {
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col>
+                            <Col xs={10} lg={10}>
                             </Col>
+                            <Col xs={2} lg={2} style={{textAlign:"right"}}>
                             <Button variant="outline-warning" onClick={() => {
                                 VestaModal.removeInstance();
                             }} id="set_btn">Z</Button>
+                            </Col>
                         </Row>
 
                     </Card.Header>

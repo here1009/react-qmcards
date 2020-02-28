@@ -1,9 +1,0 @@
-.vesta-full{
-    position: fixed;
-    z-index: 10000;
-    width:800px;
-    height:800px;
-    background-color:blue;
-    top: 50px;
-    left: 50px;
-}

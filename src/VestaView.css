@@ -1,15 +1,14 @@
 #canvas_vesta {
     background-color:#fff;
-    width: 100%;
+    width: 90%;
     height: 300px;
     margin: 0;
     padding: 0;
 }
 #canvas_vesta_modal {
-    background-color:#fff;
-    width: 90%;
-    height: 700px;
-    margin: 0;
+    background-color:rgba(202, 195, 195, 0.301);
+    width: 100%;
+    margin: -10px;
     padding: 0;
 }
 #topmenu {

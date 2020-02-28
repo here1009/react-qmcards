@@ -5,16 +5,17 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './atom6.config';
-import { MixOperation } from 'three';
+import ATOM from './c2.config';
+import {Container,Row,Col} from 'react-bootstrap';
+import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
 var camera, scene, renderer,labelRenderer;
 var controls;
 var root;
 var gmount;
-var sf=40;   // position scaling
-var asf=0.2; // atom size
-var wb=5.0;  // bond size
+var sf=20;   // position scaling
+var asf=0.1; // atom size
+var wb=2.0;  // bond size
 
 var offset = new THREE.Vector3();
 
@@ -26,7 +27,7 @@ var colorSpriteMap = {};
 function init() {
 
     var width = gmount.clientWidth;
-    var height = gmount.clientHeight;
+    var height = gmount.innerHeight;
     camera =
         new THREE.OrthographicCamera(
             -width,
@@ -60,11 +61,11 @@ function init() {
     //
     renderer = new THREE.WebGLRenderer( { antialias: true, alpha:true } );
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(gmount.clientWidth, gmount.clientHeight);
+    renderer.setSize(width, height);
     gmount.appendChild(renderer.domElement);
     //
     labelRenderer = new CSS2DRenderer();
-    labelRenderer.setSize(gmount.clientWidth, gmount.clientHeight);
+    labelRenderer.setSize(width, height);
     labelRenderer.domElement.style.position = 'absolute';
     labelRenderer.domElement.style.top = '0';
     labelRenderer.domElement.style.pointerEvents = 'none';
@@ -317,15 +318,15 @@ function onWindowResize() {
 
     //camera.aspect = gmount.clientWidth / gmount.clientHeight;
     var width = gmount.clientWidth;
-    var height = gmount.clientHeight;
+    var height = window.innerHeight;
     camera.left=-width;
     camera.right=width;
     camera.bottom=-height;
     camera.top=height;
     camera.updateProjectionMatrix();
 
-    renderer.setSize(gmount.clientWidth, gmount.clientHeight);
-    labelRenderer.setSize(gmount.clientWidth, gmount.clientHeight);
+    renderer.setSize(width, height);
+    labelRenderer.setSize(width, height);
 }
 
 class VestaView extends Component {
@@ -337,9 +338,9 @@ class VestaView extends Component {
         return (
             <div
                 id="canvas_vesta"
-                ref={(mount) => { gmount = mount }}
+                //ref={(mount) => { gmount = mount }}
+                ref={(mount) => { gmount = mount; gmount.innerHeight = gmount.clientHeight; gmount.innerWidth = gmount.clientWidth; }}
             >
-
             </div>
         );
     }
@@ -351,11 +352,27 @@ class VestaViewModal extends Component {
     }
     render() {
         return (
-            <div
-                id="canvas_vesta_modal"
-                ref={(mount) => { gmount = mount }}
-            >
+            <div>
+                <Container>
+                    <Row style={{width:"100%"}}>
+                        <Col xs={10} lg={10}>
+                            <div
+                                id="canvas_vesta_modal"
+                                ref={(mount) => { gmount = mount;gmount.innerHeight=window.innerHeight; gmount.innerWidth=gmount.clientWidth; }}
+                            >
 
+                            </div>
+                        </Col>
+                        <Col xs={2} lg={2} style={{textAlign:"left"}}>
+                            <ButtonGroup vertical>
+                                <Button>Button</Button>
+                                <Button>Button</Button>
+                                <Button>Button</Button>
+                                <Button>Button</Button>
+                            </ButtonGroup>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         );
     }
