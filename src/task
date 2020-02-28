@@ -1,6 +1,6 @@
 0. 参考jsmol,vesta,xcrysden代码
 1. x,y,z 坐标轴
-5. box边线大小不根据远近做scaling
+5. box边线大小不根据远近做scaling或者zoom的时候重新画box
 6. 设置：扩胞，切割，旋转，平动, 朝向
 7. MeshStandardMaterial, MeshPhysicalMaterial
 8. 怎么不扩包的情况下切割完整结构
@@ -10,3 +10,4 @@
 12. 多原子选中
 13. 双原子距离
 14. 多原子信息显示
+15. 键长

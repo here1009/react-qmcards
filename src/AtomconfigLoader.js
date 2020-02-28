@@ -506,7 +506,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				}
 			}
 		}
-		console.log(big_atoms);
+		//console.log(big_atoms);
 		atoms=big_atoms.slice();
 		natom=big_natom;
 		al=big_al.slice();
