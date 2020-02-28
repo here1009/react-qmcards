@@ -10,28 +10,26 @@ import ATOM from './atom2.config';
 import {Container,Row,Col} from 'react-bootstrap';
 import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
-var vestaObj = {
-    camera: null,
-    scene: null,
-    renderer: null,
-    labelRenderer: null,
-    controls: null,
-    root: null,
-    gmout: null,
-    sf: 20,
-    asf: 0.1,
-    wb: 2.0,
-    offset: null,
-    visualizationType : 2,
-    loader: null,
-    width: null,
-    height: null,
-    initScene: function(){
+var vestaObj = function(){
+    this.camera = null;
+    this.scene= null;
+    this.renderer= null;
+    this.labelRenderer= null;
+    this.controls= null;
+    this.root = new THREE.Group();
+    this.offset = new THREE.Vector3();
+    this.loader = new ATOMCONFIGLoader();
+    this.gmout= null;
+    this.sf= 20;
+    this.asf= 0.1;
+    this.wb= 2.0;
+    this.visualizationType = 2;
+    this.initScene= function(){
+        this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
         this.height = this.gmount.clientHeight;
-        this.scene = new THREE.Scene();
-    },
-    initCamera: function(){
+    };
+    this.initCamera= function(){
         var camera =
             new THREE.OrthographicCamera(
                 -this.width,
@@ -44,8 +42,8 @@ var vestaObj = {
         camera.position.set(0, 0, 4000);
         camera.updateProjectionMatrix();
         this.camera=camera;
-    },
-    initLight: function(){
+    };
+    this.initLight= function(){
         var light = new THREE.DirectionalLight(0xffffff, 0.7);
         light.position.set(1, 1, 1);
         this.scene.add(light);
@@ -56,14 +54,11 @@ var vestaObj = {
 
         var light = new THREE.AmbientLight(0xffffff, 0.2);
         this.scene.add(light);
-    },
-    initGroup: function(){
-        this.root = new THREE.Group();
-        this.offset = new THREE.Vector3();
-        this.loader = new ATOMCONFIGLoader();
+    };
+    this.initGroup= function(){
         this.scene.add(this.root);
-    },
-    initRenderer: function(){
+    };
+    this.initRenderer= function(){
         //
         var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -78,15 +73,15 @@ var vestaObj = {
         labelRenderer.domElement.style.pointerEvents = 'none';
         this.labelRenderer=labelRenderer;
         this.gmount.appendChild(this.labelRenderer.domElement);
-    },
-    initControls: function(){
+    };
+    this.initControls= function(){
         //
         var controls = new TrackballControls(this.camera, this.renderer.domElement);
         controls.minDistance = 500;
         controls.maxDistance = 2000;
         this.controls = controls;
-    },
-    loadMolecule: function(url,root){
+    };
+    this.loadMolecule= function(url,root){
 
         while (root.children.length > 0) {
 
@@ -270,10 +265,10 @@ var vestaObj = {
             }
         });
 
-    },
-    init: function(){
+    };
+    this.init= function(){
         //window.onresize = onWindowResize;
-        window.addEventListener('resize', onWindowResize, false);
+        window.addEventListener('resize', ()=>this.onWindowResize(), false);
         this.initScene();
         this.initCamera();
         this.initLight();
@@ -281,40 +276,50 @@ var vestaObj = {
         this.initRenderer();
         this.initControls();
         this.loadMolecule(ATOM,this.root);
-    },
-    render: function () {
+    };
+    this.render= function () {
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
     }
-};
+    this.onWindowResize=function() {
+        var width = this.gmount.clientWidth;
+        var height = this.gmount.clientHeight;
+        this.camera.left = -width;
+        this.camera.right = width;
+        this.camera.bottom = -height;
+        this.camera.top = height;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(width, height);
+        this.labelRenderer.setSize(width, height);
+    }
+}
+
+var obj1 = new vestaObj();
+var obj2 = new vestaObj();
 
 function animate(){
     requestAnimationFrame(animate);
-    vestaObj.controls.update();
-    vestaObj.render();
+    if(obj1.controls!=null){
+        obj1.controls.update();
+        obj1.render();
+    }
+    if(obj2.controls!=null){
+        obj2.controls.update();
+        obj2.render();
+    }
 }
-function onWindowResize() {
-    var width = vestaObj.gmount.clientWidth;
-    var height = vestaObj.gmount.clientHeight;
-    vestaObj.camera.left=-width;
-    vestaObj.camera.right=width;
-    vestaObj.camera.bottom=-height;
-    vestaObj.camera.top=height;
-    vestaObj.camera.updateProjectionMatrix();
-    vestaObj.renderer.setSize(width, height);
-    vestaObj.labelRenderer.setSize(width, height);
-}
+
 
 class VestaView extends Component {
     componentDidMount() {
-        vestaObj.init();
+        obj1.init();
         animate();
     }
     render() {
         return (
             <div
                 id="canvas_vesta"
-                ref={(mount) => { vestaObj.gmount = mount }}
+                ref={(mount) => { obj1.gmount = mount }}
                 //ref={(mount) => {
                 //vestaObj.gmount = mount;
                 //    vestaObj.gmount.innerHeight = vestaObj.gmount.clientHeight;
@@ -327,7 +332,7 @@ class VestaView extends Component {
 }
 class VestaViewModal extends Component {
     componentDidMount() {
-        vestaObj.init();
+        obj2.init();
         animate();
     }
     render() {
@@ -338,7 +343,7 @@ class VestaViewModal extends Component {
                         <Col xs={10} lg={10}>
                             <div
                                 id="canvas_vesta_modal"
-                                ref={(mount) => { vestaObj.gmount = mount }}
+                                ref={(mount) => { obj2.gmount = mount }}
                                // ref={(mount) => {
                                // vestaObj.gmount = mount;
                                //     vestaObj.gmount.innerHeight = window.innerHeight;
