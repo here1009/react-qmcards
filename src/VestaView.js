@@ -19,7 +19,8 @@ var vestaObj = function(){
     this.root = new THREE.Group();
     this.offset = new THREE.Vector3();
     this.loader = new ATOMCONFIGLoader();
-    this.gmout= null;
+    this.gmount= null;
+    this.gmoutn2= null;
     this.sf= 20;
     this.asf= 0.1;
     this.wb= 2.0;
@@ -73,13 +74,20 @@ var vestaObj = function(){
         labelRenderer.domElement.style.pointerEvents = 'none';
         this.labelRenderer=labelRenderer;
         this.gmount.appendChild(this.labelRenderer.domElement);
-
+        //
+        this.renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer2.setSize(this.width*0.3,this.width*0.3);
+        this.gmount2.style.position="absolute";
+        this.gmount2.style.top=(50)+"px";
+        this.gmount2.style.left=(50)+"px";
+        this.gmount2.appendChild(this.renderer2.domElement);
     };
     this.initControls= function(){
         //
         var controls = new TrackballControls(this.camera, this.renderer.domElement);
         controls.minDistance = 500;
         controls.maxDistance = 2000;
+        controls.noPan=true;
         this.controls = controls;
     };
     this.loadMolecule= function(url,root){
@@ -290,6 +298,44 @@ var vestaObj = function(){
         });
 
     };
+    this.plot_axes = function() {
+        this.camera2 =
+            new THREE.OrthographicCamera(
+                -this.width,
+                this.width,
+                this.height,
+                -this.height,
+                .1,
+                8000);
+        this.scene2 = new THREE.Scene();
+        this.camera2.up = this.camera.up;
+        this.camera2.updateProjectionMatrix();
+        var len = this.width*0.5;
+        //
+        var dir = new THREE.Vector3(1, 0, 0);
+        dir.normalize();
+        var origin = new THREE.Vector3(0, 0, 0);
+        var length = len;
+        var hex = 0xff0000;
+        var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
+        this.scene2.add(arrowHelper);
+        //
+        var dir = new THREE.Vector3(0, 1, 0);
+        dir.normalize();
+        var origin = new THREE.Vector3(0, 0, 0);
+        var length = len;
+        var hex = 0x00ff00;
+        var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
+        this.scene2.add(arrowHelper);
+        //
+        var dir = new THREE.Vector3(0, 0, 1);
+        dir.normalize();
+        var origin = new THREE.Vector3(0, 0, 0);
+        var length = len;
+        var hex = 0x0000ff;
+        var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
+        this.scene2.add(arrowHelper);
+    };
     this.init= function(){
         //window.onresize = onWindowResize;
         window.addEventListener('resize', ()=>this.onWindowResize(), false);
@@ -300,10 +346,12 @@ var vestaObj = function(){
         this.initRenderer();
         this.initControls();
         this.loadMolecule(ATOM,this.root);
+        this.plot_axes();
     };
     this.render= function () {
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
+        this.renderer2.render(this.scene2, this.camera2);
     }
     this.onWindowResize=function() {
         var width = this.gmount.clientWidth;
@@ -314,6 +362,7 @@ var vestaObj = function(){
         this.camera.top = height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);
+        //this.renderer2.setSize(width, height);
         this.labelRenderer.setSize(width, height);
     }
 }
@@ -325,10 +374,16 @@ function animate(){
     requestAnimationFrame(animate);
     if(obj1.controls!=null){
         obj1.controls.update();
+        obj1.camera2.position.set(obj1.camera.position.x, obj1.camera.position.y, obj1.camera.position.z);
+        obj1.camera2.position.setLength(2000);
+        obj1.camera2.lookAt(obj1.controls.target);
         obj1.render();
     }
     if(obj2.controls!=null){
         obj2.controls.update();
+        obj2.camera2.position.set(obj2.camera.position.x, obj2.camera.position.y, obj2.camera.position.z);
+        obj2.camera2.position.setLength(2000);
+        obj2.camera2.lookAt(obj2.controls.target);
         obj2.render();
     }
 }
@@ -341,15 +396,22 @@ class VestaView extends Component {
     }
     render() {
         return (
-            <div
-                id="canvas_vesta"
-                ref={(mount) => { obj1.gmount = mount }}
+            <div>
+                <div
+                    id="canvas_vesta"
+                    ref={(mount) => { obj1.gmount = mount }}
                 //ref={(mount) => {
                 //vestaObj.gmount = mount;
                 //    vestaObj.gmount.innerHeight = vestaObj.gmount.clientHeight;
                 //    vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
                 //}}
-            >
+                >
+                </div>
+                <div
+                    id="canvas_vesta_axes"
+                    ref={(mount) => { obj1.gmount2 = mount }}
+                >
+                </div>
             </div>
         );
     }
@@ -363,18 +425,26 @@ class VestaViewModal extends Component {
         return (
             <div>
                 <Container>
-                    <Row style={{width:"100%"}}>
+                    <Row style={{ width: "100%" }}>
                         <Col xs={10} lg={10}>
-                            <div
-                                id="canvas_vesta_modal"
-                                ref={(mount) => { obj2.gmount = mount; }}
-                               // ref={(mount) => {
-                               // vestaObj.gmount = mount;
-                               //     vestaObj.gmount.innerHeight = window.innerHeight;
-                               //     vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
-                               // }}
-                            >
+                            <div>
+                                <div
+                                    id="canvas_vesta_modal"
+                                    ref={(mount) => { obj2.gmount = mount; }}
+                                // ref={(mount) => {
+                                // vestaObj.gmount = mount;
+                                //     vestaObj.gmount.innerHeight = window.innerHeight;
+                                //     vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
+                                // }}
+                                >
 
+                                </div>
+                                <div
+                                    id="canvas_vesta_modal_axes"
+                                    ref={(mount) => { obj2.gmount2 = mount }}
+                                >
+
+                                </div>
                             </div>
                         </Col>
                         <Col xs={2} lg={2} style={{textAlign:"center"}}>

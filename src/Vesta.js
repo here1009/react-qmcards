@@ -16,18 +16,17 @@ class Vesta extends Component {
         return (
             <div>
                 <Card>
-                    <Card.Header>
                         <Row>
-                            <Col>
+                            <Col xs={10} lg={10}>
                             </Col>
+                            <Col xs={2} lg={2} style={{textAlign:"right"}}>
                             <Button variant="outline-warning" onClick={() => {
                                VestaModal.showInstance({
                                     isShow: true
                                 });
                             }} id="set_btn">Z</Button>
+                            </Col>
                         </Row>
-
-                    </Card.Header>
                     <Card.Body>
                         <Vesta_view></Vesta_view>
                     </Card.Body>
@@ -43,7 +42,6 @@ class VestaModal extends Component {
         return (
             <div>
                 <Card>
-                    <Card.Header>
                         <Row>
                             <Col xs={10} lg={10}>
                             </Col>
@@ -54,7 +52,6 @@ class VestaModal extends Component {
                             </Col>
                         </Row>
 
-                    </Card.Header>
                     <Card.Body>
                         <VestaViewModal></VestaViewModal>
                     </Card.Body>
