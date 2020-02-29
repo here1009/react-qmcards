@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './atom2.config';
+import ATOM from './atom5.config';
 import {Container,Row,Col} from 'react-bootstrap';
 import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
@@ -73,6 +73,7 @@ var vestaObj = function(){
         labelRenderer.domElement.style.pointerEvents = 'none';
         this.labelRenderer=labelRenderer;
         this.gmount.appendChild(this.labelRenderer.domElement);
+
     };
     this.initControls= function(){
         //
@@ -272,15 +273,17 @@ var vestaObj = function(){
                     start.multiplyScalar(sf);
                     end.multiplyScalar(sf);
 
-                    //var color=new THREE.Color();
+                    var lineGeometry = new THREE.Geometry();
+                    lineGeometry.vertices.push(
+                        start.clone(),
+                        end.clone()
+                    );
                     color.r = 0;
                     color.g = 0;
                     color.b = 0;
-                    var object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({ color: color }));
-                    object.position.copy(start);
-                    object.position.lerp(end, 0.5);
-                    object.scale.set(0.5, 0.5, start.distanceTo(end));
-                    object.lookAt(end);
+                    var lineMaterial = new THREE.LineBasicMaterial({ color: color });
+                    var object = new THREE.Line(lineGeometry, lineMaterial);
+                   // console.log([start,end]);
                     root.add(object);
                 }
             }
