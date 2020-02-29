@@ -1,5 +1,5 @@
 0. 参考jsmol,vesta,xcrysden代码
-1. x,y,z 坐标轴
+1. x,y,z 坐标轴 * al
 5. box边线大小不根据远近做scaling或者zoom的时候重新画box
 6. 设置：扩胞，切割，旋转，平动, 朝向
 7. MeshStandardMaterial, MeshPhysicalMaterial

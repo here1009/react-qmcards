@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './atom5.config';
+import ATOM from './ti2o.config';
 import {Container,Row,Col} from 'react-bootstrap';
 import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
@@ -23,7 +23,7 @@ var vestaObj = function(){
     this.gmoutn2= null;
     this.sf= 20;
     this.asf= 0.1;
-    this.wb= 2.0;
+    this.wb= 3.0;
     this.visualizationType = 2;
     this.initScene= function(){
         this.scene = new THREE.Scene();
@@ -85,6 +85,7 @@ var vestaObj = function(){
     this.initControls= function(){
         //
         var controls = new TrackballControls(this.camera, this.renderer.domElement);
+        //var controls = new OrbitControls(this.camera, this.renderer.domElement);
         controls.minDistance = 500;
         controls.maxDistance = 2000;
         controls.noPan=true;

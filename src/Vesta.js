@@ -19,7 +19,7 @@ class Vesta extends Component {
                         <Row>
                             <Col xs={10} lg={10}>
                             </Col>
-                            <Col xs={2} lg={2} style={{textAlign:"right"}}>
+                            <Col xs={2} lg={2} style={{textAlign:"left"}}>
                             <Button variant="outline-warning" onClick={() => {
                                VestaModal.showInstance({
                                     isShow: true
@@ -45,7 +45,7 @@ class VestaModal extends Component {
                         <Row>
                             <Col xs={10} lg={10}>
                             </Col>
-                            <Col xs={2} lg={2} style={{textAlign:"right"}}>
+                            <Col xs={2} lg={2} style={{textAlign:"left"}}>
                             <Button variant="outline-warning" onClick={() => {
                                 VestaModal.removeInstance();
                             }} id="set_btn">Z</Button>
