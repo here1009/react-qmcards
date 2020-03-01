@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './ti2o.config';
+import ATOM from './caffeine.config';
 import {Container,Row,Col} from 'react-bootstrap';
 import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
@@ -20,7 +20,7 @@ var vestaObj = function(){
     this.offset = new THREE.Vector3();
     this.loader = new ATOMCONFIGLoader();
     this.gmount= null;
-    this.gmoutn2= null;
+    this.gmount2= null;
     this.sf= 20;
     this.asf= 0.1;
     this.wb= 3.0;
@@ -65,6 +65,10 @@ var vestaObj = function(){
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(this.width, this.height);
         this.renderer=renderer;
+        this.gmount.style.position="relative";
+        //this.gmount.style.backgroundColor="#ff0000";
+        this.gmount.style.margin=0;
+        this.gmount.style.padding=0;
         this.gmount.appendChild(this.renderer.domElement);
         //
         var labelRenderer = new CSS2DRenderer();
@@ -74,13 +78,6 @@ var vestaObj = function(){
         labelRenderer.domElement.style.pointerEvents = 'none';
         this.labelRenderer=labelRenderer;
         this.gmount.appendChild(this.labelRenderer.domElement);
-        //
-        this.renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        this.renderer2.setSize(this.width*0.3,this.width*0.3);
-        this.gmount2.style.position="absolute";
-        this.gmount2.style.top=(50)+"px";
-        this.gmount2.style.left=(50)+"px";
-        this.gmount2.appendChild(this.renderer2.domElement);
     };
     this.initControls= function(){
         //
@@ -300,42 +297,124 @@ var vestaObj = function(){
 
     };
     this.plot_axes = function() {
+        var len=100;
+        var len2=len*0.8;
+        //
+        this.renderer2 = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer2.setSize(len,len);
+        this.gmount2.style.position="absolute";
+        //this.gmount2.style.backgroundColor="#000";
+        this.gmount2.style.top=(38)+"px";
+        this.gmount2.style.left=(0)+"px";
+        this.gmount2.style.margin=0;
+        this.gmount2.style.padding=0;
+        this.gmount2.appendChild(this.renderer2.domElement);
         this.camera2 =
             new THREE.OrthographicCamera(
-                -this.width,
-                this.width,
-                this.height,
-                -this.height,
+                -len,
+                len,
+                len,
+                -len,
                 .1,
                 8000);
         this.scene2 = new THREE.Scene();
         this.camera2.up = this.camera.up;
         this.camera2.updateProjectionMatrix();
-        var len = this.width*0.5;
+        var light = new THREE.DirectionalLight(0xffffff, 0.7);
+        light.position.set(1, 1, 1);
+        this.scene2.add(light);
+
+        var light = new THREE.DirectionalLight(0xffffff, 0.7);
+        light.position.set(-1, -1, -1);
+        this.scene2.add(light);
+
+        var light = new THREE.AmbientLight(0xffffff, 0.3);
+        this.scene2.add(light);
         //
-        var dir = new THREE.Vector3(1, 0, 0);
-        dir.normalize();
-        var origin = new THREE.Vector3(0, 0, 0);
-        var length = len;
-        var hex = 0xff0000;
-        var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
-        this.scene2.add(arrowHelper);
+        var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
+        var material = new THREE.MeshPhongMaterial({ color: "#dfe6e6" });
+        var object = new THREE.Mesh(sphereGeometry, material);
+        object.position.copy(new THREE.Vector3(0, 0, 0));
+        object.scale.multiplyScalar(10);
+        this.scene2.add(object);
         //
-        var dir = new THREE.Vector3(0, 1, 0);
-        dir.normalize();
-        var origin = new THREE.Vector3(0, 0, 0);
-        var length = len;
-        var hex = 0x00ff00;
-        var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
-        this.scene2.add(arrowHelper);
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
+        var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
+        var object = new THREE.Mesh(cylinderGeometry, material);
+        var start = new THREE.Vector3(0,0,0);
+        var end = new THREE.Vector3(len2,0,0);
+        object.position.copy(start);
+        object.position.lerp(end, 0.5);
+        var direction = new THREE.Vector3().subVectors(end, start);
+        var axis = new THREE.Vector3(0, 1, 0);
+        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+        object.scale.set(1, start.distanceTo(end), 1);
+        this.scene2.add(object);
         //
-        var dir = new THREE.Vector3(0, 0, 1);
-        dir.normalize();
-        var origin = new THREE.Vector3(0, 0, 0);
-        var length = len;
-        var hex = 0x0000ff;
-        var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
-        this.scene2.add(arrowHelper);
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
+        var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
+        var object = new THREE.Mesh(cylinderGeometry, material);
+        var start = new THREE.Vector3(len2,0,0);
+        var end = new THREE.Vector3(len,0,0);
+        object.position.copy(start);
+        object.position.lerp(end, 0.5);
+        var direction = new THREE.Vector3().subVectors(end, start);
+        var axis = new THREE.Vector3(0, 1, 0);
+        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+        object.scale.set(1, start.distanceTo(end), 1);
+        this.scene2.add(object);
+        //
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
+        var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
+        var object = new THREE.Mesh(cylinderGeometry, material);
+        var start = new THREE.Vector3(0,0,0);
+        var end = new THREE.Vector3(0,len2,0);
+        object.position.copy(start);
+        object.position.lerp(end, 0.5);
+        var direction = new THREE.Vector3().subVectors(end, start);
+        var axis = new THREE.Vector3(0, 1, 0);
+        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+        object.scale.set(1, start.distanceTo(end), 1);
+        this.scene2.add(object);
+        //
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
+        var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
+        var object = new THREE.Mesh(cylinderGeometry, material);
+        var start = new THREE.Vector3(0,len2,0);
+        var end = new THREE.Vector3(0,len,0);
+        object.position.copy(start);
+        object.position.lerp(end, 0.5);
+        var direction = new THREE.Vector3().subVectors(end, start);
+        var axis = new THREE.Vector3(0, 1, 0);
+        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+        object.scale.set(1, start.distanceTo(end), 1);
+        this.scene2.add(object);
+        //
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
+        var material = new THREE.MeshPhongMaterial({ color: "#009688" });
+        var object = new THREE.Mesh(cylinderGeometry, material);
+        var start = new THREE.Vector3(0,0,0);
+        var end = new THREE.Vector3(0,0,len2);
+        object.position.copy(start);
+        object.position.lerp(end, 0.5);
+        var direction = new THREE.Vector3().subVectors(end, start);
+        var axis = new THREE.Vector3(0, 1, 0);
+        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+        object.scale.set(1, start.distanceTo(end), 1);
+        this.scene2.add(object);
+        //
+        var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
+        var material = new THREE.MeshPhongMaterial({ color: "#009688" });
+        var object = new THREE.Mesh(cylinderGeometry, material);
+        var start = new THREE.Vector3(0,0,len2);
+        var end = new THREE.Vector3(0,0,len);
+        object.position.copy(start);
+        object.position.lerp(end, 0.5);
+        var direction = new THREE.Vector3().subVectors(end, start);
+        var axis = new THREE.Vector3(0, 1, 0);
+        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+        object.scale.set(1, start.distanceTo(end), 1);
+        this.scene2.add(object);
     };
     this.init= function(){
         //window.onresize = onWindowResize;
@@ -343,11 +422,11 @@ var vestaObj = function(){
         this.initScene();
         this.initCamera();
         this.initLight();
+        this.plot_axes();
         this.initGroup();
         this.initRenderer();
         this.initControls();
         this.loadMolecule(ATOM,this.root);
-        this.plot_axes();
     };
     this.render= function () {
         this.renderer.render(this.scene, this.camera);
@@ -383,7 +462,7 @@ function animate(){
     if(obj2.controls!=null){
         obj2.controls.update();
         obj2.camera2.position.set(obj2.camera.position.x, obj2.camera.position.y, obj2.camera.position.z);
-        obj2.camera2.position.setLength(2000);
+        obj2.camera2.position.setLength(1000);
         obj2.camera2.lookAt(obj2.controls.target);
         obj2.render();
     }
@@ -425,39 +504,22 @@ class VestaViewModal extends Component {
     render() {
         return (
             <div>
-                <Container>
-                    <Row style={{ width: "100%" }}>
-                        <Col xs={10} lg={10}>
-                            <div>
-                                <div
-                                    id="canvas_vesta_modal"
-                                    ref={(mount) => { obj2.gmount = mount; }}
-                                // ref={(mount) => {
-                                // vestaObj.gmount = mount;
-                                //     vestaObj.gmount.innerHeight = window.innerHeight;
-                                //     vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
-                                // }}
-                                >
+                <div
+                    id="canvas_vesta_modal"
+                    ref={(mount) => { obj2.gmount = mount; }}
+                // ref={(mount) => {
+                // vestaObj.gmount = mount;
+                //     vestaObj.gmount.innerHeight = window.innerHeight;
+                //     vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
+                // }}
+                >
 
-                                </div>
-                                <div
-                                    id="canvas_vesta_modal_axes"
-                                    ref={(mount) => { obj2.gmount2 = mount }}
-                                >
-
-                                </div>
-                            </div>
-                        </Col>
-                        <Col xs={2} lg={2} style={{textAlign:"center"}}>
-                            <ButtonGroup vertical>
-                                <Button>Button</Button>
-                                <Button>Button</Button>
-                                <Button>Button</Button>
-                                <Button>Button</Button>
-                            </ButtonGroup>
-                        </Col>
-                    </Row>
-                </Container>
+                </div>
+                <div
+                    id="canvas_vesta_modal_axes"
+                    ref={(mount) => { obj2.gmount2 = mount }}
+                >
+                </div>
             </div>
         );
     }

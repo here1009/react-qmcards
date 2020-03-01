@@ -1,6 +1,6 @@
 #canvas_vesta {
     background-color:#fff;
-    width: 90%;
+    width: 100%;
     height: 300px;
     margin: 0;
     padding: 0;
@@ -8,8 +8,8 @@
 #canvas_vesta_modal {
     background-color:#fff;
     width: 100%;
-    margin: -10px;
     height: 700px;
+    margin: 0;
     padding: 0;
 }
 #topmenu {
