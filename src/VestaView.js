@@ -6,7 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './caffeine.config';
+//import ATOM from './caffeine.config';
+import ATOM from './atom2.config';
 import {Container,Row,Col} from 'react-bootstrap';
 import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
@@ -17,6 +18,7 @@ var vestaObj = function(){
     this.labelRenderer= null;
     this.controls= null;
     this.root = new THREE.Group();
+    this.root2 = new THREE.Group();
     this.offset = new THREE.Vector3();
     this.loader = new ATOMCONFIGLoader();
     this.gmount= null;
@@ -88,7 +90,7 @@ var vestaObj = function(){
         controls.noPan=true;
         this.controls = controls;
     };
-    this.loadMolecule= function(url,root){
+    this.loadMolecule= function(url,root,root2){
 
         while (root.children.length > 0) {
 
@@ -118,22 +120,20 @@ var vestaObj = function(){
             geometryBonds.translate(offset.x, offset.y, offset.z);
 
             var al = json.al;
-
             var position = new THREE.Vector3();
             var color = new THREE.Color();
             //
+            plot_axes();
             if (visualizationType == 0) {
                 plot_atom();
-                plot_box();
             }
             else if (visualizationType == 1) {
                 plot_bond();
-                plot_box();
             } else if (visualizationType == 2) {
                 plot_bond();
                 plot_atom();
-                plot_box();
             }
+            plot_box();
             //
             function plot_bond() {
                 //plot bond
@@ -293,10 +293,158 @@ var vestaObj = function(){
                     root.add(object);
                 }
             }
+            function plot_axes(){
+                var len=100;
+                var len2=80;
+                var [x,y,z] = [1,0,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var s1 = Math.sqrt(fx*fx+fy*fy+fz*fz);
+                var [x,y,z] = [0,1,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var s2 = Math.sqrt(fx*fx+fy*fy+fz*fz);
+                var [x,y,z] = [0,0,1];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var s3 = Math.sqrt(fx*fx+fy*fy+fz*fz);
+                var s = Math.max(s1,s2,s3);
+                var lenx = len/s1;
+                var lenx2 = len2/s1;
+                var leny = len/s2;
+                var leny2 = len2/s2;
+                var lenz = len/s3;
+                var lenz2 = len2/s3;
+                //console.log([lenx,leny,lenz]);
+                //
+                var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
+                var material = new THREE.MeshPhongMaterial({ color: "#dfe6e6" });
+                var object = new THREE.Mesh(sphereGeometry, material);
+                object.position.copy(new THREE.Vector3(0, 0, 0));
+                object.scale.multiplyScalar(10);
+                root2.add(object);
+                //
+                var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
+                var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
+                var object = new THREE.Mesh(cylinderGeometry, material);
+                var start = new THREE.Vector3(0, 0, 0);
+                var [x,y,z] = [lenx2,0,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var end = new THREE.Vector3(fx, fy, fz)
+                var direction = new THREE.Vector3().subVectors(end, start);
+                var axis = new THREE.Vector3(0, 1, 0);
+                object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                object.position.copy(start);
+                object.position.lerp(end, 0.5);
+                object.scale.set(1, start.distanceTo(end), 1);
+                root2.add(object);
+                //
+                var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
+                var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
+                var object = new THREE.Mesh(cylinderGeometry, material);
+                var [x,y,z] = [lenx2,0,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var start = new THREE.Vector3(fx, fy, fz);
+                var [x,y,z] = [lenx,0,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var end = new THREE.Vector3(fx, fy, fz);
+                var direction = new THREE.Vector3().subVectors(end, start);
+                var axis = new THREE.Vector3(0, 1, 0);
+                object.position.copy(start);
+                object.position.lerp(end, 0.5);
+                object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                object.scale.set(1, start.distanceTo(end), 1);
+                root2.add(object);
+                //
+                var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
+                var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
+                var object = new THREE.Mesh(cylinderGeometry, material);
+                var start = new THREE.Vector3(0, 0, 0);
+                var [x,y,z] = [0,leny2,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var end = new THREE.Vector3(fx, fy, fz);
+                var direction = new THREE.Vector3().subVectors(end, start);
+                var axis = new THREE.Vector3(0, 1, 0);
+                object.position.copy(start);
+                object.position.lerp(end, 0.5);
+                object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                object.scale.set(1, start.distanceTo(end), 1);
+                root2.add(object);
+                //
+                var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
+                var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
+                var object = new THREE.Mesh(cylinderGeometry, material);
+                var [x,y,z] = [0,leny2,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var start = new THREE.Vector3(fx, fy, fz);
+                var [x,y,z] = [0,leny,0];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var end = new THREE.Vector3(fx, fy, fz);
+                var direction = new THREE.Vector3().subVectors(end, start);
+                var axis = new THREE.Vector3(0, 1, 0);
+                object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                object.position.copy(start);
+                object.position.lerp(end, 0.5);
+                object.scale.set(1, start.distanceTo(end), 1);
+                root2.add(object);
+                //
+                var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
+                var material = new THREE.MeshPhongMaterial({ color: "#009688" });
+                var object = new THREE.Mesh(cylinderGeometry, material);
+                var start = new THREE.Vector3(0, 0, 0);
+                var [x,y,z] = [0,0,lenz2];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var end = new THREE.Vector3(fx, fy, fz);
+                var direction = new THREE.Vector3().subVectors(end, start);
+                var axis = new THREE.Vector3(0, 1, 0);
+                object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                object.position.copy(start);
+                object.position.lerp(end, 0.5);
+                object.scale.set(1, start.distanceTo(end), 1);
+                root2.add(object);
+                //
+                var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
+                var material = new THREE.MeshPhongMaterial({ color: "#009688" });
+                var object = new THREE.Mesh(cylinderGeometry, material);
+                var [x,y,z] = [0,0,lenz2];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var start = new THREE.Vector3(fx, fy, fz);
+                var [x,y,z] = [0,0,lenz];
+                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+                var end = new THREE.Vector3(fx, fy, fz);
+                var direction = new THREE.Vector3().subVectors(end, start);
+                var axis = new THREE.Vector3(0, 1, 0);
+                object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                object.position.copy(start);
+                object.position.lerp(end, 0.5);
+                object.scale.set(1, start.distanceTo(end), 1);
+                root2.add(object);
+            }
         });
 
     };
-    this.plot_axes = function() {
+    this.initAxes = function() {
         var len=100;
         var len2=len*0.8;
         //
@@ -330,91 +478,8 @@ var vestaObj = function(){
 
         var light = new THREE.AmbientLight(0xffffff, 0.3);
         this.scene2.add(light);
-        //
-        var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
-        var material = new THREE.MeshPhongMaterial({ color: "#dfe6e6" });
-        var object = new THREE.Mesh(sphereGeometry, material);
-        object.position.copy(new THREE.Vector3(0, 0, 0));
-        object.scale.multiplyScalar(10);
-        this.scene2.add(object);
-        //
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
-        var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
-        var object = new THREE.Mesh(cylinderGeometry, material);
-        var start = new THREE.Vector3(0,0,0);
-        var end = new THREE.Vector3(len2,0,0);
-        object.position.copy(start);
-        object.position.lerp(end, 0.5);
-        var direction = new THREE.Vector3().subVectors(end, start);
-        var axis = new THREE.Vector3(0, 1, 0);
-        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-        object.scale.set(1, start.distanceTo(end), 1);
-        this.scene2.add(object);
-        //
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
-        var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
-        var object = new THREE.Mesh(cylinderGeometry, material);
-        var start = new THREE.Vector3(len2,0,0);
-        var end = new THREE.Vector3(len,0,0);
-        object.position.copy(start);
-        object.position.lerp(end, 0.5);
-        var direction = new THREE.Vector3().subVectors(end, start);
-        var axis = new THREE.Vector3(0, 1, 0);
-        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-        object.scale.set(1, start.distanceTo(end), 1);
-        this.scene2.add(object);
-        //
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
-        var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
-        var object = new THREE.Mesh(cylinderGeometry, material);
-        var start = new THREE.Vector3(0,0,0);
-        var end = new THREE.Vector3(0,len2,0);
-        object.position.copy(start);
-        object.position.lerp(end, 0.5);
-        var direction = new THREE.Vector3().subVectors(end, start);
-        var axis = new THREE.Vector3(0, 1, 0);
-        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-        object.scale.set(1, start.distanceTo(end), 1);
-        this.scene2.add(object);
-        //
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
-        var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
-        var object = new THREE.Mesh(cylinderGeometry, material);
-        var start = new THREE.Vector3(0,len2,0);
-        var end = new THREE.Vector3(0,len,0);
-        object.position.copy(start);
-        object.position.lerp(end, 0.5);
-        var direction = new THREE.Vector3().subVectors(end, start);
-        var axis = new THREE.Vector3(0, 1, 0);
-        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-        object.scale.set(1, start.distanceTo(end), 1);
-        this.scene2.add(object);
-        //
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
-        var material = new THREE.MeshPhongMaterial({ color: "#009688" });
-        var object = new THREE.Mesh(cylinderGeometry, material);
-        var start = new THREE.Vector3(0,0,0);
-        var end = new THREE.Vector3(0,0,len2);
-        object.position.copy(start);
-        object.position.lerp(end, 0.5);
-        var direction = new THREE.Vector3().subVectors(end, start);
-        var axis = new THREE.Vector3(0, 1, 0);
-        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-        object.scale.set(1, start.distanceTo(end), 1);
-        this.scene2.add(object);
-        //
-        var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
-        var material = new THREE.MeshPhongMaterial({ color: "#009688" });
-        var object = new THREE.Mesh(cylinderGeometry, material);
-        var start = new THREE.Vector3(0,0,len2);
-        var end = new THREE.Vector3(0,0,len);
-        object.position.copy(start);
-        object.position.lerp(end, 0.5);
-        var direction = new THREE.Vector3().subVectors(end, start);
-        var axis = new THREE.Vector3(0, 1, 0);
-        object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-        object.scale.set(1, start.distanceTo(end), 1);
-        this.scene2.add(object);
+
+        this.scene2.add(this.root2);
     };
     this.init= function(){
         //window.onresize = onWindowResize;
@@ -422,11 +487,11 @@ var vestaObj = function(){
         this.initScene();
         this.initCamera();
         this.initLight();
-        this.plot_axes();
         this.initGroup();
         this.initRenderer();
         this.initControls();
-        this.loadMolecule(ATOM,this.root);
+        this.initAxes();
+        this.loadMolecule(ATOM,this.root,this.root2);
     };
     this.render= function () {
         this.renderer.render(this.scene, this.camera);
