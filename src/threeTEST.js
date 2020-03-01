@@ -1,39 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import  { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './Vesta.css';
-import Head_logo from './head.svg';
-import Vesta_view from './VestaView'
-import {VestaViewModal} from './VestaView'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, ButtonToolbar, Container, Row, Col } from 'react-bootstrap';
-import { ButtonGroup, Tab, Nav } from 'react-bootstrap';
-import { Card, CardColumns } from 'react-bootstrap';
-import { Modal } from 'react-bootstrap';
+import { Button,  Container, Row, Col } from 'react-bootstrap';
+import { Card, Jumbotron } from 'react-bootstrap';
 import {ThreeTestView, ThreeTestViewModal} from './ThreeTestView'
+import { MdFullscreen,MdClose } from 'react-icons/md';
 
 class ThreeTest extends Component {
     render() {
         return (
             <div>
-                <Card>
-                    <Card.Header>
-                        <Row>
-                            <Col>
-                            </Col>
-                            <Button variant="outline-warning" onClick={() => {
+                <Card style={{margin:0,padding:0}}>
+                    <Row style={{margin:0,padding:0}}>
+                        <Col xs={10} lg={10}>
+                        </Col>
+                        <Col xs={2} lg={2} style={{ textAlign: "right",margin:0,padding:0 }}>
+                            <Button variant="light" onClick={() => {
                                ThreeTestModal.showInstance({
                                     isShow: true
                                 });
-                            }} id="set_btn">Z</Button>
-                        </Row>
-
-                    </Card.Header>
-                    <Card.Body>
+                            }} id="set_btn"><MdFullscreen/></Button>
+                        </Col>
+                    </Row>
+                    <Card.Body style={{margin:0, padding:0}}>
                         <ThreeTestView></ThreeTestView>
                     </Card.Body>
                 </Card>
             </div >
+
         );
     }
 
@@ -43,20 +39,30 @@ class ThreeTestModal extends Component {
     render() {
         return (
             <div>
-                <Card>
-                    <Card.Header>
-                        <Row>
-                            <Col>
-                            </Col>
-                            <Button variant="outline-warning" onClick={() => {
+                <Card style={{margin:0,padding:0}}>
+                    <Row style={{ margin: 0, padding: 0 }}>
+                        <Col xs={10} lg={10}>
+                        </Col>
+                        <Col xs={2} lg={2} style={{ textAlign: "right", margin: 0, padding: 0 }}>
+                            <Button variant="light" onClick={() => {
                                 ThreeTestModal.removeInstance();
-                            }} id="set_btn">Z</Button>
-                        </Row>
+                            }} id="set_btn"><MdClose/></Button>
+                        </Col>
+                    </Row>
 
-                    </Card.Header>
-                    <Card.Body>
+                    <Row style={{ margin: 0, padding: 0 }}>
+                        <Col xs={10} lg={10}>
                         <ThreeTestViewModal></ThreeTestViewModal>
-                    </Card.Body>
+                        </Col>
+                        <Col xs={2} lg={2} style={{ textAlign: "middle", margin: 0, padding: 0 }}>
+                            <Jumbotron fluid>
+                                <Container>
+                                    <p>
+                                    </p>
+                                </Container>
+                            </Jumbotron>
+                        </Col>
+                    </Row>
                 </Card>
             </div>
         );

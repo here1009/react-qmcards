@@ -1,4 +1,4 @@
-0. 参考jsmol,vesta,xcrysden代码
+0. 参考jsmol,vesta,xcrysden代码,数据参考material project
 1. x,y,z 坐标轴 * al
 6. 设置：扩胞，切割，旋转，平动, 朝向
 8. 怎么不扩包的情况下切割完整结构

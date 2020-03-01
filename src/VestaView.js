@@ -6,8 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-//import ATOM from './caffeine.config';
-import ATOM from './atom2.config';
+import ATOM from './caffeine.config';
+//import ATOM from './Al4O3.config';
 import {Container,Row,Col} from 'react-bootstrap';
 import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
 
@@ -527,7 +527,7 @@ function animate(){
     if(obj2.controls!=null){
         obj2.controls.update();
         obj2.camera2.position.set(obj2.camera.position.x, obj2.camera.position.y, obj2.camera.position.z);
-        obj2.camera2.position.setLength(1000);
+        obj2.camera2.position.setLength(2000);
         obj2.camera2.lookAt(obj2.controls.target);
         obj2.render();
     }

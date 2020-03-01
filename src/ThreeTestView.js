@@ -118,6 +118,10 @@ class ThreeTestView extends Component {
 }
 
 class ThreeTestViewModal extends Component {
+    componentDidMount() {
+        init();
+        animate();
+    }
     render() {
         return (
             <div
