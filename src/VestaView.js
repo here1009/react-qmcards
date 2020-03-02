@@ -6,10 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-import ATOM from './caffeine.config';
-//import ATOM from './Al4O3.config';
-import {Container,Row,Col} from 'react-bootstrap';
-import {Dropdown,DropdownButton,ButtonGroup,Button} from 'react-bootstrap';
+//import ATOM from './caffeine.config';
+import ATOM from './atom6.config';
 
 var vestaObj = function(){
     this.camera = null;
@@ -23,6 +21,8 @@ var vestaObj = function(){
     this.loader = new ATOMCONFIGLoader();
     this.gmount= null;
     this.gmount2= null;
+    this.initzoom=true;
+    this.box=new THREE.Box3();
     this.sf= 20;
     this.asf= 0.1;
     this.wb= 3.0;
@@ -33,7 +33,7 @@ var vestaObj = function(){
         this.height = this.gmount.clientHeight;
     };
     this.initCamera= function(){
-        var camera =
+        this.camera =
             new THREE.OrthographicCamera(
                 -this.width,
                 this.width,
@@ -41,10 +41,9 @@ var vestaObj = function(){
                 -this.height,
                 .1,
                 8000);
-        camera.zoom = 1;
-        camera.position.set(0, 0, 4000);
-        camera.updateProjectionMatrix();
-        this.camera=camera;
+        this.camera.zoom = 1;
+        this.camera.position.set(0, 0, 4000);
+        this.camera.updateProjectionMatrix();
     };
     this.initLight= function(){
         var light = new THREE.DirectionalLight(0xffffff, 0.7);
@@ -90,7 +89,7 @@ var vestaObj = function(){
         controls.noPan=true;
         this.controls = controls;
     };
-    this.loadMolecule= function(url,root,root2){
+    this.loadMolecule=function(url,root,root2){
 
         while (root.children.length > 0) {
 
@@ -442,7 +441,8 @@ var vestaObj = function(){
                 root2.add(object);
             }
         });
-
+        
+        
     };
     this.initAxes = function() {
         var len=100;
@@ -485,15 +485,27 @@ var vestaObj = function(){
         //window.onresize = onWindowResize;
         window.addEventListener('resize', ()=>this.onWindowResize(), false);
         this.initScene();
+        this.initGroup();
+        this.loadMolecule(ATOM,this.root,this.root2);
         this.initCamera();
         this.initLight();
-        this.initGroup();
         this.initRenderer();
         this.initControls();
         this.initAxes();
-        this.loadMolecule(ATOM,this.root,this.root2);
     };
-    this.render= function () {
+    this.setZoom = function(){
+        var box = new THREE.Box3();
+        box.expandByObject(this.root);
+        this.rwidth = box.max.x - box.min.x;
+        this.rheight = box.max.y - box.min.x;
+        if(isFinite(this.rwidth) && this.initzoom==true){
+            this.camera.zoom = 0.8 * this.width / this.rwidth;
+            this.camera.updateProjectionMatrix();
+            this.initzoom=false;
+        }
+    }
+    this.render = function () {
+        this.setZoom();
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
         this.renderer2.render(this.scene2, this.camera2);
@@ -501,6 +513,8 @@ var vestaObj = function(){
     this.onWindowResize=function() {
         var width = this.gmount.clientWidth;
         var height = this.gmount.clientHeight;
+        this.width = width;
+        this.height = height;
         this.camera.left = -width;
         this.camera.right = width;
         this.camera.bottom = -height;
@@ -537,6 +551,7 @@ function animate(){
 class VestaView extends Component {
     componentDidMount() {
         obj1.init();
+        //obj1.setZoom();
         animate();
     }
     render() {
@@ -544,7 +559,7 @@ class VestaView extends Component {
             <div>
                 <div
                     id="canvas_vesta"
-                    ref={(mount) => { obj1.gmount = mount }}
+                    ref={(mount) => { obj1.gmount = mount;}}
                 //ref={(mount) => {
                 //vestaObj.gmount = mount;
                 //    vestaObj.gmount.innerHeight = vestaObj.gmount.clientHeight;

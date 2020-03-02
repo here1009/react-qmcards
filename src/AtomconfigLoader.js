@@ -491,8 +491,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 						var t1 = (x >= 0.0 || Math.abs(x) < 1.e-5) && (x <= 1.0 || Math.abs(x - 1.0) < 1.e-5);
 						var t2 = (y >= 0.0 || Math.abs(y) < 1.e-5) && (y <= 1.0 || Math.abs(y - 1.0) < 1.e-5);
 						var t3 = (z >= 0.0 || Math.abs(z) < 1.e-5) && (z <= 1.0 || Math.abs(z - 1.0) < 1.e-5);
-						//if (t1 && t2 && t3) {
-						if (true) {
+						if (t1 && t2 && t3) {
+						//if (true) {
 							big_atoms[big_natom] = atoms[ia].slice();
 							big_atoms[big_natom][0] = fx;
 							big_atoms[big_natom][1] = fy;
