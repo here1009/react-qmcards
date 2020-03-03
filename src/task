@@ -1,8 +1,6 @@
 0. 参考jsmol,vesta,xcrysden代码,数据参考material project
-1. x,y,z 坐标轴 * al
 6. 设置：扩胞，切割，旋转，平动, 朝向
 8. 怎么不扩包的情况下切割完整结构
-9. 渲染的大小(根据box的大小)自动调整
 10. 单原子的操作，信息
 11. bond操作，信息
 12. 多原子选中
@@ -11,3 +9,4 @@
 15. 键长
 16. copy obj2 to obj1 when modal closed
 17. caffeine的结构怎么正确显示？
+18. 设置结构在box中的中心（平移结构）

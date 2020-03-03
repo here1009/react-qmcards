@@ -7,7 +7,7 @@ import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
 //import ATOM from './caffeine.config';
-import ATOM from './atom6.config';
+import ATOM from './c2.config';
 
 var vestaObj = function(){
     this.camera = null;
@@ -551,7 +551,6 @@ function animate(){
 class VestaView extends Component {
     componentDidMount() {
         obj1.init();
-        //obj1.setZoom();
         animate();
     }
     render() {
@@ -597,7 +596,7 @@ class VestaViewModal extends Component {
                 </div>
                 <div
                     id="canvas_vesta_modal_axes"
-                    ref={(mount) => { obj2.gmount2 = mount }}
+                    ref={(mount) => { obj2.gmount2 = mount; }}
                 >
                 </div>
             </div>
