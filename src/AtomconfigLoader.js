@@ -96,72 +96,6 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			var f=dot_product(n,b);
 			return f;
 		}
-		function check_in_box_wrong(al,p){
-			var tol=1.e-5;
-			for (var i=0;i<3;i++){
-				if(Math.abs(p[i])<=tol){
-					p[i]=0.0;
-				}
-			}
-			var o1 = [0.0,0.0,0.0];
-			var l1 = al[0].slice();
-			var l2 = al[1].slice();
-			var l3 = al[2].slice();
-			//console.log(al);
-			var p1=l1.map((v,i)=>o1[i]+v);
-			var p2=l2.map((v,i)=>o1[i]+v);
-			var p3=l3.map((v,i)=>o1[i]+v);
-			//
-			var ll=l1.map((v,i)=>v+l2[i]+l3[i]);
-			var o2 = ll.slice();
-			//
-			p1 = l1.map((v,i)=>v+l2[i]);
-			p2 = l1.map((v,i)=>v+l3[i]);
-			p1 = l2.map((v,i)=>v+l3[i]);
-			//
-			var l4=p1.map((v,i)=>v-o2[i]);
-			var l5=p2.map((v,i)=>v-o2[i]);
-			var l6=p3.map((v,i)=>v-o2[i]);
-			//
-			var pin = [0.5*o2[0],0.5*o2[1],0.5*o2[2]];
-			var pin_2= pin.map((v,i)=>v-o2[i]);
-			
-			//plane1,l1,l2,o1
-			var n=cross_product(l1,l2);
-			var r1=fplane(o1,n,p);
-			var r1_in=fplane(o1,n,pin);
-			var f1=(r1*r1_in>0.0 || Math.abs(r1*r1_in)<1.e-5) ?  1:0;
-			//plane2,l1,l3,o1
-			var n=cross_product(l1,l3);
-			var r2=fplane(o1,n,p);
-			var r2_in=fplane(o1,n,pin);
-			var f2=(r2*r2_in>0.0 || Math.abs(r2*r2_in)<1.e-5) ?  1:0;
-			//plane3,l2,l3,o1
-			var n=cross_product(l2,l3);
-			var r3=fplane(o1,n,p);
-			var r3_in=fplane(o1,n,pin);
-			var f3=(r3*r3_in>0.0 || Math.abs(r3*r3_in)<1.e-5) ?  1:0;
-			//plane4,l4,l5,o2
-			var n=cross_product(l4,l5);
-			var r4=fplane(o2,n,p);
-			var r4_in=fplane(o2,n,pin_2);
-			var f4=(r4*r4_in>0.0 || Math.abs(r4*r4_in)<1.e-5) ?  1:0;
-			//plane5,l4,l6,o2
-			var n=cross_product(l4,l6);
-			var r5 = fplane(o2, n, p);
-			var r5_in=fplane(o2,n,pin_2);
-			var f5=(r5*r5_in>0.0 || Math.abs(r5*r5_in)<1.e-5) ?  1:0;
-			//plane6,l5,l6,o2
-			var n = cross_product(l5, l6);
-			var r6 = fplane(o2, n, p);
-			var r6_in=fplane(o2,n,pin_2);
-			var f6=(r6*r6_in>0.0 || Math.abs(r6*r6_in)<1.e-5) ?  1:0;
-			if(f1&&f2&&f3&&f4&&f5&&f6) {
-				return 1;
-			}
-
-			return 0;
-		}
 		function check_in_atom(atoms,natom,a){
 			for(var i=0;i<natom;i++){
 				var c=[];
@@ -402,7 +336,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 							var b = [atoms[ib][6]+i, atoms[ib][7]+j, atoms[ib][8]+k];
 							var dis = gen_dis_dir(al, a, b);
 							var dis_bond = bond_fact * parseFloat(COVR[atoms[ib][5]]) + parseFloat(COVR[ta]);
-							if (dis <= dis_bond && dis>1.e-5) {
+							if ((Math.abs(dis - dis_bond) < 1.e-5 || dis < dis_bond) && dis > 1.e-5) {
 								var tmp = atoms[ib].slice();
 								var [x,y,z] = [b[0],b[1],b[2]];
 								tmp[6]=x;
@@ -430,7 +364,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 				var neigh=gen_neigh(atoms,al,natom,fa,ta)
 				for(var j=0;j<neigh.length;j++){
 					var tb = neigh[j][5];
-					if(ta>tb) {
+					if(ta<tb) {
 						if(!bond_type.has([ta,tb].toString())){
 							bond_type.set([ta,tb].toString(), true);
 						}
@@ -537,30 +471,30 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		}
 		//bond types
 		var bond_fact=1.2;
-		var bond_map=gen_bond_type(atoms,al,natom);
-		//console.log(bond_map);
-		//expand cell
+		//
 		var n1=1;
 		var n2=1;
 		var n3=1;
+		//expand cell
 		var big_al=al.slice();
 		var big_atoms=[];
 		var big_natom=0;
 		for (var ia = 0; ia < natom; ia++) {
+			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
 			for (var i = -n1; i <= n1; i++) {
 				for (var j = -n2; j <= n2; j++) {
 					for (var k = -n3; k <= n3; k++) {
-						var x = (atoms[ia][6] + i);
-						var y = (atoms[ia][7] + j);
-						var z = (atoms[ia][8] + k);
-						var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
-						var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
-						var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+						var x = (atomPos[0] + i);
+						var y = (atomPos[1] + j);
+						var z = (atomPos[2] + k);
 
 						var t1 = (x >= 0.0 || Math.abs(x) < 1.e-5) && (x <= 1.0 || Math.abs(x - 1.0) < 1.e-5);
 						var t2 = (y >= 0.0 || Math.abs(y) < 1.e-5) && (y <= 1.0 || Math.abs(y - 1.0) < 1.e-5);
 						var t3 = (z >= 0.0 || Math.abs(z) < 1.e-5) && (z <= 1.0 || Math.abs(z - 1.0) < 1.e-5);
 						if (t1 && t2 && t3) {
+							var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+							var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+							var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
 						//if (true) {
 							big_atoms[big_natom] = atoms[ia].slice();
 							big_atoms[big_natom][0] = fx;
@@ -576,7 +510,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 							//console.log(neigh);
 							for (var inei=0;inei<neigh.length;inei++) {
 								var nei = neigh[inei].slice();
-								if(!bond_map.has([atoms[ia][5],nei[5]].toString())) continue;
+								if(atoms[ia][5]>nei[5]) continue;
+								//if(!bond_map.has([atoms[ia][5],nei[5]].toString())) continue;
 								var pos = [nei[6],nei[7],nei[8]];
 								var [x2,y2,z2] = pos.slice();
 								var tt1 = (x2 >= 0.0 || Math.abs(x2) < 1.e-5) && (x2 <= 1.0 || Math.abs(x2 - 1.0) < 1.e-5);
@@ -632,7 +567,6 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		natom=big_natom;
 		al=big_al.slice();
 
-		// all bond
 
 		// calculate bond
 		for ( var i=0; i<natom; i ++) {
@@ -643,13 +577,15 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			var eatom = parseInt("null");	
 			var c=[];
 			var fc=[];
-			for (var j = i+1; j < natom; j ++)
+			var offs = [-0.5, 0.0, 0.0];
+			for (var j = 0; j < natom; j ++)
 			{
+				//
 				var a = [atoms[i][0], atoms[i][1], atoms[i][2]];
 				var b = [atoms[j][0], atoms[j][1], atoms[j][2]];
 				dis = gen_dis(a, b);
 				dis_bond = bond_fact*parseFloat(COVR[atoms[i][5]]) + parseFloat(COVR[atoms[j][5]]);
-				if (dis <= dis_bond) {
+				if ((Math.abs(dis-dis_bond)<1.e-5 || dis < dis_bond) && dis > 1.e-5) {
 					eatom = j + 1;
 					var h = hash(satom, eatom);
 

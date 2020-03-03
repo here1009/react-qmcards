@@ -7,7 +7,7 @@ import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
 //import ATOM from './caffeine.config';
-import ATOM from './c2.config';
+import ATOM from './atom6.config';
 
 var vestaObj = function(){
     this.camera = null;
