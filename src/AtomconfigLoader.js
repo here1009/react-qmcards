@@ -472,30 +472,32 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		//bond types
 		var bond_fact=1.2;
 		//
-		var n1=1;
-		var n2=1;
-		var n3=1;
+		var n1=3;
+		var n2=3;
+		var n3=3;
 		//expand cell
 		var big_al=al.slice();
+		big_al[0]=[al[0][0]*n1, al[0][1]*n1, al[0][2]*n1];
+		big_al[1]=[al[1][0]*n2, al[1][1]*n2, al[1][2]*n2];
+		big_al[2]=[al[2][0]*n3, al[2][1]*n3, al[2][2]*n3];
 		var big_atoms=[];
 		var big_natom=0;
 		for (var ia = 0; ia < natom; ia++) {
 			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
-			for (var i = -n1; i <= n1; i++) {
-				for (var j = -n2; j <= n2; j++) {
-					for (var k = -n3; k <= n3; k++) {
-						var x = (atomPos[0] + i);
-						var y = (atomPos[1] + j);
-						var z = (atomPos[2] + k);
+			for (var i = 0; i < n1; i++) {
+				for (var j = 0; j < n2; j++) {
+					for (var k = 0; k < n3; k++) {
+						var x = (atomPos[0] + i)/n1;
+						var y = (atomPos[1] + j)/n2;
+						var z = (atomPos[2] + k)/n3;
 
-						var t1 = (x >= 0.0 || Math.abs(x) < 1.e-5) && (x <= 1.0 || Math.abs(x - 1.0) < 1.e-5);
-						var t2 = (y >= 0.0 || Math.abs(y) < 1.e-5) && (y <= 1.0 || Math.abs(y - 1.0) < 1.e-5);
-						var t3 = (z >= 0.0 || Math.abs(z) < 1.e-5) && (z <= 1.0 || Math.abs(z - 1.0) < 1.e-5);
-						if (t1 && t2 && t3) {
-							var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
-							var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
-							var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
-						//if (true) {
+					//	var t1 = (x >= 0.0 || Math.abs(x) < 1.e-5) && (x <= 1.0 || Math.abs(x - 1.0) < 1.e-5);
+					//	var t2 = (y >= 0.0 || Math.abs(y) < 1.e-5) && (y <= 1.0 || Math.abs(y - 1.0) < 1.e-5);
+					//	var t3 = (z >= 0.0 || Math.abs(z) < 1.e-5) && (z <= 1.0 || Math.abs(z - 1.0) < 1.e-5);
+					//	if (t1 && t2 && t3) {
+							var fx = big_al[0][0] * x + big_al[1][0] * y + big_al[2][0] * z;
+							var fy = big_al[0][1] * x + big_al[1][1] * y + big_al[2][1] * z;
+							var fz = big_al[0][2] * x + big_al[1][2] * y + big_al[2][2] * z;
 							big_atoms[big_natom] = atoms[ia].slice();
 							big_atoms[big_natom][0] = fx;
 							big_atoms[big_natom][1] = fy;
@@ -506,65 +508,129 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 							big_natom = big_natom + 1;
 							//
-							var neigh = gen_neigh(atoms,al,natom,[x,y,z],atoms[ia][5]);
-							//console.log(neigh);
-							for (var inei=0;inei<neigh.length;inei++) {
-								var nei = neigh[inei].slice();
-								if(atoms[ia][5]>nei[5]) continue;
-								//if(!bond_map.has([atoms[ia][5],nei[5]].toString())) continue;
-								var pos = [nei[6],nei[7],nei[8]];
-								var [x2,y2,z2] = pos.slice();
-								var tt1 = (x2 >= 0.0 || Math.abs(x2) < 1.e-5) && (x2 <= 1.0 || Math.abs(x2 - 1.0) < 1.e-5);
-								var tt2 = (y2 >= 0.0 || Math.abs(y2) < 1.e-5) && (y2 <= 1.0 || Math.abs(y2 - 1.0) < 1.e-5);
-								var tt3 = (z2 >= 0.0 || Math.abs(z2) < 1.e-5) && (z2 <= 1.0 || Math.abs(z2 - 1.0) < 1.e-5);
-								//console.log(pos);
-								if (!(tt1 && tt2 && tt3)) {
-									//check if already in atoms
-									var fx = al[0][0] * x2 + al[1][0] * y2 + al[2][0] * z2;
-									var fy = al[0][1] * x2 + al[1][1] * y2 + al[2][1] * z2;
-									var fz = al[0][2] * x2 + al[1][2] * y2 + al[2][2] * z2;
-									if(check_in_atom(big_atoms,big_natom,[fx,fy,fz])) continue;
-									big_atoms[big_natom] = nei.slice();
-									big_atoms[big_natom][0] = fx;
-									big_atoms[big_natom][1] = fy;
-									big_atoms[big_natom][2] = fz;
-									big_atoms[big_natom][6] = x2;
-									big_atoms[big_natom][7] = y2;
-									big_atoms[big_natom][8] = z2;
-
-									big_natom = big_natom + 1;
-									// check H bond
-									var lneigh = gen_neigh(atoms,al,natom,[x2,y2,z2],nei[5]);
-									for (var ilnei=0;ilnei<lneigh.length;ilnei++){
-										var lnei = lneigh[ilnei].slice();
-										if (lnei[4] == 'H') {
-											var lpos = [lnei[6], lnei[7], lnei[8]];
-											var [lx2, ly2, lz2] = pos.slice();
-											var fx = al[0][0] * lx2 + al[1][0] * ly2 + al[2][0] * lz2;
-											var fy = al[0][1] * lx2 + al[1][1] * ly2 + al[2][1] * lz2;
-											var fz = al[0][2] * lx2 + al[1][2] * ly2 + al[2][2] * lz2;
-											if (check_in_atom(big_atoms, big_natom, [fx, fy, fz])) continue;
-											big_atoms[big_natom] = lnei.slice();
-											big_atoms[big_natom][0] = fx;
-											big_atoms[big_natom][1] = fy;
-											big_atoms[big_natom][2] = fz;
-											big_atoms[big_natom][6] = lx2;
-											big_atoms[big_natom][7] = ly2;
-											big_atoms[big_natom][8] = lz2;
-
-											big_natom = big_natom + 1;
-										}
-									}
-								}
-							}
+					}
+				}
+			}
+		}
+		natom=0;
+		atoms=[];
+		var rcut=8.0;
+		var [x,y,z]=[big_al[0][0],big_al[0][1],big_al[0][2]];
+		var alx = Math.sqrt(x*x+y*y+z*z);
+		var [x,y,z]=[big_al[1][0],big_al[1][1],big_al[1][2]];
+		var aly = Math.sqrt(x*x+y*y+z*z);
+		var [x,y,z]=[big_al[2][0],big_al[2][1],big_al[2][2]];
+		var alz = Math.sqrt(x*x+y*y+z*z);
+		var dimx = Math.ceil(alx/rcut);
+		var dimy = Math.ceil(aly/rcut);
+		var dimz = Math.ceil(alz/rcut);
+		console.log([dimx,dimy,dimz]);
+		
+		var sec=[];
+		for (var i=0;i<dimx;i++){
+			sec[i]=[];
+			for(var j=0;j<dimy;j++){
+				sec[i][j] = [];
+				for(var k=0;k<dimz;k++){
+					sec[i][j][k] = [];
+				}
+			}
+		}
+		var insec= [];
+		
+		for (var ia =0; ia<big_natom; ia++){
+			var [x,y,z]=[big_atoms[ia][6],big_atoms[ia][7],big_atoms[ia][8]];
+			var px = x*alx;
+			var py = y*aly;
+			var pz = z*alz;
+			var idx = Math.floor(px/rcut);
+			var idy = Math.floor(py/rcut);
+			var idz = Math.floor(pz/rcut);
+			sec[idx][idy][idz].push(ia);
+			insec[ia]=[idx,idy,idz];
+		}
+		var sum=0
+		natom=0;
+		atoms=[];
+		var c1 =[0.33333,0.33333,0.33333];
+		var c2 =[0.66666,0.66666,0.66666];
+		for (var i=0;i<dimx;i++){
+			for(var j=0;j<dimy;j++){
+				for(var k=0;k<dimz;k++){
+					sum=sum+sec[i][j][k].length;
+					for(var ii=0;ii<sec[i][j][k].length;ii++){
+						var ia = sec[i][j][k][ii];
+						var pos = big_atoms[ia].slice();
+						var [x,y,z] =[pos[6],pos[7],pos[8]];
+						var t1 = (x >= c1[0] || Math.abs(x-c1[0]) < 1.e-5) && (x <= c2[0] || Math.abs(x - c2[0]) < 1.e-5);
+						var t2 = (y >= c1[1] || Math.abs(y-c1[1]) < 1.e-5) && (y <= c2[1] || Math.abs(y - c2[1]) < 1.e-5);
+						var t3 = (z >= c1[2] || Math.abs(z-c1[2]) < 1.e-5) && (z <= c2[2] || Math.abs(z - c2[2]) < 1.e-5);
+						if (t1 && t2 && t3) {
+							atoms.push(pos);
+							natom=natom+1;
+							//
 						}
 					}
 				}
 			}
 		}
+		console.log(sum,big_natom);
+
+						//	var neigh = gen_neigh(atoms,al,natom,[x,y,z],atoms[ia][5]);
+						//	//console.log(neigh);
+						//	for (var inei=0;inei<neigh.length;inei++) {
+						//		var nei = neigh[inei].slice();
+						//		if(atoms[ia][5]>nei[5]) continue;
+						//		//if(!bond_map.has([atoms[ia][5],nei[5]].toString())) continue;
+						//		var pos = [nei[6],nei[7],nei[8]];
+						//		var [x2,y2,z2] = pos.slice();
+						//		var tt1 = (x2 >= 0.0 || Math.abs(x2) < 1.e-5) && (x2 <= 1.0 || Math.abs(x2 - 1.0) < 1.e-5);
+						//		var tt2 = (y2 >= 0.0 || Math.abs(y2) < 1.e-5) && (y2 <= 1.0 || Math.abs(y2 - 1.0) < 1.e-5);
+						//		var tt3 = (z2 >= 0.0 || Math.abs(z2) < 1.e-5) && (z2 <= 1.0 || Math.abs(z2 - 1.0) < 1.e-5);
+						//		//console.log(pos);
+						//		if (!(tt1 && tt2 && tt3)) {
+						//			//check if already in atoms
+						//			var fx = al[0][0] * x2 + al[1][0] * y2 + al[2][0] * z2;
+						//			var fy = al[0][1] * x2 + al[1][1] * y2 + al[2][1] * z2;
+						//			var fz = al[0][2] * x2 + al[1][2] * y2 + al[2][2] * z2;
+						//			if(check_in_atom(big_atoms,big_natom,[fx,fy,fz])) continue;
+						//			big_atoms[big_natom] = nei.slice();
+						//			big_atoms[big_natom][0] = fx;
+						//			big_atoms[big_natom][1] = fy;
+						//			big_atoms[big_natom][2] = fz;
+						//			big_atoms[big_natom][6] = x2;
+						//			big_atoms[big_natom][7] = y2;
+						//			big_atoms[big_natom][8] = z2;
+
+						//			big_natom = big_natom + 1;
+						//			// check H bond
+						//			var lneigh = gen_neigh(atoms,al,natom,[x2,y2,z2],nei[5]);
+						//			for (var ilnei=0;ilnei<lneigh.length;ilnei++){
+						//				var lnei = lneigh[ilnei].slice();
+						//				if (lnei[4] == 'H') {
+						//					var lpos = [lnei[6], lnei[7], lnei[8]];
+						//					var [lx2, ly2, lz2] = pos.slice();
+						//					var fx = al[0][0] * lx2 + al[1][0] * ly2 + al[2][0] * lz2;
+						//					var fy = al[0][1] * lx2 + al[1][1] * ly2 + al[2][1] * lz2;
+						//					var fz = al[0][2] * lx2 + al[1][2] * ly2 + al[2][2] * lz2;
+						//					if (check_in_atom(big_atoms, big_natom, [fx, fy, fz])) continue;
+						//					big_atoms[big_natom] = lnei.slice();
+						//					big_atoms[big_natom][0] = fx;
+						//					big_atoms[big_natom][1] = fy;
+						//					big_atoms[big_natom][2] = fz;
+						//					big_atoms[big_natom][6] = lx2;
+						//					big_atoms[big_natom][7] = ly2;
+						//					big_atoms[big_natom][8] = lz2;
+
+						//					big_natom = big_natom + 1;
+						//				}
+						//			}
+						//		}
+						//	}
+		
 		//console.log(big_atoms);
-		atoms=big_atoms.slice();
-		natom=big_natom;
+		//atoms=big_atoms.slice();
+		//natom=big_natom;
 		al=big_al.slice();
 
 
