@@ -377,7 +377,82 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			}
 			return bond_type;
 		}
-		var CPK = { h: [ 255, 255, 255 ], he: [ 217, 255, 255 ], li: [ 204, 128, 255 ], be: [ 194, 255, 0 ], b: [ 255, 181, 181 ], c: [ 144, 144, 144 ], n: [ 48, 80, 248 ], o: [ 255, 13, 13 ], f: [ 144, 224, 80 ], ne: [ 179, 227, 245 ], na: [ 171, 92, 242 ], mg: [ 138, 255, 0 ], al: [ 191, 166, 166 ], si: [ 240, 200, 160 ], p: [ 255, 128, 0 ], s: [ 255, 255, 48 ], cl: [ 31, 240, 31 ], ar: [ 128, 209, 227 ], k: [ 143, 64, 212 ], ca: [ 61, 255, 0 ], sc: [ 230, 230, 230 ], ti: [ 191, 194, 199 ], v: [ 166, 166, 171 ], cr: [ 138, 153, 199 ], mn: [ 156, 122, 199 ], fe: [ 224, 102, 51 ], co: [ 240, 144, 160 ], ni: [ 80, 208, 80 ], cu: [ 200, 128, 51 ], zn: [ 125, 128, 176 ], ga: [ 194, 143, 143 ], ge: [ 102, 143, 143 ], as: [ 189, 128, 227 ], se: [ 255, 161, 0 ], br: [ 166, 41, 41 ], kr: [ 92, 184, 209 ], rb: [ 112, 46, 176 ], sr: [ 0, 255, 0 ], y: [ 148, 255, 255 ], zr: [ 148, 224, 224 ], nb: [ 115, 194, 201 ], mo: [ 84, 181, 181 ], tc: [ 59, 158, 158 ], ru: [ 36, 143, 143 ], rh: [ 10, 125, 140 ], pd: [ 0, 105, 133 ], ag: [ 192, 192, 192 ], cd: [ 255, 217, 143 ], in: [ 166, 117, 115 ], sn: [ 102, 128, 128 ], sb: [ 158, 99, 181 ], te: [ 212, 122, 0 ], i: [ 148, 0, 148 ], xe: [ 66, 158, 176 ], cs: [ 87, 23, 143 ], ba: [ 0, 201, 0 ], la: [ 112, 212, 255 ], ce: [ 255, 255, 199 ], pr: [ 217, 255, 199 ], nd: [ 199, 255, 199 ], pm: [ 163, 255, 199 ], sm: [ 143, 255, 199 ], eu: [ 97, 255, 199 ], gd: [ 69, 255, 199 ], tb: [ 48, 255, 199 ], dy: [ 31, 255, 199 ], ho: [ 0, 255, 156 ], er: [ 0, 230, 117 ], tm: [ 0, 212, 82 ], yb: [ 0, 191, 56 ], lu: [ 0, 171, 36 ], hf: [ 77, 194, 255 ], ta: [ 77, 166, 255 ], w: [ 33, 148, 214 ], re: [ 38, 125, 171 ], os: [ 38, 102, 150 ], ir: [ 23, 84, 135 ], pt: [ 208, 208, 224 ], au: [ 255, 209, 35 ], hg: [ 184, 184, 208 ], tl: [ 166, 84, 77 ], pb: [ 87, 89, 97 ], bi: [ 158, 79, 181 ], po: [ 171, 92, 0 ], at: [ 117, 79, 69 ], rn: [ 66, 130, 150 ], fr: [ 66, 0, 102 ], ra: [ 0, 125, 0 ], ac: [ 112, 171, 250 ], th: [ 0, 186, 255 ], pa: [ 0, 161, 255 ], u: [ 0, 143, 255 ], np: [ 0, 128, 255 ], pu: [ 0, 107, 255 ], am: [ 84, 92, 242 ], cm: [ 120, 92, 227 ], bk: [ 138, 79, 227 ], cf: [ 161, 54, 212 ], es: [ 179, 31, 212 ], fm: [ 179, 31, 186 ], md: [ 179, 13, 166 ], no: [ 189, 13, 135 ], lr: [ 199, 0, 102 ], rf: [ 204, 0, 89 ], db: [ 209, 0, 79 ], sg: [ 217, 0, 69 ], bh: [ 224, 0, 56 ], hs: [ 230, 0, 46 ], mt: [ 235, 0, 38 ], ds: [ 235, 0, 38 ], rg: [ 235, 0, 38 ], cn: [ 235, 0, 38 ], uut: [ 235, 0, 38 ], uuq: [ 235, 0, 38 ], uup: [ 235, 0, 38 ], uuh: [ 235, 0, 38 ], uus: [ 235, 0, 38 ], uuo: [ 235, 0, 38 ] };
+		function check_add_neigh_out_boundary(ia, isec, depth, eleflag) {
+			if (depth==0) return;
+			for (var m = -1; m <= 1; m++) {
+				for (var n = -1; n <= 1; n++) {
+					for (var q = -1; q <= 1; q++) {
+						var is = isec[0] + m;
+						var js = isec[1] + n;;
+						var ks = isec[2] + q;
+						if (is >= 0 && is < dimx && js >= 0 && js < dimy && ks >= 0 && ks < dimz) {
+							var loc_atoms = sec[is][js][ks];
+							for (var ias = 0; ias < loc_atoms.length; ias++) {
+								var iac = loc_atoms[ias];
+								var [x, y, z] = [big_atoms[iac][6], big_atoms[iac][7], big_atoms[iac][8]];
+								var t1 = (x >= c1[0] || Math.abs(x - c1[0]) < 1.e-5) && (x <= c2[0] || Math.abs(x - c2[0]) < 1.e-5);
+								var t2 = (y >= c1[1] || Math.abs(y - c1[1]) < 1.e-5) && (y <= c2[1] || Math.abs(y - c2[1]) < 1.e-5);
+								var t3 = (z >= c1[2] || Math.abs(z - c1[2]) < 1.e-5) && (z <= c2[2] || Math.abs(z - c2[2]) < 1.e-5);
+								//
+								if (!(t1 && t2 && t3) && in_atoms_flag[iac] == 0) {
+									var a = [big_atoms[ia][0], big_atoms[ia][1], big_atoms[ia][2]];
+									var b = [big_atoms[iac][0], big_atoms[iac][1], big_atoms[iac][2]];
+									var dis = gen_dis(a, b);
+									var dis_bond = bond_fact * parseFloat(COVR[big_atoms[ia][5]]) + parseFloat(COVR[big_atoms[iac][5]]);
+									if (dis <= dis_bond || Math.abs(dis - dis_bond) < 1.e-5) {
+										atoms.push(big_atoms[iac].slice());
+										natom = natom + 1;
+										in_atoms_flag[iac] = 1;
+										check_add_neigh_out_boundary(iac, insec[iac], depth-1, eleflag);
+										if(eleflag!=""){
+											check_add_specitype_neigh_out_boundary(iac,insec[iac],1,eleflag);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		function check_add_specitype_neigh_out_boundary(ia, isec, depth, eleflag) {
+			if (depth==0) return;
+			for (var m = -1; m <= 1; m++) {
+				for (var n = -1; n <= 1; n++) {
+					for (var q = -1; q <= 1; q++) {
+						var is = isec[0] + m;
+						var js = isec[1] + n;;
+						var ks = isec[2] + q;
+						if (is >= 0 && is < dimx && js >= 0 && js < dimy && ks >= 0 && ks < dimz) {
+							var loc_atoms = sec[is][js][ks];
+							for (var ias = 0; ias < loc_atoms.length; ias++) {
+								var iac = loc_atoms[ias];
+								var [x, y, z] = [big_atoms[iac][6], big_atoms[iac][7], big_atoms[iac][8]];
+								var t1 = (x >= c1[0] || Math.abs(x - c1[0]) < 1.e-5) && (x <= c2[0] || Math.abs(x - c2[0]) < 1.e-5);
+								var t2 = (y >= c1[1] || Math.abs(y - c1[1]) < 1.e-5) && (y <= c2[1] || Math.abs(y - c2[1]) < 1.e-5);
+								var t3 = (z >= c1[2] || Math.abs(z - c1[2]) < 1.e-5) && (z <= c2[2] || Math.abs(z - c2[2]) < 1.e-5);
+								//
+								if (!(t1 && t2 && t3) && in_atoms_flag[iac] == 0) {
+									var a = [big_atoms[ia][0], big_atoms[ia][1], big_atoms[ia][2]];
+									var b = [big_atoms[iac][0], big_atoms[iac][1], big_atoms[iac][2]];
+									var dis = gen_dis(a, b);
+									var dis_bond = bond_fact * parseFloat(COVR[big_atoms[ia][5]]) + parseFloat(COVR[big_atoms[iac][5]]);
+									if (dis <= dis_bond || Math.abs(dis - dis_bond) < 1.e-5) {
+										if(big_atoms[iac][4]==eleflag){
+											atoms.push(big_atoms[iac].slice());
+											natom = natom + 1;
+											in_atoms_flag[iac] = 1;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}	
+
+		var CPK = { h: [255, 255, 255], he: [217, 255, 255], li: [204, 128, 255], be: [194, 255, 0], b: [255, 181, 181], c: [144, 144, 144], n: [48, 80, 248], o: [255, 13, 13], f: [144, 224, 80], ne: [179, 227, 245], na: [171, 92, 242], mg: [138, 255, 0], al: [191, 166, 166], si: [240, 200, 160], p: [255, 128, 0], s: [255, 255, 48], cl: [31, 240, 31], ar: [128, 209, 227], k: [143, 64, 212], ca: [61, 255, 0], sc: [230, 230, 230], ti: [191, 194, 199], v: [166, 166, 171], cr: [138, 153, 199], mn: [156, 122, 199], fe: [224, 102, 51], co: [240, 144, 160], ni: [80, 208, 80], cu: [200, 128, 51], zn: [125, 128, 176], ga: [194, 143, 143], ge: [102, 143, 143], as: [189, 128, 227], se: [255, 161, 0], br: [166, 41, 41], kr: [92, 184, 209], rb: [112, 46, 176], sr: [0, 255, 0], y: [148, 255, 255], zr: [148, 224, 224], nb: [115, 194, 201], mo: [84, 181, 181], tc: [59, 158, 158], ru: [36, 143, 143], rh: [10, 125, 140], pd: [0, 105, 133], ag: [192, 192, 192], cd: [255, 217, 143], in: [166, 117, 115], sn: [102, 128, 128], sb: [158, 99, 181], te: [212, 122, 0], i: [148, 0, 148], xe: [66, 158, 176], cs: [87, 23, 143], ba: [0, 201, 0], la: [112, 212, 255], ce: [255, 255, 199], pr: [217, 255, 199], nd: [199, 255, 199], pm: [163, 255, 199], sm: [143, 255, 199], eu: [97, 255, 199], gd: [69, 255, 199], tb: [48, 255, 199], dy: [31, 255, 199], ho: [0, 255, 156], er: [0, 230, 117], tm: [0, 212, 82], yb: [0, 191, 56], lu: [0, 171, 36], hf: [77, 194, 255], ta: [77, 166, 255], w: [33, 148, 214], re: [38, 125, 171], os: [38, 102, 150], ir: [23, 84, 135], pt: [208, 208, 224], au: [255, 209, 35], hg: [184, 184, 208], tl: [166, 84, 77], pb: [87, 89, 97], bi: [158, 79, 181], po: [171, 92, 0], at: [117, 79, 69], rn: [66, 130, 150], fr: [66, 0, 102], ra: [0, 125, 0], ac: [112, 171, 250], th: [0, 186, 255], pa: [0, 161, 255], u: [0, 143, 255], np: [0, 128, 255], pu: [0, 107, 255], am: [84, 92, 242], cm: [120, 92, 227], bk: [138, 79, 227], cf: [161, 54, 212], es: [179, 31, 212], fm: [179, 31, 186], md: [179, 13, 166], no: [189, 13, 135], lr: [199, 0, 102], rf: [204, 0, 89], db: [209, 0, 79], sg: [217, 0, 69], bh: [224, 0, 56], hs: [230, 0, 46], mt: [235, 0, 38], ds: [235, 0, 38], rg: [235, 0, 38], cn: [235, 0, 38], uut: [235, 0, 38], uuq: [235, 0, 38], uup: [235, 0, 38], uuh: [235, 0, 38], uus: [235, 0, 38], uuo: [235, 0, 38] };
 		var RAD = {
 			h:53,he:31,li:167,be:112,b:87,c:67,n:56,o:48,f:42,ne:38,
 			na:190,mg:145,al:118,si:111,p:98,s:88,cl:79,ar:71,
@@ -496,6 +571,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var minz = -frcutz;
 		var maxz = frcutz+1.0;
 		//
+		var in_atoms_flag=[];
 		var big_atoms=[];
 		var ori_atoms_index=[];
 		var big_natom=0;
@@ -526,8 +602,10 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 							big_atoms[big_natom][7] = y;
 							big_atoms[big_natom][8] = z;
 							//
+							in_atoms_flag[big_natom]=0;
 							if(i==0 && j==0 && k==0) {
 								ori_atoms_index.push(big_natom);
+								in_atoms_flag[big_natom]=1;
 							}
 							big_natom = big_natom + 1;
 							//
@@ -568,56 +646,13 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			insec[ia]=[idx,idy,idz];
 		}
 		//cut cell
-		natom=0;
-		atoms=[];
 		var c1 =[0.0,0.0,0.0];
 		var c2 =[1.0,1.0,1.0];
-		for (var i=0;i<dimx;i++){
-			for(var j=0;j<dimy;j++){
-				for(var k=0;k<dimz;k++){
-					for(var ii=0;ii<sec[i][j][k].length;ii++){
-						var ia = sec[i][j][k][ii];
-						var pos = big_atoms[ia].slice();
-						var [x,y,z] =[pos[6],pos[7],pos[8]];
-						var t1 = (x >= c1[0] || Math.abs(x-c1[0]) < 1.e-5) && (x <= c2[0] || Math.abs(x - c2[0]) < 1.e-5);
-						var t2 = (y >= c1[1] || Math.abs(y-c1[1]) < 1.e-5) && (y <= c2[1] || Math.abs(y - c2[1]) < 1.e-5);
-						var t3 = (z >= c1[2] || Math.abs(z-c1[2]) < 1.e-5) && (z <= c2[2] || Math.abs(z - c2[2]) < 1.e-5);
-						if (t1 && t2 && t3) {
-							atoms.push(pos);
-							natom=natom+1;
-							//
-							var neigh=[];
-							var a = [big_atoms[ia][0],big_atoms[ia][1],big_atoms[ia][2]];
-							for (var m=-1;m<=1;m++){
-								for (var n=-1;n<=1;n++){
-									for (var q=-1;q<=1;q++){
-										var is = i+m;
-										var js = j+n;;
-										var ks = k+q;
-										if(is>=0 && is<dimx && js>=0 && js<dimy && ks>=0 && ks<dimz){
-											var loc_atoms = sec[is][js][ks];
-											for (var ias=0;ias<loc_atoms.length;ias++){
-												var iac=loc_atoms[ias];
-												if(iac!=ia){
-													var b = [big_atoms[iac][0],big_atoms[iac][1],big_atoms[iac][2]];
-													var dis = gen_dis(a, b);
-													var dis_bond = bond_fact * parseFloat(COVR[big_atoms[ia][5]]) + parseFloat(COVR[big_atoms[iac][5]]);
-													if(dis<=dis_bond || Math.abs(dis-dis_bond)<1.e-5){
-														atoms.push(big_atoms[iac].slice());
-														natom=natom+1;
-														//console.log(ia,iac, dis, dis_bond);
-													}
-													// need flag to check one atom in or not
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+		for(var i=0;i<ori_atoms_index.length;i++){
+			var ia = ori_atoms_index[i];
+			var isec = insec[ia];
+			//if ia's neigh's neigh is H, add the H
+			check_add_neigh_out_boundary(ia,isec,1,"H")
 		}
 		//console.log(big_atoms);
 		//atoms=big_atoms.slice();
