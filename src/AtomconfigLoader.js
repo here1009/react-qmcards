@@ -590,6 +590,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 						var t1 = (x >= minx || Math.abs(x-minx) < 1.e-5) && (x <= maxx || Math.abs(x - maxx) < 1.e-5);
 						var t2 = (y >= miny || Math.abs(y-miny) < 1.e-5) && (y <= maxy || Math.abs(y - maxy) < 1.e-5);
 						var t3 = (z >= minz || Math.abs(z-minz) < 1.e-5) && (z <= maxz || Math.abs(z - maxz) < 1.e-5);
+
 						if (t1 && t2 && t3) {
 							var fx = big_al[0][0] * x + big_al[1][0] * y + big_al[2][0] * z;
 							var fy = big_al[0][1] * x + big_al[1][1] * y + big_al[2][1] * z;
@@ -603,7 +604,11 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 							big_atoms[big_natom][8] = z;
 							//
 							in_atoms_flag[big_natom]=0;
-							if(i==0 && j==0 && k==0) {
+
+							var lt1 = (x >= 0.0 || Math.abs(x) < 1.e-5) && (x <= 1.0 || Math.abs(x - 1.0) < 1.e-5);
+							var lt2 = (y >= 0.0 || Math.abs(y) < 1.e-5) && (y <= 1.0 || Math.abs(y - 1.0) < 1.e-5);
+							var lt3 = (z >= 0.0 || Math.abs(z) < 1.e-5) && (z <= 1.0 || Math.abs(z - 1.0) < 1.e-5);
+							if(lt1&&lt2&&lt3){
 								ori_atoms_index.push(big_natom);
 								in_atoms_flag[big_natom]=1;
 							}
@@ -645,11 +650,16 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			sec[idx][idy][idz].push(ia);
 			insec[ia]=[idx,idy,idz];
 		}
+		// can flag sec if contain atoms out of boundary
 		//cut cell
 		var c1 =[0.0,0.0,0.0];
 		var c2 =[1.0,1.0,1.0];
-		for(var i=0;i<ori_atoms_index.length;i++){
+		natom=0;
+		atoms=[];
+		for (var i = 0; i < ori_atoms_index.length; i++) {
 			var ia = ori_atoms_index[i];
+			atoms.push(big_atoms[ia]);
+			natom+=1;
 			var isec = insec[ia];
 			//if ia's neigh's neigh is H, add the H
 			check_add_neigh_out_boundary(ia,isec,1,"H")
