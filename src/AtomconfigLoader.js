@@ -398,10 +398,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 						if (is >= 0 && is < dimx && js >= 0 && js < dimy && ks >= 0 && ks < dimz) {
 							var loc_atoms = sec[is][js][ks];
 							var [min,max] = sec_min_max[is][js][ks].slice();
-							//console.log(is,js,ks,sec_min_max[is][js][ks]);
 							var l = [0, 0, 0];
 							var r = [1, 1, 1];
-							if (!check_in_range(min, l, r) && !check_in_range(max, l, r)) {
+							if (!(check_in_range(min, l, r) && check_in_range(max, l, r))) {
 								for (var ias = 0; ias < loc_atoms.length; ias++) {
 									var iac = loc_atoms[ias];
 									var [x, y, z] = [big_atoms[iac][6], big_atoms[iac][7], big_atoms[iac][8]];
@@ -414,7 +413,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 										var b = [big_atoms[iac][0], big_atoms[iac][1], big_atoms[iac][2]];
 										var dis = gen_dis(a, b);
 										var dis_bond = bond_fact * parseFloat(COVR[big_atoms[ia][5]]) + parseFloat(COVR[big_atoms[iac][5]]);
-										if (big_atoms[ia][5] <= big_atoms[iac][5]) {
+										//if (big_atoms[ia][5] <= big_atoms[iac][5]) {
 											if (dis <= dis_bond || Math.abs(dis - dis_bond) < 1.e-5) {
 												atoms.push(big_atoms[iac].slice());
 												natom = natom + 1;
@@ -424,7 +423,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 													check_add_specitype_neigh_out_boundary(iac, insec[iac], 1, eleflag);
 												}
 											}
-										}
+										//}
 									}
 								}
 							}
@@ -434,7 +433,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			}
 		}
 		function check_add_specitype_neigh_out_boundary(ia, isec, depth, eleflag) {
-			if (depth==0) return;
+			if (depth == 0) return;
 			for (var m = -1; m <= 1; m++) {
 				for (var n = -1; n <= 1; n++) {
 					for (var q = -1; q <= 1; q++) {
@@ -443,23 +442,28 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 						var ks = isec[2] + q;
 						if (is >= 0 && is < dimx && js >= 0 && js < dimy && ks >= 0 && ks < dimz) {
 							var loc_atoms = sec[is][js][ks];
-							for (var ias = 0; ias < loc_atoms.length; ias++) {
-								var iac = loc_atoms[ias];
-								var [x, y, z] = [big_atoms[iac][6], big_atoms[iac][7], big_atoms[iac][8]];
-								var t1 = (x >= c1[0] || Math.abs(x - c1[0]) < 1.e-5) && (x <= c2[0] || Math.abs(x - c2[0]) < 1.e-5);
-								var t2 = (y >= c1[1] || Math.abs(y - c1[1]) < 1.e-5) && (y <= c2[1] || Math.abs(y - c2[1]) < 1.e-5);
-								var t3 = (z >= c1[2] || Math.abs(z - c1[2]) < 1.e-5) && (z <= c2[2] || Math.abs(z - c2[2]) < 1.e-5);
-								//
-								if (!(t1 && t2 && t3) && in_atoms_flag[iac] == 0) {
-									var a = [big_atoms[ia][0], big_atoms[ia][1], big_atoms[ia][2]];
-									var b = [big_atoms[iac][0], big_atoms[iac][1], big_atoms[iac][2]];
-									var dis = gen_dis(a, b);
-									var dis_bond = bond_fact * parseFloat(COVR[big_atoms[ia][5]]) + parseFloat(COVR[big_atoms[iac][5]]);
-									if (dis <= dis_bond || Math.abs(dis - dis_bond) < 1.e-5) {
-										if(big_atoms[iac][4]==eleflag){
-											atoms.push(big_atoms[iac].slice());
-											natom = natom + 1;
-											in_atoms_flag[iac] = 1;
+							var [min, max] = sec_min_max[is][js][ks].slice();
+							var l = [0, 0, 0];
+							var r = [1, 1, 1];
+							if (!(check_in_range(min, l, r) && check_in_range(max, l, r))) {
+								for (var ias = 0; ias < loc_atoms.length; ias++) {
+									var iac = loc_atoms[ias];
+									var [x, y, z] = [big_atoms[iac][6], big_atoms[iac][7], big_atoms[iac][8]];
+									var t1 = (x >= c1[0] || Math.abs(x - c1[0]) < 1.e-5) && (x <= c2[0] || Math.abs(x - c2[0]) < 1.e-5);
+									var t2 = (y >= c1[1] || Math.abs(y - c1[1]) < 1.e-5) && (y <= c2[1] || Math.abs(y - c2[1]) < 1.e-5);
+									var t3 = (z >= c1[2] || Math.abs(z - c1[2]) < 1.e-5) && (z <= c2[2] || Math.abs(z - c2[2]) < 1.e-5);
+									//
+									if (!(t1 && t2 && t3) && in_atoms_flag[iac] == 0) {
+										var a = [big_atoms[ia][0], big_atoms[ia][1], big_atoms[ia][2]];
+										var b = [big_atoms[iac][0], big_atoms[iac][1], big_atoms[iac][2]];
+										var dis = gen_dis(a, b);
+										var dis_bond = bond_fact * parseFloat(COVR[big_atoms[ia][5]]) + parseFloat(COVR[big_atoms[iac][5]]);
+										if (dis <= dis_bond || Math.abs(dis - dis_bond) < 1.e-5) {
+											if (big_atoms[iac][4] == eleflag) {
+												atoms.push(big_atoms[iac].slice());
+												natom = natom + 1;
+												in_atoms_flag[iac] = 1;
+											}
 										}
 									}
 								}
@@ -714,7 +718,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			natom+=1;
 			var isec = insec[ia];
 			//if ia's neigh's neigh is H, add the H
-			check_add_neigh_out_boundary(ia,isec,1,"H")
+			check_add_neigh_out_boundary(ia,isec,3,"H")
 		}
 		//console.log(big_atoms);
 		//atoms=big_atoms.slice();
