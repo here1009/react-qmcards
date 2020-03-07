@@ -10,3 +10,4 @@
 18. 设置结构在box中的中心（平移结构）
 20. 判断以什么方式寻找bond, recursive or not.
     作为一个输入参数，调整recursive depth.
+21. move things out of AtomconfigLoader.js

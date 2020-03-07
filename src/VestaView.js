@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { readFile, readFileSync } from 'fs';
 import './VestaView.css'
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
@@ -492,7 +493,33 @@ var vestaObj = function(){
         this.initRenderer();
         this.initControls();
         this.initAxes();
-    };
+        var loader = new THREE.FileLoader();
+        this.data='';
+        this.test='shitsync';
+        var scope=this;
+        // set parameters
+        // pass in parameters use scope(not use keyword this)
+        // reload file, build geometry
+        // if need returned datas, need sync loader.load or check state in loop
+            loader.load(
+                ATOM,
+                function (data) {
+                    console.log(scope.test);
+                    scope.test = 'TEST';
+                },
+                // onProgress callback
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                    console.log(scope.test);
+                },
+
+                // onError callback
+                function (err) {
+                    console.error('An error happened');
+                }
+            );
+       
+    }
     this.setZoom = function(){
         var box = new THREE.Box3();
         box.expandByObject(this.root);
