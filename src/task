@@ -11,3 +11,4 @@
 20. 判断以什么方式寻找bond, recursive or not.
     作为一个输入参数，调整recursive depth.
 21. move things out of AtomconfigLoader.js
+22. import 和 直接用url的区别

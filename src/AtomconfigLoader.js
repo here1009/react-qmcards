@@ -20,10 +20,11 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 	constructor: ATOMCONFIGLoader,
 
-	load: function ( url, onLoad, onProgress, onError ) {
+	load: function ( url, probs, onLoad, onProgress, onError ) {
 
 		var scope = this;
-
+		this.bond_depth = probs.bond_depth==null?0:probs.bond_depth;
+		//console.log(this.dpth);
 		var loader = new FileLoader( scope.manager );
 		loader.setPath( scope.path );
 		loader.load( url, function ( text ) {
@@ -37,6 +38,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 	// Based on CanvasMol PDB parser
 
 	parse: function ( text ) {
+		//console.log(this);
 		function det(al){
 			return al[0][0]*(al[1][1]*al[2][2]-al[1][2]*al[2][1])-al[1][0]*(al[0][1]*al[2][2]-al[0][2]*al[2][1])+al[2][0]*(al[0][1]*al[1][2]-al[0][2]*al[1][1]);
 		}
@@ -718,7 +720,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			natom+=1;
 			var isec = insec[ia];
 			//if ia's neigh's neigh is H, add the H
-			check_add_neigh_out_boundary(ia,isec,3,"H")
+			check_add_neigh_out_boundary(ia,isec,this.bond_depth,"H")
 		}
 		//console.log(big_atoms);
 		//atoms=big_atoms.slice();

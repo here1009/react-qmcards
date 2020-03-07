@@ -6,8 +6,8 @@ import Head_logo from './head.svg';
 import Vesta_view from './VestaView'
 import {VestaViewModal} from './VestaView'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button,  Container, Row, Col } from 'react-bootstrap';
-import { Card, Jumbotron } from 'react-bootstrap';
+import { Button,  Container, Row, Col, Form } from 'react-bootstrap';
+import { Card, Jumbotron,InputGroup, FormControl } from 'react-bootstrap';
 import { MdFullscreen,MdClose } from 'react-icons/md';
 
 class Vesta extends Component {
@@ -58,14 +58,13 @@ class VestaModal extends Component {
                         <Col xs={2} lg={2} style={{ textAlign: "middle", margin: 0, padding: 0 }}>
                             <Jumbotron fluid>
                                 <Container>
-                                    <p>
-                                    </p>
+
                                 </Container>
-                            </Jumbotron>
+                            </Jumbotron> 
+                            <Button block onClick={()=>{VestaViewModal.setBondDepth();}}>Bond Depth</Button>
                             <Button block>Button</Button>
-                                <Button block>Button</Button>
-                                <Button block>Button</Button>
-                                <Button block>Button</Button>
+                            <Button block>Button</Button>
+                            <Button block>Button</Button>
                         </Col>
                     </Row>
                 </Card>

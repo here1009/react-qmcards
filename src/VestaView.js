@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { readFile, readFileSync } from 'fs';
+import React, { Component,setState } from 'react';
 import './VestaView.css'
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
@@ -7,8 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import NB from './c2.config';
-//import ATOM from './caffeine.config';
-import ATOM from './110.config';
+import ATOM from './caffeine.config';
+//import ATOM from './atom6.config';
 
 var vestaObj = function(){
     this.camera = null;
@@ -28,6 +27,7 @@ var vestaObj = function(){
     this.asf= 0.1;
     this.wb= 3.0;
     this.visualizationType = 2;
+    this.bond_depth = 0;
     this.initScene= function(){
         this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
@@ -98,18 +98,21 @@ var vestaObj = function(){
             object.parent.remove(object);
 
         }
+        var scope = this;
         var offset=this.offset;
         var sf = this.sf;   // position scaling
         var asf = this.asf; // atom size
         var wb = this.wb;  // bond size
-        var visualizationType = this.visualizationType;
-        this.loader.load(url, function (pdb) {
+        var props={
+            bond_depth:scope.bond_depth,
+            visualizationType:scope.visualizationType,
+        };
+        this.loader.load(url, props, function (pdb) {
 
             var geometryAtoms = pdb.geometryAtoms;
             var geometryBonds = pdb.geometryBonds;
             var json = pdb.json;
 
-            var boxGeometry = new THREE.BoxBufferGeometry(1, 1, 1);
             var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 32);
             var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
 
@@ -124,12 +127,12 @@ var vestaObj = function(){
             var color = new THREE.Color();
             //
             plot_axes();
-            if (visualizationType == 0) {
+            if (props.visualizationType == 0) {
                 plot_atom();
             }
-            else if (visualizationType == 1) {
+            else if (props.visualizationType == 1) {
                 plot_bond();
-            } else if (visualizationType == 2) {
+            } else if (props.visualizationType == 2) {
                 plot_bond();
                 plot_atom();
             }
@@ -486,39 +489,37 @@ var vestaObj = function(){
         //window.onresize = onWindowResize;
         window.addEventListener('resize', ()=>this.onWindowResize(), false);
         this.initScene();
-        this.initGroup();
-        this.loadMolecule(ATOM,this.root,this.root2);
+        this.initGroup();     
         this.initCamera();
         this.initLight();
         this.initRenderer();
         this.initControls();
         this.initAxes();
-        var loader = new THREE.FileLoader();
-        this.data='';
-        this.test='shitsync';
-        var scope=this;
+        this.loadfile();
+        this.loadMolecule(ATOM,this.root,this.root2);
         // set parameters
         // pass in parameters use scope(not use keyword this)
         // reload file, build geometry
         // if need returned datas, need sync loader.load or check state in loop
-            loader.load(
-                ATOM,
-                function (data) {
-                    console.log(scope.test);
-                    scope.test = 'TEST';
-                },
-                // onProgress callback
-                function (xhr) {
-                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-                    console.log(scope.test);
-                },
-
-                // onError callback
-                function (err) {
-                    console.error('An error happened');
-                }
-            );
        
+    }
+    this.loadfile = function () {
+        var scope = this;
+        var loader = new THREE.FileLoader();
+        loader.load(
+            ATOM,
+            function (data) {
+            },
+            // onProgress callback
+            function (xhr) {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+
+            // onError callback
+            function (err) {
+                console.error('An error happened');
+            }
+        );
     }
     this.setZoom = function(){
         var box = new THREE.Box3();
@@ -571,6 +572,7 @@ function animate(){
         obj2.camera2.position.setLength(2000);
         obj2.camera2.lookAt(obj2.controls.target);
         obj2.render();
+        
     }
 }
 
@@ -613,22 +615,20 @@ class VestaViewModal extends Component {
                 <div
                     id="canvas_vesta_modal"
                     ref={(mount) => { obj2.gmount = mount; }}
-                // ref={(mount) => {
-                // vestaObj.gmount = mount;
-                //     vestaObj.gmount.innerHeight = window.innerHeight;
-                //     vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
-                // }}
-                >
-
-                </div>
+                    ></div>
                 <div
-                    id="canvas_vesta_modal_axes"
-                    ref={(mount) => { obj2.gmount2 = mount; }}
+                    id="canvas_vesta_axes"
+                    ref={(mount) => { obj2.gmount2 = mount }}
                 >
                 </div>
             </div>
         );
     }
+}
+VestaViewModal.setBondDepth = function(properties){
+    //bond search depth
+    obj2.bond_depth+=1;
+    obj2.loadMolecule(ATOM,obj2.root,obj2.root2);
 }
 export {VestaViewModal};
 export default VestaView;
