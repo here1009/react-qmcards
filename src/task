@@ -6,9 +6,12 @@
 12. 多原子选中
 13. 双原子距离
 14. 多原子信息显示
-16. copy obj2 to obj1 when modal closed
+16. copy obj2 to obj1 when modal closed, 就一个obj， closed的时候更改显示位置。
 18. 设置结构在box中的中心（平移结构）
 20. 判断以什么方式寻找bond, recursive or not.
     作为一个输入参数，调整recursive depth.
 21. move things out of AtomconfigLoader.js
 22. import 和 直接用url的区别
+23. think about threejs GUI helper
+24. 把buttong-->onclick 换成listener....
+25. make things more packed

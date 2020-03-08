@@ -1,13 +1,16 @@
-import React, { Component,setState } from 'react';
-import './VestaView.css'
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import './VestaView.css';
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
-import NB from './c2.config';
-import ATOM from './caffeine.config';
-//import ATOM from './atom6.config';
+import { MdFullscreen,MdClose } from 'react-icons/md';
+import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl} from 'react-bootstrap';
+//import NB from './c2.config';
+//import ATOM from './caffeine.config';
+import ATOM from './c2.config';
 
 var vestaObj = function(){
     this.camera = null;
@@ -27,7 +30,7 @@ var vestaObj = function(){
     this.asf= 0.1;
     this.wb= 3.0;
     this.visualizationType = 2;
-    this.bond_depth = 0;
+    this.bond_depth=1;
     this.initScene= function(){
         this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
@@ -92,11 +95,17 @@ var vestaObj = function(){
     };
     this.loadMolecule=function(url,root,root2){
 
+        this.initzoom=true;
         while (root.children.length > 0) {
 
             var object = root.children[0];
             object.parent.remove(object);
 
+        }
+        while (root2.children.length > 0) {
+
+            var object = root2.children[0];
+            object.parent.remove(object);
         }
         var scope = this;
         var offset=this.offset;
@@ -503,6 +512,15 @@ var vestaObj = function(){
         // if need returned datas, need sync loader.load or check state in loop
        
     }
+    this.setBondDepth = function(properties){
+        //bond search depth
+        var props = properties || {};
+        if(props.bond_depth>=0){
+            //console.log(props.bond_depth);
+            this.bond_depth = props.bond_depth;
+            this.loadMolecule(ATOM,this.root,this.root2);
+        } 
+    }
     this.loadfile = function () {
         var scope = this;
         var loader = new THREE.FileLoader();
@@ -576,8 +594,7 @@ function animate(){
     }
 }
 
-
-class VestaView extends Component {
+class Vesta extends Component {
     componentDidMount() {
         obj1.init();
         animate();
@@ -585,26 +602,46 @@ class VestaView extends Component {
     render() {
         return (
             <div>
-                <div
-                    id="canvas_vesta"
-                    ref={(mount) => { obj1.gmount = mount;}}
-                //ref={(mount) => {
-                //vestaObj.gmount = mount;
-                //    vestaObj.gmount.innerHeight = vestaObj.gmount.clientHeight;
-                //    vestaObj.gmount.innerWidth = vestaObj.gmount.clientWidth;
-                //}}
-                >
-                </div>
-                <div
+                <Card style={{margin:0,padding:0}}>
+                    <Row style={{margin:0,padding:0}}>
+                        <Col xs={10} lg={10}>
+                        </Col>
+                        <Col xs={2} lg={2} style={{ textAlign: "right",margin:0,padding:0 }}>
+                            <Button variant="light" onClick={() => {
+                                VestaModal.showInstance({
+                                    isShow: true
+                                });
+                            }} id="set_btn"><MdFullscreen/></Button>
+                        </Col>
+                    </Row>
+                    <Card.Body style={{margin:0, padding:0}}>
+                    <div
+                        id="canvas_vesta"
+                        ref={(mount) => { obj1.gmount = mount;}}
+                
+                    >
+                    </div>
+                    <div
                     id="canvas_vesta_axes"
                     ref={(mount) => { obj1.gmount2 = mount }}
-                >
-                </div>
-            </div>
+                    >
+                    </div>
+                    </Card.Body>
+                </Card>
+            </div >
         );
     }
+
 }
-class VestaViewModal extends Component {
+
+
+class VestaModal extends Component {
+//    constructor(){
+//        super();
+//        this.state={
+//            bond_depth:0
+//        }
+//    }
     componentDidMount() {
         obj2.init();
         animate();
@@ -612,23 +649,80 @@ class VestaViewModal extends Component {
     render() {
         return (
             <div>
-                <div
-                    id="canvas_vesta_modal"
-                    ref={(mount) => { obj2.gmount = mount; }}
-                    ></div>
-                <div
-                    id="canvas_vesta_axes"
-                    ref={(mount) => { obj2.gmount2 = mount }}
-                >
-                </div>
+                <Card style={{margin:0,padding:0}}>
+                    <Row style={{ margin: 0, padding: 0 }}>
+                        <Col xs={10} lg={10}>
+                        </Col>
+                        <Col xs={2} lg={2} style={{ textAlign: "right", margin: 0, padding: 0 }}>
+                            <Button variant="light" onClick={() => {
+                                VestaModal.removeInstance();
+                            }} id="set_btn"><MdClose/></Button>
+                        </Col>
+                    </Row>
+
+                    <Row style={{ margin: 0, padding: 0 }}>
+                        <Col xs={10} lg={10}>
+                        <div
+                            id="canvas_vesta_modal"
+                            ref={(mount) => { obj2.gmount = mount; }}
+                         ></div>
+                        <div
+                            id="canvas_vesta_axes"
+                            ref={(mount) => { obj2.gmount2 = mount }}
+                        >
+                        </div>
+                        </Col>
+                        <Col xs={2} lg={2} style={{ textAlign: "middle", margin: 0, padding: 0 }}>
+                            <Jumbotron fluid>
+                                <Container>
+
+                                </Container>
+                            </Jumbotron>
+                            <InputGroup>
+                                <InputGroup.Prepend> 
+                                    <Button block onClick={()=>{
+                                        var text=document.getElementById('text_bond_depth');
+                                        obj2.setBondDepth({
+                                            bond_depth:parseInt(text.value)
+                                        });
+                                    }}>Bond Depth</Button>
+                                </InputGroup.Prepend>
+                                <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroup.Prepend> 
+                                    <Button block >TEST</Button>
+                                </InputGroup.Prepend>
+                                <FormControl aria-label="" />
+                            </InputGroup>
+                            
+                        </Col>
+                    </Row>
+                </Card>
             </div>
         );
     }
+
 }
-VestaViewModal.setBondDepth = function(properties){
-    //bond search depth
-    obj2.bond_depth+=1;
-    obj2.loadMolecule(ATOM,obj2.root,obj2.root2);
+VestaModal.showInstance = function(properties) {
+    if (!document.getElementById("vesta-full")) {
+        let props = properties || {};
+        let div = document.createElement('div');
+        div.setAttribute('id', 'vesta-full');
+        let st='position:fixed;z-index:10000;top:0px;left:0px;width:100%;';
+        div.setAttribute('style', st);
+        document.body.appendChild(div);
+        //console.log(ReactDOM);
+        ReactDOM.render(React.createElement(VestaModal, props), div);
+    }
+    var text=document.getElementById('text_bond_depth');
+    text.value=obj2.bond_depth;
 }
-export {VestaViewModal};
-export default VestaView;
+VestaModal.removeInstance = function() {
+    if(document.getElementById("vesta-full")) {
+        document.getElementById('vesta-full').remove();
+    }
+}
+
+
+export {VestaModal,Vesta};
