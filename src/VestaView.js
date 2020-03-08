@@ -6,11 +6,11 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
-import { MdFullscreen,MdClose } from 'react-icons/md';
+import { MdFullscreen,MdClose,MdCached } from 'react-icons/md';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl} from 'react-bootstrap';
 //import NB from './c2.config';
 //import ATOM from './caffeine.config';
-import ATOM from './c2.config';
+import ATOM from './atom2.config';
 
 var vestaObj = function(){
     this.camera = null;
@@ -91,6 +91,7 @@ var vestaObj = function(){
         controls.minDistance = 500;
         controls.maxDistance = 2000;
         controls.noPan=true;
+        //controls.enablePan=false;
         this.controls = controls;
     };
     this.loadMolecule=function(url,root,root2){
@@ -661,7 +662,7 @@ class VestaModal extends Component {
                     </Row>
 
                     <Row style={{ margin: 0, padding: 0 }}>
-                        <Col xs={10} lg={10}>
+                        <Col xs={8} lg={10}>
                         <div
                             id="canvas_vesta_modal"
                             ref={(mount) => { obj2.gmount = mount; }}
@@ -672,7 +673,7 @@ class VestaModal extends Component {
                         >
                         </div>
                         </Col>
-                        <Col xs={2} lg={2} style={{ textAlign: "middle", margin: 0, padding: 0 }}>
+                        <Col xs={4} lg={2} style={{ textAlign: "middle", margin: 0, padding: 0 }}>
                             <Jumbotron fluid>
                                 <Container>
 
@@ -685,7 +686,14 @@ class VestaModal extends Component {
                                         obj2.setBondDepth({
                                             bond_depth:parseInt(text.value)
                                         });
-                                    }}>Bond Depth</Button>
+                                    }}><MdCached/></Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend>
+                                <InputGroup.Text>BondDepth</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
+                                <InputGroup.Prepend>
+                                <InputGroup.Text>MaxExpandRcut(Ang)</InputGroup.Text>
                                 </InputGroup.Prepend>
                                 <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
                             </InputGroup>
