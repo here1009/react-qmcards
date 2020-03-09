@@ -688,22 +688,35 @@ class VestaModal extends Component {
                                         });
                                     }}><MdCached/></Button>
                                 </InputGroup.Prepend>
-                                <InputGroup.Prepend>
-                                <InputGroup.Text>BondDepth</InputGroup.Text>
-                                </InputGroup.Prepend>
-                                <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
-                                <InputGroup.Prepend>
-                                <InputGroup.Text>MaxExpandRcut(Ang)</InputGroup.Text>
-                                </InputGroup.Prepend>
+                                <FormControl disabled value="BondDepth" aria-label="" />
+                            </InputGroup>
+                            <InputGroup>
                                 <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
                             </InputGroup>
                             <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button block >TEST</Button>
-                                </InputGroup.Prepend>
-                                <FormControl aria-label="" />
+                                <FormControl disabled value="MaxExpandRcut(Ang)"/>
                             </InputGroup>
-                            
+                            <InputGroup>
+                                <FormControl id="text_max_expand_rcut" aria-label="set bond search depth)" />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroup.Prepend> 
+                                    <Button block ><MdCached/></Button>
+                                </InputGroup.Prepend>
+                                <FormControl disabled value="ShowAtom" aria-label="" />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroup.Prepend> 
+                                    <Button block ><MdCached/></Button>
+                                </InputGroup.Prepend>
+                                <FormControl disabled value="ShowBond" aria-label="" />
+                            </InputGroup>
+                            <InputGroup>
+                                <InputGroup.Prepend> 
+                                    <Button block ><MdCached/></Button>
+                                </InputGroup.Prepend>
+                                <FormControl disabled value="ShowAtomBond" aria-label="" />
+                            </InputGroup>
                         </Col>
                     </Row>
                 </Card>
