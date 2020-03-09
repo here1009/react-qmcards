@@ -24,6 +24,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		var scope = this;
 		this.bond_depth = probs.bond_depth==null?0:probs.bond_depth;
+		this.max_expand_rcut = probs.max_expand_rcut;
 		//console.log(this.dpth);
 		var loader = new FileLoader( scope.manager );
 		loader.setPath( scope.path );
@@ -594,7 +595,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		//bond types
 		var bond_fact=1.0;
 		//
-		var rcut=5.0;
+		var rcut=this.max_expand_rcut;
+		console.log(rcut);
 		//expand cell
 		var big_al=al.slice();
 		big_al[0]=[al[0][0], al[0][1], al[0][2]];
@@ -622,9 +624,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var big_atoms=[];
 		var ori_atoms_index=[];
 		var big_natom=0;
-		var n1=1;
-		var n2=1;
-		var n3=1;
+		var n1=Math.ceil(frcutx);
+		var n2=Math.ceil(frcuty);
+		var n3=Math.ceil(frcutz);
 		for (var ia = 0; ia < natom; ia++) {
 			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
 			for (var i = -n1; i <= n1; i++) {

@@ -9,8 +9,8 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import { MdFullscreen,MdClose,MdCached } from 'react-icons/md';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl} from 'react-bootstrap';
 //import NB from './c2.config';
-//import ATOM from './caffeine.config';
-import ATOM from './atom2.config';
+import ATOM from './caffeine.config';
+//import ATOM from './c2.config';
 
 var vestaObj = function(){
     this.camera = null;
@@ -31,6 +31,7 @@ var vestaObj = function(){
     this.wb= 3.0;
     this.visualizationType = 2;
     this.bond_depth=1;
+    this.max_expand_rcut=6.0;
     this.initScene= function(){
         this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
@@ -116,6 +117,7 @@ var vestaObj = function(){
         var props={
             bond_depth:scope.bond_depth,
             visualizationType:scope.visualizationType,
+            max_expand_rcut:scope.max_expand_rcut,
         };
         this.loader.load(url, props, function (pdb) {
 
@@ -516,11 +518,17 @@ var vestaObj = function(){
     this.setBondDepth = function(properties){
         //bond search depth
         var props = properties || {};
-        if(props.bond_depth>=0){
-            //console.log(props.bond_depth);
-            this.bond_depth = props.bond_depth;
-            this.loadMolecule(ATOM,this.root,this.root2);
-        } 
+        if(props.bond_depth!=null){
+            this.bond_depth = props.bond_depth; 
+        }     
+        if(props.max_expand_rcut!=null){
+            this.max_expand_rcut = props.max_expand_rcut;
+        }
+        if(props.visualizationType!=null){
+            this.visualizationType = props.visualizationType;
+        }
+           
+        this.loadMolecule(ATOM,this.root,this.root2);
     }
     this.loadfile = function () {
         var scope = this;
@@ -681,12 +689,7 @@ class VestaModal extends Component {
                             </Jumbotron>
                             <InputGroup>
                                 <InputGroup.Prepend> 
-                                    <Button block onClick={()=>{
-                                        var text=document.getElementById('text_bond_depth');
-                                        obj2.setBondDepth({
-                                            bond_depth:parseInt(text.value)
-                                        });
-                                    }}><MdCached/></Button>
+                                    <Button id="btn_bond_depth"><MdCached/></Button>
                                 </InputGroup.Prepend>
                                 <FormControl disabled value="BondDepth" aria-label="" />
                             </InputGroup>
@@ -701,19 +704,19 @@ class VestaModal extends Component {
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend> 
-                                    <Button block ><MdCached/></Button>
+                                    <Button block id="btn_showatom"><MdCached/></Button>
                                 </InputGroup.Prepend>
                                 <FormControl disabled value="ShowAtom" aria-label="" />
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend> 
-                                    <Button block ><MdCached/></Button>
+                                    <Button block id="btn_showbond"><MdCached/></Button>
                                 </InputGroup.Prepend>
                                 <FormControl disabled value="ShowBond" aria-label="" />
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend> 
-                                    <Button block ><MdCached/></Button>
+                                    <Button block id="btn_showatombond"><MdCached/></Button>
                                 </InputGroup.Prepend>
                                 <FormControl disabled value="ShowAtomBond" aria-label="" />
                             </InputGroup>
@@ -738,6 +741,37 @@ VestaModal.showInstance = function(properties) {
     }
     var text=document.getElementById('text_bond_depth');
     text.value=obj2.bond_depth;
+    var text=document.getElementById('text_max_expand_rcut');
+    text.value=obj2.max_expand_rcut;
+    var btn=document.getElementById('btn_bond_depth');
+    btn.addEventListener('click', ()=>{
+        var text1=document.getElementById('text_bond_depth');
+        var text2=document.getElementById('text_max_expand_rcut');
+            obj2.setBondDepth({
+                bond_depth:parseInt(text1.value),
+                max_expand_rcut:parseFloat(text2.value),
+            });
+    }, false);
+    var btn=document.getElementById('btn_showatom');
+    btn.addEventListener('click', ()=>{
+            obj2.setBondDepth({
+                visualizationType:0,
+            });
+    }, false);
+    var btn=document.getElementById('btn_showbond');
+    btn.addEventListener('click', ()=>{
+            obj2.setBondDepth({
+                visualizationType:1,
+            });
+    }, false);
+    var btn=document.getElementById('btn_showatombond');
+    btn.addEventListener('click', ()=>{
+            obj2.setBondDepth({
+                visualizationType:2,
+            });
+    }, false);
+
+
 }
 VestaModal.removeInstance = function() {
     if(document.getElementById("vesta-full")) {
