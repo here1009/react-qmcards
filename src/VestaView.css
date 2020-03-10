@@ -12,6 +12,12 @@
     margin: 0;
     padding: 0;
 }
+#side_settings{
+    /*transform: rotate(90deg);*/
+    position: absolute;
+    top:200px;
+    left:100px;
+}
 #topmenu {
     position: absolute;
     top: 50px;
