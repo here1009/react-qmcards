@@ -9,8 +9,8 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
 //import NB from './c2.config';
-import ATOM from './caffeine.config';
-//import ATOM from './c2.config';
+//import ATOM from './caffeine.config';
+import ATOM from './atom2.config';
 
 
 var vestaObj = function(){
@@ -618,9 +618,7 @@ class Vesta extends Component {
                         </Col>
                         <Col xs={2} lg={2} style={{ textAlign: "right",margin:0,padding:0 }}>
                             <Button variant="light" onClick={() => {
-                                VestaModal.showInstance({
-                                    isShow: true
-                                });
+                                VestaModal.showInstance();
                             }} id="set_btn"><MdFullscreen/></Button>
                         </Col>
                     </Row>
@@ -784,16 +782,15 @@ class VestaModal extends Component {
     }
 
 }
-VestaModal.showInstance = function(properties) {
+VestaModal.showInstance = function() {
     if (!document.getElementById("vesta-full")) {
-        let props = properties || {};
         let div = document.createElement('div');
         div.setAttribute('id', 'vesta-full');
         let st='position:fixed;z-index:10000;top:0px;left:0px;width:100%;';
         div.setAttribute('style', st);
         document.body.appendChild(div);
         //console.log(ReactDOM);
-        ReactDOM.render(React.createElement(VestaModal, props), div);
+        ReactDOM.render(React.createElement(VestaModal), div);
     }
     var text=document.getElementById('text_bond_depth');
     text.value=obj2.bond_depth;
@@ -853,10 +850,32 @@ VestaModal.showInstance = function(properties) {
     document.onmouseup = function(e) {
         isDraging=false;        
     }
-    
+    item.addEventListener('touchstart',(e)=>{
+        //console.log(item);
+        mouseOffsetX = e.touches[0].pageX - item.offsetLeft;
+        mouseOffsetY = e.touches[0].pageY - item.offsetTop;
+        isDraging = true;
         
-
-
+        //console.log("TEST",[mouseOffsetX,mouseOffsetY]);
+    });
+    
+    item.addEventListener('touchmove',(e)=>{
+        //var e=e||window.event;
+        e.preventDefault();
+        var moveX = 0;
+        var moveY = 0;
+        //console.log("TEST2");
+        if(isDraging===true){
+            moveX = e.touches[0].pageX - mouseOffsetX;
+            moveY = e.touches[0].pageY - mouseOffsetY;
+            item.style.left = moveX + "px";
+            item.style.top = moveY + "px";         
+        }
+        
+    });
+    item.addEventListener('touchend',(e)=>{
+        isDraging=false;
+    });
 }
 VestaModal.removeInstance = function() {
     if(document.getElementById("vesta-full")) {
