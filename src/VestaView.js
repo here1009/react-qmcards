@@ -10,8 +10,8 @@ import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
 import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
-import ATOM from './caffeine.config';
-//import ATOM from './atom2.config';
+//import ATOM from './caffeine.config';
+import ATOM from './atom6.config';
 
 
 var vestaObj = function(){
