@@ -8,9 +8,10 @@ import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
+import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
-//import ATOM from './caffeine.config';
-import ATOM from './atom2.config';
+import ATOM from './caffeine.config';
+//import ATOM from './atom2.config';
 
 
 var vestaObj = function(){
@@ -669,7 +670,7 @@ class VestaModal extends Component {
                     </Row>
 
                     <Row style={{ margin: 0, padding: 0 }}>
-                        <Col xs={8} lg={10}>
+                        <Col xs={8} lg={8}>
                         <div
                             id="canvas_vesta_modal"
                             ref={(mount) => { obj2.gmount = mount; }}
@@ -680,96 +681,10 @@ class VestaModal extends Component {
                         >
                         </div>
                         </Col>
-                        <Col xs={4} lg={2} id='side_settings'  style={{ textAlign: "middle", margin: 0, padding: 0}}
+                        <Col xs={4} lg={4} id='side_settings'  style={{ textAlign: "middle", margin: 0, padding: 0}}
  
                         >
-                        <Accordion defaultActiveKey="0">
-                        <Card>
-                            <Accordion.Toggle id='setting-toggle' as={Button}  eventKey="0">
-                            Settings
-                            </Accordion.Toggle>
-                            <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                            <Jumbotron fluid>
-                                <Container>
-
-                                </Container>
-                            </Jumbotron>
-                            <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button id="btn_bond_depth"><MdCached/></Button>
-                                </InputGroup.Prepend>
-                                <FormControl disabled value="BondDepth" aria-label="" />
-                            </InputGroup>
-                            <InputGroup>
-                                <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
-                            </InputGroup>
-                            <InputGroup>
-                                <FormControl disabled value="MaxExpandRcut(Ang)"/>
-                            </InputGroup>
-                            <InputGroup>
-                                <FormControl id="text_max_expand_rcut" aria-label="set bond search depth)" />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_showatom"><MdCached/></Button>
-                                </InputGroup.Prepend>
-                                <FormControl disabled value="ShowAtom" aria-label="" />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_showbond"><MdCached/></Button>
-                                </InputGroup.Prepend>
-                                <FormControl disabled value="ShowBond" aria-label="" />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_showatombond"><MdCached/></Button>
-                                </InputGroup.Prepend>
-                                <FormControl disabled value="ShowAtomBond" aria-label="" />
-                            </InputGroup>
-                            <InputGroup style={{marginTop:10+"px"}}>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_rotateup" style={{
-                                        borderTopRightRadius: 0.25+"em",
-                                        borderBottomRightRadius: 0.0+"em",
-                                        borderBottomLeftRadius: 0.0+"em",
-                                        marginLeft:42+"px"
-                                    }}
-                                    ><MdArrowUpward/></Button>
-                                </InputGroup.Prepend>
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_rotateleft"><MdArrowBack/></Button>
-                                </InputGroup.Prepend>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_rotatemid"><MdRefresh/></Button>
-                                </InputGroup.Prepend>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_rotateright" style={{
-                                        borderTopRightRadius: 0.25+"em",
-                                        borderBottomRightRadius: 0.25+"em",
-                                    }}><MdArrowForward/></Button>
-                                </InputGroup.Prepend>
-                                <FormControl value="90" aria-label="" style={{marginLeft: 10+"px"}} />
-                            </InputGroup>
-                            <InputGroup>
-                                <InputGroup.Prepend> 
-                                    <Button block id="btn_rotatedown" style={{
-                                        borderTopRightRadius: 0.0+"em",
-                                        borderTopLeftRadius: 0.0+"em",
-                                        borderBottomRightRadius: 0.25+"em",
-                                        borderBottomLeftRadius: 0.25+"em",
-                                        marginLeft:42+"px"
-                                    }}><MdArrowDownward/></Button>
-                                </InputGroup.Prepend>
-                                
-                            </InputGroup>
-                            </Card.Body>
-                            </Accordion.Collapse>
-                        </Card>
-                        </Accordion>
+                        <BtnSetting></BtnSetting>
                             
                         </Col>
                     </Row>
@@ -823,60 +738,8 @@ VestaModal.showInstance = function() {
                 visualizationType:2,
             });
     }, false);
-    var mouseOffsetX=0;
-    var mouseOffsetY=0;
-    var isDraging=false; 
-    var item = document.getElementById('side_settings');
-    var item_btn = document.getElementById('setting-toggle');
-    item.addEventListener('mousedown',(e)=>
-    {
-        //console.log(item);
-        mouseOffsetX = e.pageX - item.offsetLeft;
-        mouseOffsetY = e.pageY - item.offsetTop;
-        isDraging = true;
-        
-    },false);
-    document.onmousemove = function(e){
-        var e=e||window.event;
-        var moveX = 0;
-        var moveY = 0;
-        if(isDraging===true){
-            moveX = e.pageX - mouseOffsetX;
-            moveY = e.pageY - mouseOffsetY;
-            item.style.left = moveX + "px";
-            item.style.top = moveY + "px";         
-        }
-    }
-    document.onmouseup = function(e) {
-        isDraging=false;        
-    }
-    item.addEventListener('touchstart',(e)=>{
-        //console.log(item);
-        mouseOffsetX = e.touches[0].pageX - item.offsetLeft;
-        mouseOffsetY = e.touches[0].pageY - item.offsetTop;
-        isDraging = true;
-        
-        //console.log("TEST",[mouseOffsetX,mouseOffsetY]);
-    });
-    
-    item.addEventListener('touchmove',(e)=>{
-        //var e=e||window.event;
-        e.preventDefault();
-        var moveX = 0;
-        var moveY = 0;
-        //console.log("TEST2");
-        if(isDraging===true){
-            moveX = e.touches[0].pageX - mouseOffsetX;
-            moveY = e.touches[0].pageY - mouseOffsetY;
-            item.style.left = moveX + "px";
-            item.style.top = moveY + "px";         
-        }
-        
-    });
-    item.addEventListener('touchend',(e)=>{
-        isDraging=false;
-    });
 }
+
 VestaModal.removeInstance = function() {
     if(document.getElementById("vesta-full")) {
         document.getElementById('vesta-full').remove();
