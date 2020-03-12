@@ -106,7 +106,7 @@ class BtnSetting extends Component{
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotatedown"><MdArrowDownward/></Button>
                                 </InputGroup.Prepend>
-                                <FormControl value="90" aria-label="" />
+                                <FormControl id="text_rotation" aria-label="" />
                             </InputGroup>
                             </Card.Body>
                             </Accordion.Collapse>

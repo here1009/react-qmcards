@@ -10,8 +10,5 @@
 18. 设置结构在box中的中心（平移结构）
 21. move things out of AtomconfigLoader.js
 22. import 和 直接用url的区别
-23. think about threejs GUI helper
 25. make things more packed
-26. vestaMadal右侧设置可收起
 27. 标准的按钮component，不在按钮上显示文字，只用图标； tooltips解释功能。
-28. 触摸屏事件

@@ -4,14 +4,15 @@ import './VestaView.css';
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
 import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
-//import ATOM from './caffeine.config';
-import ATOM from './atom6.config';
+import ATOM from './caffeine.config';
+//import ATOM from './atom6.config';
 
 
 var vestaObj = function(){
@@ -90,12 +91,21 @@ var vestaObj = function(){
     this.initControls= function(){
         //
         var controls = new TrackballControls(this.camera, this.renderer.domElement);
-        //var controls = new OrbitControls(this.camera, this.renderer.domElement);
         controls.minDistance = 500;
         controls.maxDistance = 2000;
         controls.noPan=true;
+        controls.noRotate=true;
         //controls.enablePan=false;
         this.controls = controls;
+        //this.controls.autoRotate = true; 
+        //this.controls.target = new THREE.Vector3(100,100,100);
+        //this.camera.lookAt(controls.target);
+        //controls.addEventListener( 'change', this.render );
+        //this.tcontrol=new TransformControls(this.camera, this.render.domElement);
+        //this.tcontrol.attach( this.root );
+        //this.tcontrol.setMode( "translate" );
+        //this.scene.add(this.tcontrol);
+        
     };
     this.loadMolecule=function(url,root,root2){
 
@@ -514,8 +524,7 @@ var vestaObj = function(){
         // set parameters
         // pass in parameters use scope(not use keyword this)
         // reload file, build geometry
-        // if need returned datas, need sync loader.load or check state in loop
-       
+        // if need returned datas, need sync loader.load or check state in loop      
     }
     this.setBondDepth = function(properties){
         //bond search depth
@@ -561,8 +570,32 @@ var vestaObj = function(){
             this.initzoom=false;
         }
     }
+    this.setRotation = function(properties){
+        var direction = properties.direction;
+        var angle = properties.angle;
+        if(direction=='x'){
+            this.root.rotation.x+=angle;
+            this.root2.rotation.x+=angle;
+        }
+        if(direction=='y'){
+            this.root.rotation.y+=angle;
+            this.root2.rotation.y+=angle;
+        }
+        if(direction=='z'){
+            this.root.rotation.z+=angle;
+            this.root2.rotation.z+=angle;
+        }
+    }
+    this.initRotation = function(){
+        this.root.rotation.x=0;
+        this.root2.rotation.x=0;
+        this.root.rotation.y=0;
+        this.root2.rotation.y=0;
+        this.root.rotation.z=0;
+        this.root2.rotation.z=0;
+    }
     this.render = function () {
-        this.setZoom();
+        
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
         this.renderer2.render(this.scene2, this.camera2);
@@ -593,6 +626,7 @@ function animate(){
         obj1.camera2.position.set(obj1.camera.position.x, obj1.camera.position.y, obj1.camera.position.z);
         obj1.camera2.position.setLength(2000);
         obj1.camera2.lookAt(obj1.controls.target);
+        obj1.setZoom();
         obj1.render();
     }
     if(obj2.controls!=null){
@@ -600,6 +634,7 @@ function animate(){
         obj2.camera2.position.set(obj2.camera.position.x, obj2.camera.position.y, obj2.camera.position.z);
         obj2.camera2.position.setLength(2000);
         obj2.camera2.lookAt(obj2.controls.target);
+        obj2.setZoom();
         obj2.render();
         
     }
@@ -697,6 +732,7 @@ class VestaModal extends Component {
     }
 
 }
+
 VestaModal.showInstance = function() {
     if (!document.getElementById("vesta-full")) {
         let div = document.createElement('div');
@@ -738,6 +774,46 @@ VestaModal.showInstance = function() {
                 visualizationType:2,
             });
     }, false);
+    
+    var text=document.getElementById('text_rotation');
+    text.value=45;
+    var btn=document.getElementById('btn_rotateup');
+    btn.addEventListener('click', ()=>{
+            var rangle=parseFloat(text.value)/180*Math.PI;
+            obj2.setRotation({
+                direction:'x',
+                angle:rangle || 0,
+            });
+    }, false);
+    var btn=document.getElementById('btn_rotatedown');
+    btn.addEventListener('click', ()=>{
+            var rangle=-parseFloat(text.value)/180*Math.PI;
+            obj2.setRotation({
+                direction:'x',
+                angle:rangle || 0,
+            });
+    }, false);
+    var btn=document.getElementById('btn_rotateleft');
+    btn.addEventListener('click', ()=>{
+            var rangle=parseFloat(text.value)/180*Math.PI;
+            obj2.setRotation({
+                direction:'z',
+                angle:rangle || 0,
+            });
+    }, false);
+    var btn=document.getElementById('btn_rotateright');
+    btn.addEventListener('click', ()=>{
+            var rangle=-parseFloat(text.value)/180*Math.PI;
+            obj2.setRotation({
+                direction:'z',
+                angle:rangle || 0,
+            });
+    }, false);
+    var btn=document.getElementById('btn_rotatemid');
+    btn.addEventListener('click', ()=>{
+            obj2.initRotation();
+    }, false);
+    
 }
 
 VestaModal.removeInstance = function() {
