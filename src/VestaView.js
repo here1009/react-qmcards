@@ -95,11 +95,20 @@ var vestaObj = function(){
         controls.minDistance = 500;
         controls.maxDistance = 2000;
         controls.noPan=true;
-        //controls.noRotate=true;
         this.controls = controls;
-        //this.controls.autoRotate = true; 
-        //this.controls.target = new THREE.Vector3(100,100,100);
-        //this.camera.lookAt(controls.target);
+        //
+        var tcontrols = new TransformControls(this.camera, this.renderer.domElement);
+        
+        
+        tcontrols.attach(this.root);
+        tcontrols.setMode('translate');
+        this.tcontrols=tcontrols;
+        this.scene.add(this.tcontrols);
+        //this.controls.enabled=false;
+        this.tcontrols.addEventListener( 'dragging-changed', function ( event ) {
+            controls.enabled = !event.value
+          } );
+        
     };
     this.loadMolecule=function(url,root,root2){
 
@@ -859,6 +868,8 @@ VestaModal.showInstance = function() {
     var btn=document.getElementById('btn_rotatemid');
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
             obj2.initzoom=true;
             //obj2.setZoom();
             //obj2.camera.updateProjectionMatrix();
