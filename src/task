@@ -12,3 +12,7 @@
 22. import 和 直接用url的区别
 25. make things more packed
 27. 标准的按钮component，不在按钮上显示文字，只用图标； tooltips解释功能。
+28. check trackballcontrols.target
+29. 多个或单个物体的选中(添加transformcontrol)
+30. 优化加载速度，参考https://threejs.org/examples/#webgl_interactive_cubes_ortho
+31. read code of trackballcontrols
