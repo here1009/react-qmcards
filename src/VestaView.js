@@ -103,6 +103,7 @@ var vestaObj = function(){
         
         tcontrols.attach(this.root);
         //tcontrols.setMode('translate');
+        tcontrols.setMode('rotate');
         this.tcontrols=tcontrols;
         this.scene.add(this.tcontrols);
         //this.controls.enabled=false;
@@ -903,7 +904,12 @@ VestaModal.showInstance = function() {
             obj2.initzoom=true;
             //obj2.setZoom();
             //obj2.camera.updateProjectionMatrix();
-            
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
             
     }, false);
     

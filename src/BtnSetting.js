@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import './BtnSetting.css';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
-import { MdRemove,MdLinearScale,MdGrain,MdShare,MdMoreHoriz,MdZoomOutMap,MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
+import { MdSettingsBackupRestore,MdRemove,MdLinearScale,MdGrain,MdShare,MdMoreHoriz,MdZoomOutMap,MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
+import { FiMove } from "react-icons/fi";
+import { AiOutlineGateway } from "react-icons/ai";
+
+
 class BtnSetting extends Component{
     componentDidMount(){
         this.init();
@@ -92,7 +96,16 @@ class BtnSetting extends Component{
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_showatombond"><MdLinearScale/></Button>
                                 </InputGroup.Prepend>
-                                </InputGroup>
+                                <InputGroup.Prepend>
+                                <Button block variant="outline-primary" id="btn_drag"><FiMove/></Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend>
+                                <Button block variant="outline-primary" id="btn_rotate"><MdRefresh/></Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_scale"><AiOutlineGateway/></Button>
+                                </InputGroup.Prepend>
+                            </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotateup"><MdArrowUpward/></Button>
@@ -101,7 +114,7 @@ class BtnSetting extends Component{
                                     <Button block variant="outline-primary" id="btn_rotateleft"><MdArrowBack/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatemid"><MdRefresh/></Button>
+                                    <Button block variant="outline-primary" id="btn_rotatemid"><MdSettingsBackupRestore/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotateright"><MdArrowForward/></Button>
@@ -111,6 +124,7 @@ class BtnSetting extends Component{
                                 </InputGroup.Prepend>
                                 <FormControl id="text_rotation" aria-label="" />
                             </InputGroup>
+                            
                             </Card.Body>
                             </Accordion.Collapse>
                         </Card>
