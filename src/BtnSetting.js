@@ -70,18 +70,19 @@ class BtnSetting extends Component{
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="0">
                             <Card.Body>
-                            <Jumbotron fluid>
+                            {/* <Jumbotron fluid>
                                 <Container>
 
                                 </Container>
-                            </Jumbotron>
+                            </Jumbotron> */}
                             <InputGroup>
                                 <InputGroup.Prepend> 
                                     <Button variant="outline-primary" id="btn_bond_depth"><MdZoomOutMap/></Button>   
                                 </InputGroup.Prepend>
                                 <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
                                 <FormControl id="text_max_expand_rcut" aria-label="set bond search depth)" />
-                            
+                            </InputGroup>
+                            <InputGroup>
                                 <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_showatom"><MdMoreHoriz/></Button>
                                 </InputGroup.Prepend>
@@ -91,6 +92,8 @@ class BtnSetting extends Component{
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_showatombond"><MdLinearScale/></Button>
                                 </InputGroup.Prepend>
+                                </InputGroup>
+                            <InputGroup>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotateup"><MdArrowUpward/></Button>
                                 </InputGroup.Prepend>

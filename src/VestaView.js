@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './VestaView.css';
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import { DragControls } from 'three/examples/jsm/controls/DragControls';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
@@ -101,13 +102,42 @@ var vestaObj = function(){
         
         
         tcontrols.attach(this.root);
-        tcontrols.setMode('translate');
+        //tcontrols.setMode('translate');
         this.tcontrols=tcontrols;
         this.scene.add(this.tcontrols);
         //this.controls.enabled=false;
         this.tcontrols.addEventListener( 'dragging-changed', function ( event ) {
             controls.enabled = !event.value
           } );
+
+        /* var objects = [];
+        objects.push(this.root);
+        for (let i = 0; i < this.scene.children.length; i++) {
+            if (this.scene.children[i].isMesh) {
+                objects.push(this.scene.children[i]);
+            }
+        }
+          // 初始化拖拽控件
+        this.dragControls = new DragControls(objects, this.camera, this.renderer.domElement);
+        var _this=this;
+        // 鼠标略过事件
+        this.dragControls.addEventListener('hoveron', function (event) {
+            // 让变换控件对象和选中的对象绑定
+            _this.tcontrols.attach(_this.root);           
+        });
+        this.dragControls.addEventListener('hoveroff', function (event) {
+            //_this.tcontrols.detach();
+        });
+        // 开始拖拽
+        this.dragControls.addEventListener('dragstart', function (event) {
+            _this.controls.enabled = false;
+        });
+        // 拖拽结束
+        this.dragControls.addEventListener('dragend', function (event) {
+            _this.controls.enabled = true;
+            
+        }); */
+
         
     };
     this.loadMolecule=function(url,root,root2){
@@ -709,7 +739,7 @@ class VestaModal extends Component {
                     </Row>
 
                     <Row style={{ margin: 0, padding: 0 }}>
-                        <Col xs={8} lg={8}>
+                        <Col xs={12} lg={12}>
                         <div
                             id="canvas_vesta_modal"
                             ref={(mount) => { obj2.gmount = mount; }}
@@ -873,6 +903,7 @@ VestaModal.showInstance = function() {
             obj2.initzoom=true;
             //obj2.setZoom();
             //obj2.camera.updateProjectionMatrix();
+            
             
     }, false);
     
