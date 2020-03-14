@@ -13,7 +13,7 @@ import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion
 import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
 //import ATOM from './caffeine.config';
-import ATOM from './atom7.config';
+import ATOM from './atom5.config';
 
 
 var vestaObj = function(){
@@ -599,11 +599,13 @@ var vestaObj = function(){
         var box = new THREE.Box3();
         box.expandByObject(this.root);
         this.rwidth = box.max.x - box.min.x;
-        this.rheight = box.max.y - box.min.x;
+        this.rheight = box.max.y - box.min.y;
         if(isFinite(this.rwidth) && this.initzoom==true){
-            this.camera.zoom = 0.8 * this.width / this.rwidth;
+            this.camera.zoom = 0.6 * this.width / this.rwidth;
             this.camera.updateProjectionMatrix();
             this.initzoom=false;
+            this.tcontrols.size=1/this.camera.zoom;
+            console.log(this.tcontrols.size);
         }
     }
     this.setRotation = function(properties){
