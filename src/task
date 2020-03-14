@@ -15,4 +15,4 @@
 28. check trackballcontrols.target
 29. 多个或单个物体的选中(添加transformcontrol)
 30. 优化加载速度，参考https://threejs.org/examples/#webgl_interactive_cubes_ortho
-31. read code of trackballcontrols
+33. 整理button click的代码

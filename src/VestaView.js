@@ -962,6 +962,9 @@ VestaModal.showInstance = function() {
             obj2.root.rotation.x=0;
             obj2.root.rotation.y=0;
             obj2.root.rotation.z=0;
+            obj2.root.scale.x=1.0;
+            obj2.root.scale.y=1.0;
+            obj2.root.scale.z=1.0;
             
     }, false);
     var btn=document.getElementById('btn_a');
@@ -1163,6 +1166,7 @@ VestaModal.showInstance = function() {
             obj2.root.rotation.x=0;
             obj2.root.rotation.y=0;
             obj2.root.rotation.z=0;
+            
             //
             var quaternion = new THREE.Quaternion();
             //
@@ -1186,7 +1190,21 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
-    
+    var btn=document.getElementById('btn_drag');
+    btn.addEventListener('click', ()=>{
+            obj2.tcontrols.setMode('translate');
+            
+    }, false);
+    var btn=document.getElementById('btn_rotate');
+    btn.addEventListener('click', ()=>{
+            obj2.tcontrols.setMode('rotate');
+            
+    }, false);
+    var btn=document.getElementById('btn_scale');
+    btn.addEventListener('click', ()=>{
+            obj2.tcontrols.setMode('scale');
+            
+    }, false);
     
 }
 
