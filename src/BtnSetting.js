@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import './BtnSetting.css';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
-import { MdSettingsBackupRestore,MdRemove,MdLinearScale,MdGrain,MdShare,MdMoreHoriz,MdZoomOutMap,MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
+import { MdUndo,MdRedo,MdSettingsBackupRestore,MdRemove,MdLinearScale,MdGrain,MdShare,MdMoreHoriz,MdZoomOutMap,MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
 import { FiMove } from "react-icons/fi";
 import { AiOutlineGateway } from "react-icons/ai";
+import { WiMoonAltFull } from "react-icons/wi";
 
 
 class BtnSetting extends Component{
@@ -107,21 +108,49 @@ class BtnSetting extends Component{
                                 </InputGroup.Prepend>
                             </InputGroup>
                             <InputGroup>
+                                <InputGroup.Prepend>
+                                <Button block variant="outline-primary" id="btn_a">a</Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend>
+                                <Button block variant="outline-primary" id="btn_b">b</Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_c">c</Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend>
+                                <Button block variant="outline-primary" id="btn_astar">a*</Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend>
+                                <Button block variant="outline-primary" id="btn_bstar">b*</Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_cstar">c*</Button>
+                                </InputGroup.Prepend>
+                            </InputGroup>
+                            <InputGroup>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotateup"><MdArrowUpward/></Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_rotatedown"><MdArrowDownward/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotateleft"><MdArrowBack/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatemid"><MdSettingsBackupRestore/></Button>
-                                </InputGroup.Prepend>
-                                <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_rotateright"><MdArrowForward/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatedown"><MdArrowDownward/></Button>
+                                    <Button block variant="outline-primary" id="btn_rotatezl"><MdUndo/></Button>
                                 </InputGroup.Prepend>
+                                <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_rotatezr"><MdRedo/></Button>
+                                </InputGroup.Prepend>
+                                <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_rotatemid"><MdSettingsBackupRestore/></Button>
+                                </InputGroup.Prepend>
+                                
+                                
                                 <FormControl id="text_rotation" aria-label="" />
                             </InputGroup>
                             

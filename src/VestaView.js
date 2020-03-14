@@ -12,8 +12,8 @@ import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
 import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
-import ATOM from './caffeine.config';
-//import ATOM from './atom6.config';
+//import ATOM from './caffeine.config';
+import ATOM from './atom7.config';
 
 
 var vestaObj = function(){
@@ -30,6 +30,7 @@ var vestaObj = function(){
     this.gmount2= null;
     this.initzoom=true;
     this.box=new THREE.Box3();
+    this.al=[];
     this.sf= 20;
     this.asf= 0.1;
     this.wb= 3.0;
@@ -102,8 +103,8 @@ var vestaObj = function(){
         
         
         tcontrols.attach(this.root);
-        //tcontrols.setMode('translate');
-        tcontrols.setMode('rotate');
+        tcontrols.setMode('translate');
+        //tcontrols.setMode('rotate');
         this.tcontrols=tcontrols;
         this.scene.add(this.tcontrols);
         //this.controls.enabled=false;
@@ -181,6 +182,7 @@ var vestaObj = function(){
             geometryBonds.translate(offset.x, offset.y, offset.z);
 
             var al = json.al;
+            scope.al = al.slice();
             var position = new THREE.Vector3();
             var color = new THREE.Color();
             //
@@ -869,6 +871,56 @@ VestaModal.showInstance = function() {
         //
         //
     }, false);
+    var btn=document.getElementById('btn_rotatezl');
+    btn.addEventListener('click', ()=>{
+        var rangle=-parseFloat(text.value)/180*Math.PI;
+        //
+        var axis = new THREE.Vector3();
+        var quaternion = new THREE.Quaternion();
+        //
+        var _eye = new THREE.Vector3();
+        var eyeDirection = new THREE.Vector3();
+        var objectUpDirection = new THREE.Vector3();
+        var objectSidewaysDirection = new THREE.Vector3();
+        var moveDirection = new THREE.Vector3();
+        _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+        eyeDirection.copy( _eye ).normalize();
+        axis.copy(eyeDirection);
+        //console.log(objectSidewaysDirection);
+        quaternion.setFromAxisAngle( axis, rangle );
+        _eye.applyQuaternion( quaternion );
+        obj2.camera.up.applyQuaternion( quaternion );
+        //
+        obj2.camera.position.copy(_eye);
+        obj2.camera.updateProjectionMatrix();
+        //
+        //
+    }, false);
+    var btn=document.getElementById('btn_rotatezr');
+    btn.addEventListener('click', ()=>{
+        var rangle=parseFloat(text.value)/180*Math.PI;
+        //
+        var axis = new THREE.Vector3();
+        var quaternion = new THREE.Quaternion();
+        //
+        var _eye = new THREE.Vector3();
+        var eyeDirection = new THREE.Vector3();
+        var objectUpDirection = new THREE.Vector3();
+        var objectSidewaysDirection = new THREE.Vector3();
+        var moveDirection = new THREE.Vector3();
+        _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+        eyeDirection.copy( _eye ).normalize();
+        axis.copy(eyeDirection);
+        //console.log(objectSidewaysDirection);
+        quaternion.setFromAxisAngle( axis, rangle );
+        _eye.applyQuaternion( quaternion );
+        obj2.camera.up.applyQuaternion( quaternion );
+        //
+        obj2.camera.position.copy(_eye);
+        obj2.camera.updateProjectionMatrix();
+        //
+        //
+    }, false);
     var btn=document.getElementById('btn_rotateleft');
     btn.addEventListener('click', ()=>{
             var rangle=parseFloat(text.value)/180*Math.PI;
@@ -912,6 +964,229 @@ VestaModal.showInstance = function() {
             obj2.root.rotation.z=0;
             
     }, false);
+    var btn=document.getElementById('btn_a');
+    btn.addEventListener('click', ()=>{
+            obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
+            obj2.initzoom=true;
+            //obj2.setZoom();
+            //obj2.camera.updateProjectionMatrix();
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
+            //
+            var quaternion = new THREE.Quaternion();
+            //
+            var _eye = new THREE.Vector3();
+            var eyeDirection = new THREE.Vector3();
+            _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+            eyeDirection.copy( _eye ).normalize();
+            //
+            var al = obj2.al;
+            var [x,y,z] = [1,0,0];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+            var axis = new THREE.Vector3(fx, fy, fz);
+            //
+            quaternion.setFromUnitVectors(eyeDirection,axis.normalize());
+            _eye.applyQuaternion( quaternion );
+            obj2.camera.up.applyQuaternion( quaternion );
+            //
+            obj2.camera.position.copy(_eye);
+            obj2.camera.updateProjectionMatrix();
+            //
+    }, false);
+    var btn=document.getElementById('btn_astar');
+    btn.addEventListener('click', ()=>{
+            obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
+            obj2.initzoom=true;
+            //obj2.setZoom();
+            //obj2.camera.updateProjectionMatrix();
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
+            //
+            var quaternion = new THREE.Quaternion();
+            //
+            var _eye = new THREE.Vector3();
+            var eyeDirection = new THREE.Vector3();
+            _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+            eyeDirection.copy( _eye ).normalize();
+            //
+            var al = obj2.al;
+            var [x,y,z] = [-1,0,0];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+            var axis = new THREE.Vector3(fx, fy, fz);
+            //
+            quaternion.setFromUnitVectors(eyeDirection,axis.normalize());
+            _eye.applyQuaternion( quaternion );
+            obj2.camera.up.applyQuaternion( quaternion );
+            //
+            obj2.camera.position.copy(_eye);
+            obj2.camera.updateProjectionMatrix();
+            //
+    }, false);
+    var btn=document.getElementById('btn_b');
+    btn.addEventListener('click', ()=>{
+            obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
+            obj2.initzoom=true;
+            //obj2.setZoom();
+            //obj2.camera.updateProjectionMatrix();
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
+            //
+            var quaternion = new THREE.Quaternion();
+            //
+            var _eye = new THREE.Vector3();
+            var eyeDirection = new THREE.Vector3();
+            _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+            eyeDirection.copy( _eye ).normalize();
+            //
+            var al = obj2.al;
+            var [x,y,z] = [0,1,0];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+            var axis = new THREE.Vector3(fx, fy, fz);
+            //
+            quaternion.setFromUnitVectors(eyeDirection,axis.normalize());
+            _eye.applyQuaternion( quaternion );
+            obj2.camera.up.applyQuaternion( quaternion );
+            //
+            obj2.camera.position.copy(_eye);
+            obj2.camera.updateProjectionMatrix();
+            //
+    }, false);
+    var btn=document.getElementById('btn_bstar');
+    btn.addEventListener('click', ()=>{
+            obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
+            obj2.initzoom=true;
+            //obj2.setZoom();
+            //obj2.camera.updateProjectionMatrix();
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
+            //
+            var quaternion = new THREE.Quaternion();
+            //
+            var _eye = new THREE.Vector3();
+            var eyeDirection = new THREE.Vector3();
+            _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+            eyeDirection.copy( _eye ).normalize();
+            //
+            var al = obj2.al;
+            var [x,y,z] = [0,-1,0];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+            var axis = new THREE.Vector3(fx, fy, fz);
+            //
+            quaternion.setFromUnitVectors(eyeDirection,axis.normalize());
+            _eye.applyQuaternion( quaternion );
+            obj2.camera.up.applyQuaternion( quaternion );
+            //
+            obj2.camera.position.copy(_eye);
+            obj2.camera.updateProjectionMatrix();
+            //
+    }, false);
+    var btn=document.getElementById('btn_c');
+    btn.addEventListener('click', ()=>{
+            obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
+            obj2.initzoom=true;
+            //obj2.setZoom();
+            //obj2.camera.updateProjectionMatrix();
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
+            //
+            var quaternion = new THREE.Quaternion();
+            //
+            var _eye = new THREE.Vector3();
+            var eyeDirection = new THREE.Vector3();
+            _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+            eyeDirection.copy( _eye ).normalize();
+            //
+            var al = obj2.al;
+            var [x,y,z] = [0,0,1];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+            var axis = new THREE.Vector3(fx, fy, fz);
+            //
+            quaternion.setFromUnitVectors(eyeDirection,axis.normalize());
+            _eye.applyQuaternion( quaternion );
+            obj2.camera.up.applyQuaternion( quaternion );
+            //
+            obj2.camera.position.copy(_eye);
+            obj2.camera.updateProjectionMatrix();
+            //
+    }, false);
+    var btn=document.getElementById('btn_cstar');
+    btn.addEventListener('click', ()=>{
+            obj2.controls.reset();
+            //obj2.tcontrols.detach();
+            //obj2.tcontrols.attach(obj2.root);
+            obj2.initzoom=true;
+            //obj2.setZoom();
+            //obj2.camera.updateProjectionMatrix();
+            //console.log(obj2.root.position);
+            obj2.root.position.copy(new THREE.Vector3(0,0,0));
+            //console.log(obj2.root.rotation);
+            obj2.root.rotation.x=0;
+            obj2.root.rotation.y=0;
+            obj2.root.rotation.z=0;
+            //
+            var quaternion = new THREE.Quaternion();
+            //
+            var _eye = new THREE.Vector3();
+            var eyeDirection = new THREE.Vector3();
+            _eye.copy( obj2.camera.position ).sub( obj2.controls.target );
+            eyeDirection.copy( _eye ).normalize();
+            //
+            var al = obj2.al;
+            var [x,y,z] = [0,0,-1];
+            var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
+            var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
+            var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
+            var axis = new THREE.Vector3(fx, fy, fz);
+            //
+            quaternion.setFromUnitVectors(eyeDirection,axis.normalize());
+            _eye.applyQuaternion( quaternion );
+            obj2.camera.up.applyQuaternion( quaternion );
+            //
+            obj2.camera.position.copy(_eye);
+            obj2.camera.updateProjectionMatrix();
+            //
+    }, false);
+    
     
 }
 
