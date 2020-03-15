@@ -14,7 +14,13 @@ function createWindow() {
  
   // 并且装载应用的index.html页面
   win.loadURL(`http://localhost:3000/`);
- 
+  const pkg = require('./package.json'); // 引用package.json 
+  //判断是否是开发模式 
+  if(pkg.DEV) { 
+    win.loadURL("http://localhost:3000/")
+  } else { 
+    win.loadFile('./build/index.html')
+  }
   // 打开开发工具页面
   //win.webContents.openDevTools();
  
