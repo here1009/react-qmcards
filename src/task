@@ -16,3 +16,6 @@
 29. 多个或单个物体的选中(添加transformcontrol)
 30. 优化加载速度，参考https://threejs.org/examples/#webgl_interactive_cubes_ortho
 33. 整理button click的代码
+34. 设置读取不同的结构文件
+35. electron打包代码
+
