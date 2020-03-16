@@ -1,4 +1,5 @@
 const electron = require('electron');
+const path = require('path');
 // 控制应用生命周期的模块
 const {app} = electron;
 // 创建本地浏览器窗口的模块
@@ -10,7 +11,19 @@ let win;
  
 function createWindow() {
   // 创建一个新的浏览器窗口
-  win = new BrowserWindow({width: 1920, height: 1080});
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    autoHideMenuBar: true,
+    fullscreenable: false,
+    webPreferences: {
+        javascript: true,
+        plugins: true,
+        nodeIntegration: true, 
+        webSecurity: false,
+        preload: path.join(__dirname, './public/renderer.js') 
+    }
+  });
  
   // 并且装载应用的index.html页面
   win.loadURL(`http://localhost:3000/`);
@@ -30,6 +43,20 @@ function createWindow() {
     // 存放窗口对象，在窗口关闭的时候应当删除相应的元素。
     win = null;
   });
+  //
+  const ipc = require('electron').ipcMain;
+  const dialog = require('electron').dialog;
+
+  ipc.on('open-file-dialog', function (event) {
+    dialog.showOpenDialog({
+      properties: ['openFile']
+    }).then(files =>{
+        if (files) event.sender.send('selected-file', files);
+    }).catch(err=>{
+      console.log(err)
+    });
+  });
+
 }
  
 // 当Electron完成初始化并且已经创建了浏览器窗口，则该方法将会被调用。

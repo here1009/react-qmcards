@@ -12,8 +12,8 @@ import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
 import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
-//import ATOM from './caffeine.config';
-import ATOM from './atom5.config';
+import ATOM from './caffeine.config';
+//import ATOM from './QD_Si.config';
 
 
 var vestaObj = function(){
@@ -37,6 +37,7 @@ var vestaObj = function(){
     this.visualizationType = 2;
     this.bond_depth=1;
     this.max_expand_rcut=6.0;
+    this.configfile="";
     this.initScene= function(){
         this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
@@ -556,7 +557,8 @@ var vestaObj = function(){
         this.initControls();
         this.initAxes();
         this.loadfile();
-        this.loadMolecule(ATOM,this.root,this.root2);
+        //this.loadMolecule(ATOM,this.root,this.root2);
+        this.loadMolecule('C:\\Users\\gao_y\\Desktop\\my-app\\src\\c2.config',this.root,this.root2);
         // set parameters
         // pass in parameters use scope(not use keyword this)
         // reload file, build geometry
@@ -574,8 +576,12 @@ var vestaObj = function(){
         if(props.visualizationType!=null){
             this.visualizationType = props.visualizationType;
         }
-           
-        this.loadMolecule(ATOM,this.root,this.root2);
+        this.reloadfile();
+    }
+    this.reloadfile = function(){
+        if(this.fileconfig){
+            this.loadMolecule(this.fileconfig,this.root,this.root2);
+        }
     }
     this.loadfile = function () {
         var scope = this;
@@ -1207,6 +1213,22 @@ VestaModal.showInstance = function() {
             obj2.tcontrols.setMode('scale');
             
     }, false);
+
+    const electron = window.electron; 
+    const ipc = electron.ipcRenderer;
+
+    const selectDirBtn = document.getElementById('btn_select');
+
+    selectDirBtn.addEventListener('click', function (event) {
+        ipc.send('open-file-dialog')
+    });
+
+    ipc.on('selected-file', function (event, file) {
+        var path = require("path");
+        var fileconfig=path.normalize(file.filePaths[0]);
+        obj2.fileconfig=fileconfig;
+        obj2.reloadfile();
+    });
     
 }
 

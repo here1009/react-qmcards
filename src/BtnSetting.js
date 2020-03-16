@@ -5,6 +5,7 @@ import { MdUndo,MdRedo,MdSettingsBackupRestore,MdRemove,MdLinearScale,MdGrain,Md
 import { FiMove } from "react-icons/fi";
 import { AiOutlineGateway } from "react-icons/ai";
 import { WiMoonAltFull } from "react-icons/wi";
+import { TiFolderOpen } from "react-icons/ti";
 
 
 class BtnSetting extends Component{
@@ -176,6 +177,11 @@ class BtnSetting extends Component{
                                 
                                 
                                 <FormControl id="text_rotation" aria-label="" />
+                            </InputGroup>
+                            <InputGroup>
+                            <InputGroup.Prepend> 
+                                    <Button block variant="outline-primary" id="btn_select"><TiFolderOpen/></Button>
+                                </InputGroup.Prepend>
                             </InputGroup>
                             
                             </Card.Body>

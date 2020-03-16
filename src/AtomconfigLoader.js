@@ -29,8 +29,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var loader = new FileLoader( scope.manager );
 		loader.setPath( scope.path );
 		loader.load( url, function ( text ) {
-
-			onLoad( scope.parse( text ) );
+		onLoad( scope.parse( text ) );
+		console.log(text);
 
 		}, onProgress, onError );
 
