@@ -100,18 +100,18 @@ var vestaObj = function(){
         controls.noPan=true;
         this.controls = controls;
         //
-        var tcontrols = new TransformControls(this.camera, this.renderer.domElement);
+        // var tcontrols = new TransformControls(this.camera, this.renderer.domElement);
         
         
-        tcontrols.attach(this.root);
-        tcontrols.setMode('translate');
-        //tcontrols.setMode('rotate');
-        this.tcontrols=tcontrols;
-        this.scene.add(this.tcontrols);
-        //this.controls.enabled=false;
-        this.tcontrols.addEventListener( 'dragging-changed', function ( event ) {
-            controls.enabled = !event.value
-          } );
+        // tcontrols.attach(this.root);
+        // tcontrols.setMode('translate');
+        // //tcontrols.setMode('rotate');
+        // this.tcontrols=tcontrols;
+        // this.scene.add(this.tcontrols);
+        // //this.controls.enabled=false;
+        // this.tcontrols.addEventListener( 'dragging-changed', function ( event ) {
+        //     controls.enabled = !event.value
+        //   } );
 
         /* var objects = [];
         objects.push(this.root);
@@ -610,8 +610,8 @@ var vestaObj = function(){
             this.camera.zoom = 0.6 * this.width / this.rwidth;
             this.camera.updateProjectionMatrix();
             this.initzoom=false;
-            this.tcontrols.size=1/this.camera.zoom;
-            console.log(this.tcontrols.size);
+            // this.tcontrols.size=1/this.camera.zoom;
+            // console.log(this.tcontrols.size);
         }
     }
     this.setRotation = function(properties){
@@ -1197,21 +1197,6 @@ VestaModal.showInstance = function() {
             obj2.camera.position.copy(_eye);
             obj2.camera.updateProjectionMatrix();
             //
-    }, false);
-    var btn=document.getElementById('btn_drag');
-    btn.addEventListener('click', ()=>{
-            obj2.tcontrols.setMode('translate');
-            
-    }, false);
-    var btn=document.getElementById('btn_rotate');
-    btn.addEventListener('click', ()=>{
-            obj2.tcontrols.setMode('rotate');
-            
-    }, false);
-    var btn=document.getElementById('btn_scale');
-    btn.addEventListener('click', ()=>{
-            obj2.tcontrols.setMode('scale');
-            
     }, false);
 
     const electron = window.electron; 

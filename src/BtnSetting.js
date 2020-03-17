@@ -98,7 +98,7 @@ class BtnSetting extends Component{
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_showatombond"><MdLinearScale/></Button>
                                 </InputGroup.Prepend>
-                                <InputGroup.Prepend>
+                                {/* <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_drag"><FiMove/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
@@ -106,7 +106,7 @@ class BtnSetting extends Component{
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_scale"><AiOutlineGateway/></Button>
-                                </InputGroup.Prepend>
+                                </InputGroup.Prepend> */}
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend>
