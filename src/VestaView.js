@@ -700,7 +700,7 @@ class Vesta extends Component {
                         <Col xs={2} lg={2} style={{ textAlign: "right",margin:0,padding:0 }}>
                             <Button variant="light" onClick={() => {
                                 VestaModal.showInstance();
-                            }} id="set_btn"><MdFullscreen/></Button>
+                            }} id="set_btn" style={{padding: 0}}><MdFullscreen/></Button>
                         </Col>
                     </Row>
                     <Card.Body style={{margin:0, padding:0}}>
@@ -745,7 +745,7 @@ class VestaModal extends Component {
                         <Col xs={2} lg={2} style={{ textAlign: "right", margin: 0, padding: 0 }}>
                             <Button variant="light" onClick={() => {
                                 VestaModal.removeInstance();
-                            }} id="set_btn"><MdClose/></Button>
+                            }} id="set_btn" style={{padding: 0}}><MdClose/></Button>
                         </Col>
                     </Row>
 
