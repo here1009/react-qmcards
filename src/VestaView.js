@@ -144,7 +144,7 @@ var vestaObj = function(){
         
     };
     this.loadMolecule=function(url,root,root2){
-
+        if(url=="") return;
         this.initzoom=true;
         while (root.children.length > 0) {
 
@@ -558,7 +558,7 @@ var vestaObj = function(){
         this.initAxes();
         this.loadfile();
         //this.loadMolecule(ATOM,this.root,this.root2);
-        this.loadMolecule('C:\\Users\\gao_y\\Desktop\\my-app\\src\\c2.config',this.root,this.root2);
+        this.loadMolecule(this.configfile,this.root,this.root2);
         // set parameters
         // pass in parameters use scope(not use keyword this)
         // reload file, build geometry
@@ -664,15 +664,6 @@ var obj2 = new vestaObj();
 
 function animate(){
     requestAnimationFrame(animate);
-    if(obj1.controls!=null){
-        obj1.controls.update();
-        obj1.camera2.position.set(obj1.camera.position.x, obj1.camera.position.y, obj1.camera.position.z);
-        obj1.camera2.position.setLength(2000);
-        obj1.camera2.lookAt(obj1.controls.target);
-        obj1.setZoom();
-        obj1.render();
-        
-    }
     if(obj2.controls!=null){
         obj2.controls.update();
         obj2.camera2.position.set(obj2.camera.position.x, obj2.camera.position.y, obj2.camera.position.z);
@@ -687,12 +678,12 @@ function animate(){
 
 class Vesta extends Component {
     componentDidMount() {
-        obj1.init();
+        obj2.init();
         animate();
     }
     render() {
         return (
-            <div>
+            <div id="ggyt">
                 <Card style={{margin:0,padding:0}}>
                     <Row style={{margin:0,padding:0}}>
                         <Col xs={10} lg={10}>
@@ -706,13 +697,13 @@ class Vesta extends Component {
                     <Card.Body style={{margin:0, padding:0}}>
                     <div
                         id="canvas_vesta"
-                        ref={(mount) => { obj1.gmount = mount;}}
+                        ref={(mount) => { obj2.gmount = mount;}}
                 
                     >
                     </div>
                     <div
                     id="canvas_vesta_axes"
-                    ref={(mount) => { obj1.gmount2 = mount }}
+                    ref={(mount) => { obj2.gmount2 = mount }}
                     >
                     </div>
                     </Card.Body>
@@ -787,42 +778,65 @@ VestaModal.showInstance = function() {
         document.body.appendChild(div);
         //console.log(ReactDOM);
         ReactDOM.render(React.createElement(VestaModal), div);
+        //
+        if(document.getElementById("ggyt")) {
+            let rdiv=document.getElementById('ggyt')
+            rdiv.remove();
+            //ReactDOM.unmountComponentAtNode(rdiv)
+            //ReactDOM.render(<div/>,rdiv);
+        }
     }
     var text=document.getElementById('text_bond_depth');
-    text.value=obj2.bond_depth;
+    if(text){
+        text.value=obj2.bond_depth;
+    }
     var text=document.getElementById('text_max_expand_rcut');
-    text.value=obj2.max_expand_rcut;
+    if(text){
+        text.value=obj2.max_expand_rcut;
+    }
     var btn=document.getElementById('btn_bond_depth');
-    btn.addEventListener('click', ()=>{
-        var text1=document.getElementById('text_bond_depth');
-        var text2=document.getElementById('text_max_expand_rcut');
-            obj2.setBondDepth({
-                bond_depth:parseInt(text1.value),
-                max_expand_rcut:parseFloat(text2.value),
-            });
-    }, false);
+    if(btn){
+        btn.addEventListener('click', ()=>{
+            var text1=document.getElementById('text_bond_depth');
+            var text2=document.getElementById('text_max_expand_rcut');
+                obj2.setBondDepth({
+                    bond_depth:parseInt(text1.value),
+                    max_expand_rcut:parseFloat(text2.value),
+                });
+        }, false);
+    }
     var btn=document.getElementById('btn_showatom');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.setBondDepth({
                 visualizationType:0,
             });
     }, false);
+    }
     var btn=document.getElementById('btn_showbond');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.setBondDepth({
                 visualizationType:1,
             });
     }, false);
+    
+    }
     var btn=document.getElementById('btn_showatombond');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.setBondDepth({
                 visualizationType:2,
             });
     }, false);
+    }
     
     var text=document.getElementById('text_rotation');
+    if(text){
     text.value=45;
+    }
     var btn=document.getElementById('btn_rotateup');
+    if(btn){
     btn.addEventListener('click', ()=>{
             var rangle=-parseFloat(text.value)/180*Math.PI;
             //
@@ -850,7 +864,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
+    }
     var btn=document.getElementById('btn_rotatedown');
+    if(btn){
     btn.addEventListener('click', ()=>{
         var rangle=+parseFloat(text.value)/180*Math.PI;
         //
@@ -879,7 +895,9 @@ VestaModal.showInstance = function() {
         //
         //
     }, false);
+}
     var btn=document.getElementById('btn_rotatezl');
+    if(btn){
     btn.addEventListener('click', ()=>{
         var rangle=-parseFloat(text.value)/180*Math.PI;
         //
@@ -904,7 +922,9 @@ VestaModal.showInstance = function() {
         //
         //
     }, false);
+}
     var btn=document.getElementById('btn_rotatezr');
+    if(btn){
     btn.addEventListener('click', ()=>{
         var rangle=parseFloat(text.value)/180*Math.PI;
         //
@@ -929,7 +949,9 @@ VestaModal.showInstance = function() {
         //
         //
     }, false);
+}
     var btn=document.getElementById('btn_rotateleft');
+    if(btn){
     btn.addEventListener('click', ()=>{
             var rangle=parseFloat(text.value)/180*Math.PI;
             var oripos = obj2.camera.position;
@@ -943,7 +965,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //console.log(obj2.camera.up);
     }, false);
+}
     var btn=document.getElementById('btn_rotateright');
+    if(btn){
     btn.addEventListener('click', ()=>{
             var rangle=-parseFloat(text.value)/180*Math.PI;
             var oripos = obj2.camera.position;
@@ -956,7 +980,9 @@ VestaModal.showInstance = function() {
             obj2.camera.position.copy(vector);
             obj2.camera.updateProjectionMatrix();
     }, false);
+}
     var btn=document.getElementById('btn_rotatemid');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -975,7 +1001,9 @@ VestaModal.showInstance = function() {
             obj2.root.scale.z=1.0;
             
     }, false);
+}
     var btn=document.getElementById('btn_a');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -1012,7 +1040,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
+}
     var btn=document.getElementById('btn_astar');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -1049,7 +1079,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
+}
     var btn=document.getElementById('btn_b');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -1086,7 +1118,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
+}
     var btn=document.getElementById('btn_bstar');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -1123,7 +1157,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
+}
     var btn=document.getElementById('btn_c');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -1160,7 +1196,9 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
+}
     var btn=document.getElementById('btn_cstar');
+    if(btn){
     btn.addEventListener('click', ()=>{
             obj2.controls.reset();
             //obj2.tcontrols.detach();
@@ -1198,28 +1236,35 @@ VestaModal.showInstance = function() {
             obj2.camera.updateProjectionMatrix();
             //
     }, false);
-
+    }
     const electron = window.electron; 
     const ipc = electron.ipcRenderer;
 
     const selectDirBtn = document.getElementById('btn_select');
-
+    if(selectDirBtn){
     selectDirBtn.addEventListener('click', function (event) {
         ipc.send('open-file-dialog')
     });
-
+    
     ipc.on('selected-file', function (event, file) {
         var path = require("path");
         var fileconfig=path.normalize(file.filePaths[0]);
         obj2.fileconfig=fileconfig;
         obj2.reloadfile();
     });
-    
+}
 }
 
 VestaModal.removeInstance = function() {
     if(document.getElementById("vesta-full")) {
-        document.getElementById('vesta-full').remove();
+        let vf=document.getElementById('vesta-full');
+        ReactDOM.unmountComponentAtNode(vf)
+        var div = document.getElementById("vesta_container");
+        obj2.gmount=div;
+        console.log(obj2.configfile);
+        console.log(obj2);
+        ReactDOM.render(React.createElement(Vesta), div)
+
     }
 }
 

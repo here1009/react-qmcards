@@ -11,8 +11,8 @@ function Structure() {
         <div>
             <Row>
                 <Col>
-                <CardColumns>
-                    <Vesta></Vesta>
+                <CardColumns id='vesta_container'>
+                    <Vesta id='vesta'></Vesta>
                 </CardColumns>
                 </Col>
             </Row>

@@ -6,7 +6,7 @@
 12. 多原子选中
 13. 双原子距离
 14. 多原子信息显示
-16. copy obj2 to obj1 when modal closed, 就一个obj， closed的时候更改显示位置。
+16. copy obj2 to obj1 when modal closed, 就一个obj， closed的时候更改显示位置。*
 18. 设置结构在box中的中心（平移结构）
 21. move things out of AtomconfigLoader.js
 22. import 和 直接用url的区别
@@ -16,5 +16,5 @@
 29. 多个或单个物体的选中(添加transformcontrol)
 30. 优化加载速度，参考https://threejs.org/examples/#webgl_interactive_cubes_ortho
 33. 整理button click的代码
-34. 设置读取不同的结构文件
-
+34. fix warning
+35. 不能reopen vesta full
