@@ -1,6 +1,6 @@
 import React from 'react';
 import './Structure.css';
-import {Vesta} from './VestaView';
+import {VestaModal} from './VestaView';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, ButtonToolbar, Container, Row, Col } from 'react-bootstrap';
 import { ButtonGroup, Tab, Nav } from 'react-bootstrap';
@@ -12,7 +12,7 @@ function Structure() {
             <Row>
                 <Col>
                 <CardColumns id='vesta_container'>
-                    <Vesta id='vesta'></Vesta>
+                    <VestaModal></VestaModal>
                 </CardColumns>
                 </Col>
             </Row>

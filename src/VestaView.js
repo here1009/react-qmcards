@@ -659,7 +659,7 @@ var vestaObj = function(){
     }
 }
 
-var obj1 = new vestaObj();
+//var obj1 = new vestaObj();
 var obj2 = new vestaObj();
 
 function animate(){
@@ -676,44 +676,6 @@ function animate(){
     }
 }
 
-class Vesta extends Component {
-    componentDidMount() {
-        obj2.init();
-        animate();
-    }
-    render() {
-        return (
-            <div>
-                <Card style={{margin:0,padding:0}}>
-                    <Row style={{margin:0,padding:0}}>
-                        <Col xs={10} lg={10}>
-                        </Col>
-                        <Col xs={2} lg={2} style={{ textAlign: "right",margin:0,padding:0 }}>
-                            <Button variant="light" onClick={() => {
-                                VestaModal.showInstance();
-                            }} id="set_btn" style={{padding: 0}}><MdFullscreen/></Button>
-                        </Col>
-                    </Row>
-                    <Card.Body style={{margin:0, padding:0}}>
-                    <div
-                        id="canvas_vesta"
-                        ref={(mount) => { obj2.gmount = mount;}}
-                
-                    >
-                    </div>
-                    <div
-                    id="canvas_vesta_axes"
-                    ref={(mount) => { obj2.gmount2 = mount }}
-                    >
-                    </div>
-                    </Card.Body>
-                </Card>
-            </div >
-        );
-    }
-
-}
-
 
 class VestaModal extends Component {
 //    constructor(){
@@ -725,21 +687,14 @@ class VestaModal extends Component {
     componentDidMount() {
         obj2.init();
         animate();
+        VestaModal.showInstance();
+    }
+    componentWillUnmount(){
+        
     }
     render() {
         return (
             <div>
-                <Card style={{margin:0,padding:0}}>
-                    <Row style={{ margin: 0, padding: 0 }}>
-                        <Col xs={10} lg={10}>
-                        </Col>
-                        <Col xs={2} lg={2} style={{ textAlign: "right", margin: 0, padding: 0 }}>
-                            <Button variant="light" onClick={() => {
-                                VestaModal.removeInstance();
-                            }} id="set_btn" style={{padding: 0}}><MdClose/></Button>
-                        </Col>
-                    </Row>
-
                     <Row style={{ margin: 0, padding: 0 }}>
                         <Col xs={12} lg={12}>
                         <div
@@ -752,7 +707,7 @@ class VestaModal extends Component {
                         >
                         </div>
                         </Col>
-                        <Col xs={4} lg={4} id='side_settings'  style={{ textAlign: "middle", margin: 0, padding: 0}}
+                        <Col xs={4} lg={6} id='side_settings'  style={{ textAlign: "middle", margin: 0, padding: 0}}
  
                         >
                         <BtnSetting></BtnSetting>
@@ -762,33 +717,12 @@ class VestaModal extends Component {
                     <Row>
 
                     </Row>
-                </Card>
             </div>
         );
     }
 
 }
-
 VestaModal.showInstance = function() {
-    let div=document.getElementById("vesta-full");
-    if (!div) {
-        div = document.createElement('div');
-        div.setAttribute('id', 'vesta-full');
-        let st='position:fixed;z-index:10000;top:0px;left:0px;width:100%;';
-        div.setAttribute('style', st);
-        document.body.appendChild(div);
-        ReactDOM.render(React.createElement(VestaModal), div);
-    }
-    else{
-        ReactDOM.render(React.createElement(VestaModal), div);
-        //
-    }
-    if(document.getElementById("vesta")) {
-        let rdiv=document.getElementById('vesta')
-        ReactDOM.unmountComponentAtNode(rdiv);
-        rdiv.remove();
-    }
-    //
     var text=document.getElementById('text_bond_depth');
     if(text){
         text.value=obj2.bond_depth;
@@ -1258,18 +1192,7 @@ VestaModal.showInstance = function() {
 }
 }
 
-VestaModal.removeInstance = function() {
-    if(document.getElementById("vesta-full")) {
-        let vf=document.getElementById('vesta-full');
-        ReactDOM.unmountComponentAtNode(vf)
-        
-        var div = document.getElementById("vesta_container");
-        //obj2.gmount=div;
-        //console.log(obj2.configfile);
-        //console.log(obj2);
-        ReactDOM.render(React.createElement(Vesta), div)
-    }
-}
 
 
-export {VestaModal,Vesta};
+
+export {VestaModal};
