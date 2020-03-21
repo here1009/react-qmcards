@@ -111,43 +111,43 @@ class BtnSetting extends Component{
                             <InputGroup>
                                 <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_a">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <text text-anchor="middle" x="50%" y="50%" dy=".35em" class="text" >a+</text>
+                                <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <text x="50%" y="50%" dy=".35em" className="text" >a+</text>
                                 </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_b">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <text text-anchor="middle" x="50%" y="50%" dy=".35em" class="text" >b+</text>
+                                <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >b+</text>
                                 </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_c">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <text text-anchor="middle" x="50%" y="50%" dy=".35em" class="text" >c+</text>
+                                    <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >c+</text>
                                     </svg>
                                     </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_astar">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <text text-anchor="middle" x="50%" y="50%" dy=".35em" class="text" >a-</text>
+                                    <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >a-</text>
                                     </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_bstar">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <text text-anchor="middle" x="50%" y="50%" dy=".35em" class="text" >b-</text>
+                                    <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >b-</text>
                                     </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
                                     <Button block variant="outline-primary" id="btn_cstar">
-                                    <svg stroke="currentColor" fill="currentColor" stroke-width="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                    <text text-anchor="middle" x="50%" y="50%" dy=".35em" class="text" >c-</text>
+                                    <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                    <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >c-</text>
                                     </svg>
                                     </Button>
                                 </InputGroup.Prepend>

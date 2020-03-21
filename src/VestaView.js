@@ -683,7 +683,7 @@ class Vesta extends Component {
     }
     render() {
         return (
-            <div id="ggyt">
+            <div>
                 <Card style={{margin:0,padding:0}}>
                     <Row style={{margin:0,padding:0}}>
                         <Col xs={10} lg={10}>
@@ -770,22 +770,25 @@ class VestaModal extends Component {
 }
 
 VestaModal.showInstance = function() {
-    if (!document.getElementById("vesta-full")) {
-        let div = document.createElement('div');
+    let div=document.getElementById("vesta-full");
+    if (!div) {
+        div = document.createElement('div');
         div.setAttribute('id', 'vesta-full');
         let st='position:fixed;z-index:10000;top:0px;left:0px;width:100%;';
         div.setAttribute('style', st);
         document.body.appendChild(div);
-        //console.log(ReactDOM);
+        ReactDOM.render(React.createElement(VestaModal), div);
+    }
+    else{
         ReactDOM.render(React.createElement(VestaModal), div);
         //
-        if(document.getElementById("ggyt")) {
-            let rdiv=document.getElementById('ggyt')
-            rdiv.remove();
-            //ReactDOM.unmountComponentAtNode(rdiv)
-            //ReactDOM.render(<div/>,rdiv);
-        }
     }
+    if(document.getElementById("vesta")) {
+        let rdiv=document.getElementById('vesta')
+        ReactDOM.unmountComponentAtNode(rdiv);
+        rdiv.remove();
+    }
+    //
     var text=document.getElementById('text_bond_depth');
     if(text){
         text.value=obj2.bond_depth;
@@ -1259,12 +1262,12 @@ VestaModal.removeInstance = function() {
     if(document.getElementById("vesta-full")) {
         let vf=document.getElementById('vesta-full');
         ReactDOM.unmountComponentAtNode(vf)
+        
         var div = document.getElementById("vesta_container");
-        obj2.gmount=div;
-        console.log(obj2.configfile);
-        console.log(obj2);
+        //obj2.gmount=div;
+        //console.log(obj2.configfile);
+        //console.log(obj2);
         ReactDOM.render(React.createElement(Vesta), div)
-
     }
 }
 
