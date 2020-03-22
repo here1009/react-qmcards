@@ -42,6 +42,8 @@ var vestaObj = function(){
         this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
         this.height = this.gmount.clientHeight;
+        console.log(this.gmount);
+        console.log(this.width,this.height);
     };
     this.initCamera= function(){
         this.camera =
@@ -696,7 +698,7 @@ class VestaModal extends Component {
         return (
             <div>
                     <Row style={{ margin: 0, padding: 0 }}>
-                        <Col xs={12} lg={12}>
+                        <Col xs={12} lg={8}>
                         <div
                             id="canvas_vesta_modal"
                             ref={(mount) => { obj2.gmount = mount; }}
