@@ -697,8 +697,8 @@ class VestaModal extends Component {
     render() {
         return (
             <div>
-                    <Row style={{ margin: 0, padding: 0 }}>
-                        <Col xs={12} lg={8}>
+                    <Row>
+                        <Col xs={12} lg={12}>
                         <div
                             id="canvas_vesta_modal"
                             ref={(mount) => { obj2.gmount = mount; }}
@@ -709,9 +709,7 @@ class VestaModal extends Component {
                         >
                         </div>
                         </Col>
-                        <Col xs={4} lg={6} id='side_settings'  style={{ textAlign: "middle", margin: 0, padding: 0}}
- 
-                        >
+                        <Col xs={8} lg={4} id='side_settings'>
                         <BtnSetting></BtnSetting>
                             
                         </Col>

@@ -11,12 +11,50 @@ function Structure() {
     return (
         <div>
             <Row>
-                <Col>
-                <div>
+                <Col lg={12}>
                     <VestaModal></VestaModal>
-                    <div style={{background:"red",height:100+"px",width:100+"px", display:"flex"}}></div>
-                    </div>
                 </Col>
+                <CardColumns>
+                <Card>
+                    <Card.Body>
+                    <Card.Title>Card title</Card.Title>
+                    <Card.Text>
+                        This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This card has even longer content than the first to
+                        show that equal height action.
+                    </Card.Text>
+                    <Card.Text>
+                        <small className="text-muted">Last updated 3 mins ago</small>
+                    </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card>
+                    <Card.Body>
+                    <Card.Title>Card title</Card.Title>
+                    <Card.Text>
+                        This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This card has even longer content than the first to
+                        show that equal height action.
+                    </Card.Text>
+                    <Card.Text>
+                        <small className="text-muted">Last updated 3 mins ago</small>
+                    </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card>
+                    <Card.Body>
+                    <Card.Title>Card title</Card.Title>
+                    <Card.Text>
+                        This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This card has even longer content than the first to
+                        show that equal height action.
+                    </Card.Text>
+                    <Card.Text>
+                        <small className="text-muted">Last updated 3 mins ago</small>
+                    </Card.Text>
+                    </Card.Body>
+                </Card>
+                </CardColumns>
             </Row>
         </div>
 
