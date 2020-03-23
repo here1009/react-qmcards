@@ -6,14 +6,25 @@
 12. 多原子选中
 13. 双原子距离
 14. 多原子信息显示
-16. copy obj2 to obj1 when modal closed, 就一个obj， closed的时候更改显示位置。*
-18. 设置结构在box中的中心（平移结构）
 21. move things out of AtomconfigLoader.js
-22. import 和 直接用url的区别
 25. make things more packed
 27. 标准的按钮component，不在按钮上显示文字，只用图标； tooltips解释功能。
-28. check trackballcontrols.target
 29. 多个或单个物体的选中(添加transformcontrol)
 30. 优化加载速度，参考https://threejs.org/examples/#webgl_interactive_cubes_ortho
 33. 整理button click的代码
-34. div 环绕效果
+34. 建模部分基本的选项卡: source-code(两种模式，一种时纯txt文件，一种是可以鼠标操作) {晶格矢量，原子位置, 体积， 角度}
+                 对称性
+                 高对称K点
+35. 计算部分基本选项卡：DOS, 
+                      能带,
+                      Gap,VBM,CBM
+                      电荷密度，
+                      费米能级,
+                      dielectric
+                      force
+                      stress
+                      magnetic moment
+                      HSE
+                      +U
+                      ....
+

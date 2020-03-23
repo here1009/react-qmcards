@@ -112,7 +112,7 @@ class BtnSetting extends Component{
                                 <InputGroup.Prepend>
                                 <Button block variant="outline-primary" id="btn_a">
                                 <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <text x="50%" y="50%" dy=".35em" className="text" >a+</text>
+                                <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >a+</text>
                                 </svg>
                                 </Button>
                                 </InputGroup.Prepend>
