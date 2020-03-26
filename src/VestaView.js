@@ -31,6 +31,7 @@ var vestaObj = function(){
     this.initzoom=true;
     this.box=new THREE.Box3();
     this.al=[];
+    this.atoms=[];
     this.sf= 20;
     this.asf= 0.1;
     this.wb= 3.0;
@@ -186,6 +187,7 @@ var vestaObj = function(){
 
             var al = json.al;
             scope.al = al.slice();
+            scope.atoms = json.atoms.slice();
             var position = new THREE.Vector3();
             var color = new THREE.Color();
             //
@@ -1174,6 +1176,7 @@ VestaModal.showInstance = function() {
             //
     }, false);
     }
+    
     const electron = window.electron; 
     const ipc = electron.ipcRenderer;
 
@@ -1188,7 +1191,29 @@ VestaModal.showInstance = function() {
         var fileconfig=path.normalize(file.filePaths[0]);
         obj2.fileconfig=fileconfig;
         obj2.reloadfile();
+        //
+        var text=document.getElementById('text_atoms');
+        console.log(obj2);
+        console.log(obj2.al);
+        if(text){
+        text.value="";
+        //No. type x y z color showOrnot
+        for(var i=0;i<obj2.atoms.length;i++){
+            var No=i+1;
+            var type = obj2.atoms[i][4];
+            var x = obj2.atoms[i][6];
+            var y = obj2.atoms[i][7];
+            var z = obj2.atoms[i][8];
+            var showOrnot = true;
+            //var color=atoms[i]
+            var info=[No,type,x,y,z,showOrnot];
+            text.value=text.value+info.toString()+"\n";
+            console.log(info);
+        }
+        }
+        //
     });
+
 }
 }
 
