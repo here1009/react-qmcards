@@ -1192,9 +1192,10 @@ VestaModal.showInstance = function() {
         obj2.fileconfig=fileconfig;
         obj2.reloadfile();
         //
-        var text=document.getElementById('text_atoms');
-        console.log(obj2);
-        console.log(obj2.al);
+        var text=document.getElementById('txt_atoms');
+        //console.log(obj2);
+        //console.log(obj2.al);
+        console.log(text);
         if(text){
         text.value="";
         //No. type x y z color showOrnot
@@ -1208,7 +1209,6 @@ VestaModal.showInstance = function() {
             //var color=atoms[i]
             var info=[No,type,x,y,z,showOrnot];
             text.value=text.value+info.toString()+"\n";
-            console.log(info);
         }
         }
         //
