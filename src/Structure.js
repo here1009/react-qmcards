@@ -29,14 +29,14 @@ function Structure() {
                             <Card.Body>
                                
                             <InputGroup>
-                                {/* <TextareaAutosize
+                                <TextareaAutosize
                                 //rows={4}
-                                // value={this.state.value}
-                                // onChange={e => this.setState({value: e.target.value})}
+                                //value={this.state.value}
+                                //onChange={e => this.setState({value: e.target.value})}
                                 id="txt_atoms"
                                 style={{width:100+"%"}}
-                                /> */}
-                                <FormControl rows={4} as="textarea" id="txt_atoms" aria-label="With textarea" />
+                                />
+                                {/* <FormControl rows={4} as="textarea" id="txt_atoms" aria-label="With textarea" /> */}
                             </InputGroup>
                             </Card.Body>
                         </Accordion.Collapse>
