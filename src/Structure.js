@@ -12,7 +12,7 @@ function Structure() {
     return (
         <div>
             <Row>
-                <Col lg={12}>
+                <Col lg={12} id="vesta">
                     <VestaModal></VestaModal>
                 </Col>
 
