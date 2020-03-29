@@ -170,6 +170,7 @@ var vestaObj = function(){
             visualizationType:scope.visualizationType,
             max_expand_rcut:scope.max_expand_rcut,
         };
+        //在这个回调函数里操作页面的数据
         this.loader.load(url, props, function (pdb) {
 
             var geometryAtoms = pdb.geometryAtoms;
@@ -202,6 +203,24 @@ var vestaObj = function(){
                 plot_atom();
             }
             plot_box();
+            //
+            var text=document.getElementById('txt_atoms');
+            //console.log(text);
+            if(text){
+                text.value="";
+                //No. type x y z color showOrnot
+                for(var i=0;i<json.atoms.length;i++){
+                    var No=i+1;
+                    var type = json.atoms[i][4];
+                    var x = json.atoms[i][6];
+                    var y = json.atoms[i][7];
+                    var z = json.atoms[i][8];
+                    var showOrnot = true;
+                    //var color=atoms[i]
+                    var info=[No,type,x,y,z,showOrnot];
+                    text.value=text.value+info.toString()+"\n";
+                }
+                }
             //
             function plot_bond() {
                 //plot bond
@@ -1192,25 +1211,11 @@ VestaModal.showInstance = function() {
         obj2.fileconfig=fileconfig;
         obj2.reloadfile();
         //
-        var text=document.getElementById('txt_atoms');
+        //var text=document.getElementById('txt_atoms');
         //console.log(obj2);
         //console.log(obj2.al);
-        console.log(text);
-        if(text){
-        text.value="";
-        //No. type x y z color showOrnot
-        for(var i=0;i<obj2.atoms.length;i++){
-            var No=i+1;
-            var type = obj2.atoms[i][4];
-            var x = obj2.atoms[i][6];
-            var y = obj2.atoms[i][7];
-            var z = obj2.atoms[i][8];
-            var showOrnot = true;
-            //var color=atoms[i]
-            var info=[No,type,x,y,z,showOrnot];
-            text.value=text.value+info.toString()+"\n";
-        }
-        }
+        //console.log(text);
+        
         //
     });
 
