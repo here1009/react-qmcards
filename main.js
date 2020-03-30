@@ -58,9 +58,12 @@ function createWindow() {
   });
   ipc.on('get-file-data', function (event) {
     var data = null;
+    console.log("TEST ipc",process.argv);
     if (process.platform == 'win32' && process.argv.length >= 2) {
       var openFilePath = process.argv[1];
-      event.sender.send('selected-file', openFilePath);
+      //var openFilePath ="test.config";
+      //console.log(openFilePath);
+      if(openFilePath) event.sender.send('loaded-file', openFilePath);
       //data = fs.readFileSync(openFilePath, 'utf-8');
     }
   });

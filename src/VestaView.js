@@ -1198,7 +1198,18 @@ VestaModal.showInstance = function() {
     
     const electron = window.electron; 
     const ipc = electron.ipcRenderer;
-
+//
+    ipc.send('get-file-data');
+    ipc.on('loaded-file', function (event, file) {
+        var path = require("path");
+        //console.log(file);
+        if(file){
+            var fileconfig=path.normalize(file);
+            obj2.fileconfig=fileconfig;
+            obj2.reloadfile();
+        }
+    });
+    //
     const selectDirBtn = document.getElementById('btn_select');
     if(selectDirBtn){
     selectDirBtn.addEventListener('click', function (event) {
@@ -1207,16 +1218,12 @@ VestaModal.showInstance = function() {
     
     ipc.on('selected-file', function (event, file) {
         var path = require("path");
-        var fileconfig=path.normalize(file.filePaths[0]);
-        obj2.fileconfig=fileconfig;
-        obj2.reloadfile();
-        //
-        //var text=document.getElementById('txt_atoms');
-        //console.log(obj2);
-        //console.log(obj2.al);
-        //console.log(text);
-        
-        //
+        //console.log(file);
+        if(file.filePaths){
+            var fileconfig=path.normalize(file.filePaths[0]);
+            obj2.fileconfig=fileconfig;
+            obj2.reloadfile();
+        }
     });
     var fs=require('fs'),
     textarea=document.getElementById("txt_atoms"),
