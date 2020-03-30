@@ -56,7 +56,15 @@ function createWindow() {
       console.log(err)
     });
   });
-
+  ipc.on('get-file-data', function (event) {
+    var data = null;
+    if (process.platform == 'win32' && process.argv.length >= 2) {
+      var openFilePath = process.argv[1];
+      event.sender.send('selected-file', openFilePath);
+      //data = fs.readFileSync(openFilePath, 'utf-8');
+    }
+  });
+  
 }
  
 // 当Electron完成初始化并且已经创建了浏览器窗口，则该方法将会被调用。
@@ -75,6 +83,12 @@ app.on('window-all-closed', () => {
   }
 });
  
+app.on('open-file', (event, path) =>
+{
+    event.preventDefault();
+    console.log(path);
+});
+
 app.on('activate', () => {
   // 对于OS X系统，当dock图标被点击后会重新创建一个app窗口，并且不会有其他
   // 窗口打开
