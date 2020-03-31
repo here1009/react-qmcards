@@ -51,7 +51,16 @@ function Structure() {
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
-                                LATTICES
+                            <InputGroup>
+                                <TextareaAutosize
+                                //rows={4}
+                                //value={this.state.value}
+                                //onChange={e => this.setState({value: e.target.value})}
+                                id="txt_box"
+                                style={{width:100+"%"}}
+                                />
+                                {/* <FormControl rows={4} as="textarea" id="txt_atoms" aria-label="With textarea" /> */}
+                            </InputGroup>
                             </Card.Body>
                         </Accordion.Collapse>
                     </Card>

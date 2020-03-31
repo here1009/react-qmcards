@@ -36,7 +36,7 @@ var vestaObj = function(){
     this.asf= 0.1;
     this.wb= 3.0;
     this.visualizationType = 2;
-    this.bond_depth=1;
+    this.bond_depth=0;
     this.max_expand_rcut=6.0;
     this.configfile="";
     this.initScene= function(){
@@ -218,10 +218,24 @@ var vestaObj = function(){
                     var showOrnot = true;
                     //var color=atoms[i]
                     var info=[No,type,x,y,z,showOrnot];
-                    text.value=text.value+info.toString()+"\n";
+                    text.value=text.value+info.join("\t").toString()+"\n";
                 }
                 }
             //
+            var text=document.getElementById('txt_box');
+            //console.log(text);
+            if(text){
+                text.value="";
+                //No. type x y z color showOrnot
+                for(var i=0;i<json.al.length;i++){
+                    var x = json.al[i][0];
+                    var y = json.al[i][1];
+                    var z = json.al[i][2];
+                    //var color=atoms[i]
+                    var info=[x,y,z];
+                    text.value=text.value+info.join("\t").toString()+"\n";
+                }
+            }
             function plot_bond() {
                 //plot bond
                 var start = new THREE.Vector3();
@@ -730,7 +744,7 @@ class VestaModal extends Component {
                         >
                         </div>
                         </Col>
-                        <Col xs={8} lg={4} id='side_settings'>
+                        <Col id='side_settings' style={{width:197+"px"}}>
                         <BtnSetting></BtnSetting>
                             
                         </Col>

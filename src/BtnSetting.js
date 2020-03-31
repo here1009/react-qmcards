@@ -17,6 +17,8 @@ class BtnSetting extends Component{
     var mouseOffsetY=0;
     var isDraging=false; 
     var item = document.getElementById('side_settings');
+    item.style.left = 100 + "px";
+    item.style.top = 0 + "px";
     item.addEventListener('mousedown',(e)=>
     {
         //console.log(item);
@@ -69,9 +71,9 @@ class BtnSetting extends Component{
     render(){
         return(
             <div>
-                 <Accordion defaultActiveKey="0">
+                 <Accordion defaultActiveKey="1">
                         <Card>
-                            <Accordion.Toggle id='setting-toggle' as={Button}  eventKey="0">
+                            <Accordion.Toggle id='setting-toggle' as={Button} variant="outline-info" eventKey="0">
                             Settings
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey="0">
@@ -83,69 +85,69 @@ class BtnSetting extends Component{
                             </Jumbotron> */}
                             <InputGroup>
                                 <InputGroup.Prepend> 
-                                    <Button variant="outline-primary" id="btn_bond_depth"><MdZoomOutMap/></Button>   
+                                    <Button variant="outline-info" id="btn_bond_depth"><MdZoomOutMap/></Button>   
                                 </InputGroup.Prepend>
                                 <FormControl id="text_bond_depth" aria-label="set bond search depth)" />
                                 <FormControl id="text_max_expand_rcut" aria-label="set bond search depth)" />
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_showatom"><MdMoreHoriz/></Button>
+                                <Button block variant="outline-info" id="btn_showatom"><MdMoreHoriz/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_showbond"><MdRemove/></Button>
+                                <Button block variant="outline-info" id="btn_showbond"><MdRemove/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_showatombond"><MdLinearScale/></Button>
+                                    <Button block variant="outline-info" id="btn_showatombond"><MdLinearScale/></Button>
                                 </InputGroup.Prepend>
                                 {/* <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_drag"><FiMove/></Button>
+                                <Button block variant="outline-info" id="btn_drag"><FiMove/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_rotate"><MdRefresh/></Button>
+                                <Button block variant="outline-info" id="btn_rotate"><MdRefresh/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_scale"><AiOutlineGateway/></Button>
+                                    <Button block variant="outline-info" id="btn_scale"><AiOutlineGateway/></Button>
                                 </InputGroup.Prepend> */}
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_a">
+                                <Button block variant="outline-info" id="btn_a">
                                 <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                 <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >a+</text>
                                 </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_b">
+                                <Button block variant="outline-info" id="btn_b">
                                 <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                 <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >b+</text>
                                 </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_c">
+                                    <Button block variant="outline-info" id="btn_c">
                                     <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                     <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >c+</text>
                                     </svg>
                                     </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_astar">
+                                <Button block variant="outline-info" id="btn_astar">
                                     <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                     <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >a-</text>
                                     </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend>
-                                <Button block variant="outline-primary" id="btn_bstar">
+                                <Button block variant="outline-info" id="btn_bstar">
                                     <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                     <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >b-</text>
                                     </svg>
                                 </Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_cstar">
+                                    <Button block variant="outline-info" id="btn_cstar">
                                     <svg stroke="currentColor" fill="currentColor" strokeWidth="1" viewBox="0 0 20 20" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                                     <text textAnchor="middle" x="50%" y="50%" dy=".35em" className="text" >c-</text>
                                     </svg>
@@ -154,25 +156,25 @@ class BtnSetting extends Component{
                             </InputGroup>
                             <InputGroup>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotateup"><MdArrowUpward/></Button>
+                                    <Button block variant="outline-info" id="btn_rotateup"><MdArrowUpward/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatedown"><MdArrowDownward/></Button>
+                                    <Button block variant="outline-info" id="btn_rotatedown"><MdArrowDownward/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotateleft"><MdArrowBack/></Button>
+                                    <Button block variant="outline-info" id="btn_rotateleft"><MdArrowBack/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotateright"><MdArrowForward/></Button>
+                                    <Button block variant="outline-info" id="btn_rotateright"><MdArrowForward/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatezl"><MdUndo/></Button>
+                                    <Button block variant="outline-info" id="btn_rotatezl"><MdUndo/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatezr"><MdRedo/></Button>
+                                    <Button block variant="outline-info" id="btn_rotatezr"><MdRedo/></Button>
                                 </InputGroup.Prepend>
                                 <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_rotatemid"><MdSettingsBackupRestore/></Button>
+                                    <Button block variant="outline-info" id="btn_rotatemid"><MdSettingsBackupRestore/></Button>
                                 </InputGroup.Prepend>
                                 
                                 
@@ -180,7 +182,7 @@ class BtnSetting extends Component{
                             </InputGroup>
                             <InputGroup>
                             <InputGroup.Prepend> 
-                                    <Button block variant="outline-primary" id="btn_select"><TiFolderOpen/></Button>
+                                    <Button block variant="outline-info" id="btn_select"><TiFolderOpen/></Button>
                                 </InputGroup.Prepend>
                             </InputGroup>
                             
