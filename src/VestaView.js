@@ -43,8 +43,8 @@ var vestaObj = function(){
         this.scene = new THREE.Scene();
         this.width = this.gmount.clientWidth;
         this.height = this.gmount.clientHeight;
-        console.log(this.gmount);
-        console.log(this.width,this.height);
+        //console.log(this.gmount);
+        //console.log(this.width,this.height);
     };
     this.initCamera= function(){
         this.camera =
@@ -593,13 +593,7 @@ var vestaObj = function(){
         this.initRenderer();
         this.initControls();
         this.initAxes();
-        this.loadfile();
-        //this.loadMolecule(ATOM,this.root,this.root2);
-        this.loadMolecule(this.configfile,this.root,this.root2);
-        // set parameters
-        // pass in parameters use scope(not use keyword this)
-        // reload file, build geometry
-        // if need returned datas, need sync loader.load or check state in loop      
+        this.reloadfile();      
     }
     this.setBondDepth = function(properties){
         //bond search depth
@@ -616,8 +610,11 @@ var vestaObj = function(){
         this.reloadfile();
     }
     this.reloadfile = function(){
-        if(this.fileconfig){
-            this.loadMolecule(this.fileconfig,this.root,this.root2);
+        //console.log(this.configfile=="");
+        //console.log(this.configfile);
+        var patt = /.*\.config/i;
+        if(patt.test(this.configfile)){
+            this.loadMolecule(this.configfile,this.root,this.root2);
         }
     }
     this.loadfile = function () {
@@ -744,7 +741,7 @@ class VestaModal extends Component {
                         >
                         </div>
                         </Col>
-                        <Col id='side_settings' style={{width:197+"px"}}>
+                        <Col id='side_settings' style={{width:210+"px"}}>
                         <BtnSetting></BtnSetting>
                             
                         </Col>
@@ -1218,8 +1215,7 @@ VestaModal.showInstance = function() {
         var path = require("path");
         //console.log(file);
         if(file){
-            var fileconfig=path.normalize(file);
-            obj2.fileconfig=fileconfig;
+            obj2.configfile=path.normalize(file);
             obj2.reloadfile();
         }
     });
@@ -1234,8 +1230,7 @@ VestaModal.showInstance = function() {
         var path = require("path");
         //console.log(file);
         if(file.filePaths){
-            var fileconfig=path.normalize(file.filePaths[0]);
-            obj2.fileconfig=fileconfig;
+            obj2.configfile=path.normalize(file.filePaths[0]);
             obj2.reloadfile();
         }
     });
@@ -1265,8 +1260,7 @@ VestaModal.showInstance = function() {
         var file=event.dataTransfer.files[0];
         console.log(file.path);
         var path = require("path");
-        var fileconfig=path.normalize(file.path);
-        obj2.fileconfig=fileconfig;
+        obj2.configfile=path.normalize(file.path);
         obj2.reloadfile();
     }
 
