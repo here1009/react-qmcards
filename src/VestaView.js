@@ -212,9 +212,9 @@ var vestaObj = function(){
                 for(var i=0;i<json.atoms.length;i++){
                     var No=i+1;
                     var type = json.atoms[i][4];
-                    var x = json.atoms[i][6];
-                    var y = json.atoms[i][7];
-                    var z = json.atoms[i][8];
+                    var x = json.atoms[i][6].toFixed(3);
+                    var y = json.atoms[i][7].toFixed(3);
+                    var z = json.atoms[i][8].toFixed(3);
                     var showOrnot = true;
                     //var color=atoms[i]
                     var info=[No,type,x,y,z,showOrnot];
@@ -225,16 +225,87 @@ var vestaObj = function(){
             var text=document.getElementById('txt_box');
             //console.log(text);
             if(text){
-                text.value="";
+                text.value=" Lattice (Angstrom):\n";
                 //No. type x y z color showOrnot
                 for(var i=0;i<json.al.length;i++){
                     var x = json.al[i][0];
                     var y = json.al[i][1];
                     var z = json.al[i][2];
                     //var color=atoms[i]
+                    x=x.toFixed(3);
+                    y=y.toFixed(3);
+                    z=z.toFixed(3);
                     var info=[x,y,z];
-                    text.value=text.value+info.join("\t").toString()+"\n";
+                    text.value=text.value+"  a"+(i+1).toString()+":\t\t"+info.join("\t").toString()+"\n";
                 }
+                //
+                text.value=text.value+"\n";
+                text.value=text.value+"  Norm (a1,a2,a3):\t"+norm(json.al[0]).toFixed(3).toString()+"\t"+norm(json.al[1]).toFixed(3).toString()+"\t"+norm(json.al[2]).toFixed(3).toString()+"\n";
+                //
+                text.value=text.value+"\n";
+                var vol = Math.abs(det(json.al)).toFixed(3);
+                text.value=text.value+"  Volume (Angstrom^3):\t"+vol.toString()+"\n";
+                //
+                text.value=text.value+"\n Inverse Lattice:\n";
+                var ali=transpose(gen_ali(json.al));
+                for(var i=0;i<ali.length;i++){
+                    var x = ali[i][0];
+                    var y = ali[i][1];
+                    var z = ali[i][2];
+                    x=x.toFixed(3);
+                    y=y.toFixed(3);
+                    z=z.toFixed(3);
+                    //var color=atoms[i]
+                    var info=[x,y,z];
+                    text.value=text.value+"  b"+(i+1).toString()+":\t\t"+info.join("\t").toString()+"\n";
+                }
+                text.value=text.value+"\n";
+                text.value=text.value+"  Norm (b1,b2,b3):\t"+norm(ali[0]).toFixed(3).toString()+"\t"+norm(ali[1]).toFixed(3).toString()+"\t"+norm(ali[2]).toFixed(3).toString()+"\n";
+                //
+            }
+            function norm(x){
+                return Math.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2]);
+            }
+            function transpose(al){
+                var alt=al.slice();
+                for(var i=0;i<3;i++){
+                    for (var j=0;j<3;j++){
+                        alt[i][j]=al[j][i];
+                    }
+                }
+                return alt;
+            }
+            function det(al){
+                return al[0][0]*(al[1][1]*al[2][2]-al[1][2]*al[2][1])-al[1][0]*(al[0][1]*al[2][2]-al[0][2]*al[2][1])+al[2][0]*(al[0][1]*al[1][2]-al[0][2]*al[1][1]);
+            }
+            function gen_ali(al){
+                var a = al[0][0];
+                var d = al[0][1];
+                var g = al[0][2];
+                var b = al[1][0];
+                var e = al[1][1];
+                var h = al[1][2];
+                var c = al[2][0];
+                var f = al[2][1];
+                var i = al[2][2];
+                var ali=[];
+                var dd=det(al);
+                ali[0] = [
+                    (e * i - h * f) / dd,
+                    (f * g - i * d) / dd,
+                    (d * h - g * e) / dd
+                ];
+                ali[1] = [
+                    (-(b * i - h * c)) / dd,
+                    (-(c * g - i * a)) / dd,
+                    (-(a * h - g * b)) / dd
+                ];
+                ali[2] = [
+                    (b * f - c * e) / dd,
+                    (c * d - a * f) / dd,
+                    (a * e - b * d) / dd
+                ];
+                return ali;
             }
             function plot_bond() {
                 //plot bond
