@@ -207,7 +207,7 @@ var vestaObj = function(){
             var text=document.getElementById('txt_atoms');
             //console.log(text);
             if(text){
-                text.value="";
+                text.value=json.atoms.length.toString()+"\n";
                 //No. type x y z color showOrnot
                 for(var i=0;i<json.atoms.length;i++){
                     var No=i+1;
@@ -227,6 +227,7 @@ var vestaObj = function(){
             if(text){
                 text.value=" Lattice (Angstrom):\n";
                 //No. type x y z color showOrnot
+                let flag=["a","b","c"];
                 for(var i=0;i<json.al.length;i++){
                     var x = json.al[i][0];
                     var y = json.al[i][1];
@@ -236,18 +237,26 @@ var vestaObj = function(){
                     y=y.toFixed(3);
                     z=z.toFixed(3);
                     var info=[x,y,z];
-                    text.value=text.value+"  a"+(i+1).toString()+":\t\t"+info.join("\t").toString()+"\n";
+                    text.value=text.value+"  "+flag[i]+":\t\t"+info.join("\t").toString()+"\n";
                 }
                 //
                 text.value=text.value+"\n";
-                text.value=text.value+"  Norm (a1,a2,a3):\t"+norm(json.al[0]).toFixed(3).toString()+"\t"+norm(json.al[1]).toFixed(3).toString()+"\t"+norm(json.al[2]).toFixed(3).toString()+"\n";
+                text.value=text.value+"  Norm (a,b,c):\t"+norm(json.al[0]).toFixed(3).toString()+"\t"+norm(json.al[1]).toFixed(3).toString()+"\t"+norm(json.al[2]).toFixed(3).toString()+"\n";
                 //
                 text.value=text.value+"\n";
                 var vol = Math.abs(det(json.al)).toFixed(3);
                 text.value=text.value+"  Volume (Angstrom^3):\t"+vol.toString()+"\n";
                 //
+                text.value=text.value+"\n";
+                let ang=[];
+                ang[0]=acos3(json.al[0],json.al[1]).toFixed(3);
+                ang[1]=acos3(json.al[0],json.al[2]).toFixed(3);
+                ang[2]=acos3(json.al[1],json.al[2]).toFixed(3);
+                text.value=text.value+"  Angles :\t"+ang.join("\t").toString()+"\n";
+                //
                 text.value=text.value+"\n Inverse Lattice:\n";
                 var ali=transpose(gen_ali(json.al));
+                flag=["inva","invb","invc"];
                 for(var i=0;i<ali.length;i++){
                     var x = ali[i][0];
                     var y = ali[i][1];
@@ -257,11 +266,16 @@ var vestaObj = function(){
                     z=z.toFixed(3);
                     //var color=atoms[i]
                     var info=[x,y,z];
-                    text.value=text.value+"  b"+(i+1).toString()+":\t\t"+info.join("\t").toString()+"\n";
+                    text.value=text.value+"  "+flag[i]+":\t\t"+info.join("\t").toString()+"\n";
                 }
                 text.value=text.value+"\n";
-                text.value=text.value+"  Norm (b1,b2,b3):\t"+norm(ali[0]).toFixed(3).toString()+"\t"+norm(ali[1]).toFixed(3).toString()+"\t"+norm(ali[2]).toFixed(3).toString()+"\n";
+                text.value=text.value+"  Norm (inva,invb,invc):\t"+norm(ali[0]).toFixed(3).toString()+"\t"+norm(ali[1]).toFixed(3).toString()+"\t"+norm(ali[2]).toFixed(3).toString()+"\n";
                 //
+            }
+            function acos3(x,y){
+                let xy=x[0]*y[0]+x[1]*y[1]+x[2]*y[2];
+                let cos3=xy/(norm(x)*norm(y));
+                return Math.acos(cos3)/Math.PI*180.0;
             }
             function norm(x){
                 return Math.sqrt(x[0]*x[0]+x[1]*x[1]+x[2]*x[2]);
@@ -1300,7 +1314,7 @@ VestaModal.showInstance = function() {
     ipc.on('selected-file', function (event, file) {
         var path = require("path");
         //console.log(file);
-        if(file.filePaths){
+        if(file.filePaths.length>0){
             obj2.configfile=path.normalize(file.filePaths[0]);
             obj2.reloadfile();
         }
@@ -1329,7 +1343,7 @@ VestaModal.showInstance = function() {
         event.preventDefault();
         
         var file=event.dataTransfer.files[0];
-        console.log(file.path);
+        //console.log(file.path);
         var path = require("path");
         obj2.configfile=path.normalize(file.path);
         obj2.reloadfile();
