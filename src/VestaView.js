@@ -676,9 +676,39 @@ var vestaObj = function(){
         this.initCamera();
         this.initLight();
         this.initRenderer();
+        this.createText();
         this.initControls();
         this.initAxes();
-        this.reloadfile();      
+        this.reloadfile();  
+            
+    }
+    this.createText=function() {
+        var scope=this;
+        console.log(scope);
+        var text = new THREE.FontLoader().load('helvetiker_bold.typeface.json', function(text) {
+            var gem = new THREE.TextGeometry('ATOMS SHOW', {
+                size: 20, //字号大小，一般为大写字母的高度
+                height: 10, //文字的厚度
+                weight: 'normal', //值为'normal'或'bold'，表示是否加粗
+                font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
+                style: 'normal', //值为'normal'或'italics'，表示是否斜体
+                bevelThickness: 1, //倒角厚度
+                bevelSize: 1, //倒角宽度
+                curveSegments: 30,//弧线分段数，使得文字的曲线更加光滑
+                bevelEnabled: true, //布尔值，是否使用倒角，意为在边缘处斜切
+            });
+            gem.center();
+            var mat = new THREE.MeshPhongMaterial({
+                color: 0xffe502,
+                specular: 0x009900,
+                shininess: 30,
+                shading: THREE.FlatShading
+            });
+            var textObj = new THREE.Mesh(gem, mat);
+            textObj.castShadow = true;
+            scope.root.add(textObj);
+        });
+        console.log(text);
     }
     this.setBondDepth = function(properties){
         //bond search depth
@@ -761,6 +791,7 @@ var vestaObj = function(){
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
         this.renderer2.render(this.scene2, this.camera2);
+        
     }
     this.onWindowResize=function() {
         var width = this.gmount.clientWidth;

@@ -11,6 +11,7 @@
 27. 标准的按钮component，不在按钮上显示文字，只用图标； tooltips解释功能。
 29. 多个或单个物体的选中(添加transformcontrol)
 30. 优化加载速度，参考https://threejs.org/examples/#webgl_interactive_cubes_ortho
+http://www.yanhuangxueyuan.com/threejs/examples/?q=text#webgl_multiple_elements_text
 33. 整理button click的代码
 34. 建模部分基本的选项卡: source-code(两种模式，一种时纯txt文件，一种是可以鼠标操作) {晶格矢量，原子位置, 体积， 角度}
                  对称性
@@ -31,3 +32,4 @@
 37. 搭样式，静态页面
 39. 可伸缩大小的div, 自由排列的div
 40. 坐标轴显示a,b,c
+41. font need adjust
