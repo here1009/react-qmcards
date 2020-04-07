@@ -97,6 +97,7 @@ var vestaObj = function(){
         controls.noPan=true;
         controls.dynamicDampingFactor=0.0;
         controls.staticMoving = true;
+        controls.rotateSpeed = 5.0;
         this.controls = controls;
         //
         // var tcontrols = new TransformControls(this.camera, this.renderer.domElement);
@@ -173,8 +174,8 @@ var vestaObj = function(){
             var geometryBonds = pdb.geometryBonds;
             var json = pdb.json;
 
-            var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 32);
-            var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 3);
+            var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 8);
+            var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 2);
 
             geometryAtoms.computeBoundingBox();
             geometryAtoms.boundingBox.getCenter(offset).negate();
