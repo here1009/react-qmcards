@@ -86,13 +86,7 @@ var vestaObj = function(){
         this.gmount.style.padding=0;
         this.gmount.appendChild(this.renderer.domElement);
         //
-        var labelRenderer = new CSS2DRenderer();
-        labelRenderer.setSize(this.width, this.height);
-        labelRenderer.domElement.style.position = 'absolute';
-        labelRenderer.domElement.style.top = '0';
-        labelRenderer.domElement.style.pointerEvents = 'none';
-        this.labelRenderer=labelRenderer;
-        this.gmount.appendChild(this.labelRenderer.domElement);
+        
     };
     this.initControls= function(){
         //
@@ -101,6 +95,8 @@ var vestaObj = function(){
         controls.minDistance = 500;
         controls.maxDistance = 2000;
         controls.noPan=true;
+        controls.dynamicDampingFactor=0.0;
+        controls.staticMoving = true;
         this.controls = controls;
         //
         // var tcontrols = new TransformControls(this.camera, this.renderer.domElement);
@@ -421,7 +417,7 @@ var vestaObj = function(){
 
                     var label = new CSS2DObject(text);
                     label.position.copy(object.position);
-                    root.add(label);
+                    //root.add(label);
                 }
             }
             function plot_box() {
@@ -530,6 +526,16 @@ var vestaObj = function(){
                 object.scale.set(1, start.distanceTo(end), 1);
                 root2.add(object);
                 //
+                var text = document.createElement('div');
+                text.className = 'label';
+                text.style.color = 'rgb(0,0,0)';
+                text.textContent = 'a';
+                var label = new CSS2DObject(text);
+                label.position.copy(end);
+                root2.add(label);
+                //console.log(root2);
+
+                //
                 var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
                 var material = new THREE.MeshPhongMaterial({ color: "#a51c1c" });
                 var object = new THREE.Mesh(cylinderGeometry, material);
@@ -550,37 +556,7 @@ var vestaObj = function(){
                 object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
                 object.scale.set(1, start.distanceTo(end), 1);
                 root2.add(object);
-                //
-                var text = new THREE.FontLoader().load('helvetiker_bold.typeface.json', function(text) {
-                var gem = new THREE.TextGeometry('a', {
-                    size: 20, //字号大小，一般为大写字母的高度
-                    height: 5, //文字的厚度
-                    weight: 'normal', //值为'normal'或'bold'，表示是否加粗
-                    font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
-                    style: 'normal', //值为'normal'或'italics'，表示是否斜体
-                    bevelThickness: 1, //倒角厚度
-                    bevelSize: 1, //倒角宽度
-                    curveSegments: 30,//弧线分段数，使得文字的曲线更加光滑
-                    bevelEnabled: true, //布尔值，是否使用倒角，意为在边缘处斜切
-                });
-                gem.center();
-                var mat = new THREE.MeshPhongMaterial({
-                    color: 0x000,
-                    specular: 0x009900,
-                    shininess: 30,
-                    shading: THREE.FlatShading
-                });
-                var textObj = new THREE.Mesh(gem, mat);
-                textObj.castShadow = true;
-                var [x,y,z] = [lenx,0,0];
-                var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
-                var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
-                var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
-                var end = new THREE.Vector3(fx*1.1, fy*1.1, fz*1.1);
-                textObj.position.copy(end);
-                //console.log(end);
-                root2.add(textObj);
-                });
+                
                 //
                 var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
                 var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
@@ -598,6 +574,14 @@ var vestaObj = function(){
                 object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
                 object.scale.set(1, start.distanceTo(end), 1);
                 root2.add(object);
+                 //
+                 var text = document.createElement('div');
+                 text.className = 'label';
+                 text.style.color = 'rgb(0,0,0)';
+                 text.textContent = 'b';
+                 var label = new CSS2DObject(text);
+                 label.position.copy(end);
+                 root2.add(label);
                 //
                 var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
                 var material = new THREE.MeshPhongMaterial({ color: "#3f51b5" });
@@ -619,37 +603,7 @@ var vestaObj = function(){
                 object.position.lerp(end, 0.5);
                 object.scale.set(1, start.distanceTo(end), 1);
                 root2.add(object);
-                //
-                var text = new THREE.FontLoader().load('helvetiker_bold.typeface.json', function(text) {
-                    var gem = new THREE.TextGeometry('b', {
-                        size: 20, //字号大小，一般为大写字母的高度
-                        height: 5, //文字的厚度
-                        weight: 'normal', //值为'normal'或'bold'，表示是否加粗
-                        font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
-                        style: 'normal', //值为'normal'或'italics'，表示是否斜体
-                        bevelThickness: 1, //倒角厚度
-                        bevelSize: 1, //倒角宽度
-                        curveSegments: 30,//弧线分段数，使得文字的曲线更加光滑
-                        bevelEnabled: true, //布尔值，是否使用倒角，意为在边缘处斜切
-                    });
-                    gem.center();
-                    var mat = new THREE.MeshPhongMaterial({
-                        color: 0x000,
-                        specular: 0x009900,
-                        shininess: 30,
-                        shading: THREE.FlatShading
-                    });
-                    var textObj = new THREE.Mesh(gem, mat);
-                    textObj.castShadow = true;
-                    var [x,y,z] = [0,leny,0];
-                    var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
-                    var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
-                    var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
-                    var end = new THREE.Vector3(fx*1.1, fy*1.1, fz*1.1);
-                    textObj.position.copy(end);
-                    //console.log(end);
-                    root2.add(textObj);
-                    });
+               
                 //
                 var cylinderGeometry = new THREE.CylinderBufferGeometry(5, 1, 1, 32);
                 var material = new THREE.MeshPhongMaterial({ color: "#009688" });
@@ -667,6 +621,15 @@ var vestaObj = function(){
                 object.position.lerp(end, 0.5);
                 object.scale.set(1, start.distanceTo(end), 1);
                 root2.add(object);
+                //
+                var text = document.createElement('div');
+                text.className = 'label';
+                text.style.color = 'rgb(0,0,0)';
+                text.textContent = 'c';
+                var label = new CSS2DObject(text);
+                label.position.copy(end);
+                root2.add(label);
+                //
                 //
                 var cylinderGeometry = new THREE.CylinderBufferGeometry(1, 8, 1, 32);
                 var material = new THREE.MeshPhongMaterial({ color: "#009688" });
@@ -689,36 +652,7 @@ var vestaObj = function(){
                 object.scale.set(1, start.distanceTo(end), 1);
                 root2.add(object);
                 //
-                var text = new THREE.FontLoader().load('helvetiker_bold.typeface.json', function(text) {
-                    var gem = new THREE.TextGeometry('c', {
-                        size: 20, //字号大小，一般为大写字母的高度
-                        height: 5, //文字的厚度
-                        weight: 'normal', //值为'normal'或'bold'，表示是否加粗
-                        font: text, //字体，默认是'helvetiker'，需对应引用的字体文件
-                        style: 'normal', //值为'normal'或'italics'，表示是否斜体
-                        bevelThickness: 1, //倒角厚度
-                        bevelSize: 1, //倒角宽度
-                        curveSegments: 30,//弧线分段数，使得文字的曲线更加光滑
-                        bevelEnabled: true, //布尔值，是否使用倒角，意为在边缘处斜切
-                    });
-                    gem.center();
-                    var mat = new THREE.MeshPhongMaterial({
-                        color: 0x000,
-                        specular: 0x009900,
-                        shininess: 30,
-                        shading: THREE.FlatShading
-                    });
-                    var textObj = new THREE.Mesh(gem, mat);
-                    textObj.castShadow = true;
-                    var [x,y,z] = [0,0,lenz];
-                    var fx = al[0][0] * x + al[1][0] * y + al[2][0] * z;
-                    var fy = al[0][1] * x + al[1][1] * y + al[2][1] * z;
-                    var fz = al[0][2] * x + al[1][2] * y + al[2][2] * z;
-                    var end = new THREE.Vector3(fx*1.1, fy*1.1, fz*1.1);
-                    textObj.position.copy(end);
-                    //console.log(end);
-                    root2.add(textObj);
-                });
+                
             }
         });
         
@@ -756,10 +690,18 @@ var vestaObj = function(){
         light.position.set(-1, -1, -1);
         this.scene2.add(light);
 
-        var light = new THREE.AmbientLight(0xffffff, 0.8);
+        var light = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene2.add(light);
 
         this.scene2.add(this.root2);
+        //
+        var labelRenderer = new CSS2DRenderer();
+        labelRenderer.setSize(len, len);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        this.labelRenderer=labelRenderer;
+        this.gmount2.appendChild(this.labelRenderer.domElement);
     };
     this.init= function(){
         //window.onresize = onWindowResize;
@@ -853,7 +795,7 @@ var vestaObj = function(){
     }
     this.render = function () {
         this.renderer.render(this.scene, this.camera);
-        this.labelRenderer.render(this.scene, this.camera);
+        this.labelRenderer.render(this.scene2, this.camera2);
         this.renderer2.render(this.scene2, this.camera2);
         
     }
@@ -869,7 +811,7 @@ var vestaObj = function(){
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(width, height);
         //this.renderer2.setSize(width, height);
-        this.labelRenderer.setSize(width, height);
+        //this.labelRenderer.setSize(width, height);
     }
 }
 
