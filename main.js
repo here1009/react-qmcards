@@ -12,10 +12,10 @@ let win;
 function createWindow() {
   // 创建一个新的浏览器窗口
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    show:false,
     autoHideMenuBar: true,
-    fullscreenable: false,
+    fullscreenable: true,
+    //fullscreen: true,
     webPreferences: {
         javascript: true,
         plugins: true,
@@ -24,6 +24,8 @@ function createWindow() {
         preload: path.join(__dirname, './public/renderer.js') 
     }
   });
+  win.maximize();
+  win.show();
  
   // 并且装载应用的index.html页面
   win.loadURL(`http://localhost:3000/`);
@@ -89,7 +91,7 @@ app.on('window-all-closed', () => {
 app.on('open-file', (event, path) =>
 {
     event.preventDefault();
-    console.log(path);
+    //console.log(path);
 });
 
 app.on('activate', () => {

@@ -1,10 +1,10 @@
 {
-  "name": "my-app",
+  "name": "config",
   "version": "0.1.0",
   "private": true,
   "main": "main.js",
   "homepage": ".",
-  "DEV": true,
+  "DEV": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -26,7 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron-start": "electron .",
-    "package": "electron-packager ./ myapp --out ./OutApp --electron-version 8.1.1 --overwrite --icon=./public/favicon.ico"
+    "package": "electron-packager ./ config --out ./OutApp --electron-version 8.1.1 --overwrite --icon=./public/config0.ico"
   },
   "eslintConfig": {
     "extends": "react-app"
