@@ -341,9 +341,9 @@ var vestaObj = function(){
                     end.y = positions.getY(i + 1);
                     end.z = positions.getZ(i + 1);
 
-                    color_end.r = colors.getX(i + 1);
-                    color_end.g = colors.getY(i + 1);
-                    color_end.b = colors.getZ(i + 1);
+                    color_end.r = (colors.getX(i + 1)+color_start.r)/2;
+                    color_end.g = (colors.getY(i + 1)+color_start.g)/2;
+                    color_end.b = (colors.getZ(i + 1)+color_start.b)/2;
 
                     mid.x = (start.x + end.x) / 2;
                     mid.y = (start.y + end.y) / 2;
@@ -352,31 +352,32 @@ var vestaObj = function(){
                     start.multiplyScalar(sf);
                     end.multiplyScalar(sf);
                     mid.multiplyScalar(sf);
+                    
 
-                    var material = new THREE.MeshPhongMaterial({ color: color_start });
+                    var material = new THREE.MeshPhongMaterial({ color: color_end });
                     var object = new THREE.Mesh(cylinderGeometry, material);
                     object.position.copy(start);
-                    object.position.lerp(mid, 0.5);
+                    object.position.lerp(end, 0.5);
 
-                    var direction = new THREE.Vector3().subVectors(mid, start);
+                    var direction = new THREE.Vector3().subVectors(end, start);
                     var axis = new THREE.Vector3(0, 1, 0);
                     object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
 
-                    object.scale.set(1, start.distanceTo(mid), 1);
+                    object.scale.set(1, start.distanceTo(end), 1);
 
-                    var material = new THREE.MeshPhongMaterial({ color: color_end });
-                    var object2 = new THREE.Mesh(cylinderGeometry, material);
-                    object2.position.copy(end);
-                    object2.position.lerp(mid, 0.5);
+                    // var material = new THREE.MeshPhongMaterial({ color: color_end });
+                    // var object2 = new THREE.Mesh(cylinderGeometry, material);
+                    // object2.position.copy(end);
+                    // object2.position.lerp(mid, 0.5);
 
-                    var direction = new THREE.Vector3().subVectors(mid, end);
-                    var axis = new THREE.Vector3(0, 1, 0);
-                    object2.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+                    // var direction = new THREE.Vector3().subVectors(mid, end);
+                    // var axis = new THREE.Vector3(0, 1, 0);
+                    // object2.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
 
-                    object2.scale.set(1, end.distanceTo(mid), 1);
+                    // object2.scale.set(1, end.distanceTo(mid), 1);
 
                     root.add(object);
-                    root.add(object2);
+                    //root.add(object2);
                 }
             };
             //plot atoms
