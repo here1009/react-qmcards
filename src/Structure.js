@@ -21,8 +21,8 @@ function Structure() {
             <Row>
                 <Col lg={12} xs={12}>
                     <Accordion defaultActiveKey="0">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                    <Card className="card-header">
+                        <Accordion.Toggle as={Card.Header} eventKey="0" className="txt-header">
                         ATOMS
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
@@ -45,8 +45,8 @@ function Structure() {
                 </Col>   
                 <Col lg={6} xs={12}>
                 <Accordion defaultActiveKey="0">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                    <Card className="card-header">
+                        <Accordion.Toggle as={Card.Header} eventKey="0"className="txt-header">
                         LATTICES
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
@@ -68,8 +68,8 @@ function Structure() {
                 </Col>
                 <Col lg={6} xs={12}>
                 <Accordion defaultActiveKey="0">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                    <Card className="card-header">
+                        <Accordion.Toggle as={Card.Header} eventKey="0"className="txt-header">
                         SYMMETRYS
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
@@ -82,8 +82,8 @@ function Structure() {
                 </Col>  
                 <Col lg={6} xs={12}>
                 <Accordion defaultActiveKey="0">
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                    <Card className="card-header">
+                        <Accordion.Toggle as={Card.Header} eventKey="0"className="txt-header">
                         K-POINT PATH
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
