@@ -8,11 +8,11 @@
   color:#9e225b!important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .App-area{
   border-width: .2rem .2rem 0;

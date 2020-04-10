@@ -32,7 +32,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		loader.setPath( scope.path );
 		loader.load( url, function ( text ) {
 		onLoad( scope.parse( text ) );
-		console.log(text);
+		//console.log(text);
 
 		}, onProgress, onError );
 
@@ -656,6 +656,9 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var n1=Math.ceil(frcutx);
 		var n2=Math.ceil(frcuty);
 		var n3=Math.ceil(frcutz);
+		n1=0
+		n2=0
+		n3=0
 		for (var ia = 0; ia < natom; ia++) {
 			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
 			for (var i = -n1; i <= n1; i++) {
@@ -756,7 +759,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			natom+=1;
 			in_atoms_flag[ia] = 1;
 		}
-		console.log(natom)
+		//console.log(natom)
 		for (var i = 0; i < inbox_natom; i++) {
 			var ia = in_big[i];
 			var isec = insec[ia];
