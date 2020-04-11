@@ -33,7 +33,7 @@ var vestaObj = function(){
     this.al=[];
     this.atoms=[];
     this.sf= 20;
-    this.asf= 0.1;
+    this.asf= 0.05;
     this.wb= 3.0;
     this.visualizationType = 2;
     this.bond_depth=0;
@@ -174,7 +174,9 @@ var vestaObj = function(){
             var geometryBonds = pdb.geometryBonds;
             var json = pdb.json;
 
-            var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 8);
+            //var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 8);
+            var boxGeometry = new THREE.BoxBufferGeometry( wb, 1, wb);
+            
             var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 2);
 
             geometryAtoms.computeBoundingBox();
@@ -203,8 +205,8 @@ var vestaObj = function(){
             //
             var text=document.getElementById('txt_atoms');
             //console.log(text);
-            // if(text){
-            //     text.value=json.atoms.length.toString()+"\n";
+             if(text){
+                 text.value=json.atoms.length.toString()+"\n";
             //     //No. type x y z color showOrnot
             //     for(var i=0;i<json.atoms.length;i++){
             //         var No=i+1;
@@ -217,7 +219,7 @@ var vestaObj = function(){
             //         var info=[No,type,x,y,z,showOrnot];
             //         text.value=text.value+info.join("\t").toString()+"\n";
             //     }
-            //     }
+                 }
             //
             var text=document.getElementById('txt_box');
             //console.log(text);
@@ -341,9 +343,9 @@ var vestaObj = function(){
                     end.y = positions.getY(i + 1);
                     end.z = positions.getZ(i + 1);
 
-                    color_end.r = (colors.getX(i + 1)+color_start.r)/2;
-                    color_end.g = (colors.getY(i + 1)+color_start.g)/2;
-                    color_end.b = (colors.getZ(i + 1)+color_start.b)/2;
+                    color_end.r = colors.getX(i + 1);
+                    color_end.g = colors.getY(i + 1);
+                    color_end.b = colors.getZ(i + 1);
 
                     mid.x = (start.x + end.x) / 2;
                     mid.y = (start.y + end.y) / 2;
@@ -352,31 +354,41 @@ var vestaObj = function(){
                     start.multiplyScalar(sf);
                     end.multiplyScalar(sf);
                     mid.multiplyScalar(sf);
+                    if(color_start.r===color_end.r && color_start.g===color_end.g && color_start.b===color_end.b){
+                        var lineGeometry = new THREE.Geometry();
+                        lineGeometry.vertices.push(
+                            start.clone(),
+                            end.clone()
+                        );
+                        
+                        var lineMaterial = new THREE.LineBasicMaterial({ color: color_start,linewidth:wb });
+                        var object = new THREE.Line(lineGeometry, lineMaterial);
+                        root.add(object);
+                    }else{
+                        var lineGeometry = new THREE.Geometry();
+                        lineGeometry.vertices.push(
+                            start.clone(),
+                            mid.clone()
+                        );
+                        
+                        var lineMaterial = new THREE.LineBasicMaterial({ color: color_start,linewidth:wb });
+                        var object = new THREE.Line(lineGeometry, lineMaterial);
+                        root.add(object);
+
+                        var lineGeometry = new THREE.Geometry();
+                        lineGeometry.vertices.push(
+                            mid.clone(),
+                            end.clone()
+                        );
+                        
+                        var lineMaterial = new THREE.LineBasicMaterial({ color: color_end,linewidth:wb });
+                        var object = new THREE.Line(lineGeometry, lineMaterial);
+
+                        root.add(object);
+                    }
                     
 
-                    var material = new THREE.MeshPhongMaterial({ color: color_end });
-                    var object = new THREE.Mesh(cylinderGeometry, material);
-                    object.position.copy(start);
-                    object.position.lerp(end, 0.5);
-
-                    var direction = new THREE.Vector3().subVectors(end, start);
-                    var axis = new THREE.Vector3(0, 1, 0);
-                    object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-
-                    object.scale.set(1, start.distanceTo(end), 1);
-
-                    // var material = new THREE.MeshPhongMaterial({ color: color_end });
-                    // var object2 = new THREE.Mesh(cylinderGeometry, material);
-                    // object2.position.copy(end);
-                    // object2.position.lerp(mid, 0.5);
-
-                    // var direction = new THREE.Vector3().subVectors(mid, end);
-                    // var axis = new THREE.Vector3(0, 1, 0);
-                    // object2.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
-
-                    // object2.scale.set(1, end.distanceTo(mid), 1);
-
-                    root.add(object);
+                    
                     //root.add(object2);
                 }
             };
