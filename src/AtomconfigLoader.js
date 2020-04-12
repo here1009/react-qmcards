@@ -653,12 +653,10 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var in_big=[];
 		var in_small=new Map();
 		var big_natom=0;
-		var n1=Math.ceil(frcutx);
-		var n2=Math.ceil(frcuty);
-		var n3=Math.ceil(frcutz);
-		n1=0
-		n2=0
-		n3=0
+		var n1=Math.floor(frcutx);
+		var n2=Math.floor(frcuty);
+		var n3=Math.floor(frcutz);
+	
 		for (var ia = 0; ia < natom; ia++) {
 			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
 			for (var i = -n1; i <= n1; i++) {

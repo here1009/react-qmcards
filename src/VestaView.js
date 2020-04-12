@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import './VestaView.css';
 import * as THREE from 'three';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
-import { DragControls } from 'three/examples/jsm/controls/DragControls';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { ATOMCONFIGLoader } from './AtomconfigLoader';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
-import { MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
-import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
+import { Line2 } from 'three/examples/jsm/lines/Line2.js';
+import {Row,Col} from 'react-bootstrap';
 import {BtnSetting} from './BtnSetting';
 //import NB from './c2.config';
 import ATOM from './caffeine.config';
@@ -34,7 +32,7 @@ var vestaObj = function(){
     this.atoms=[];
     this.sf= 20;
     this.asf= 0.05;
-    this.wb= 3.0;
+    this.wb=2;
     this.visualizationType = 2;
     this.bond_depth=0;
     this.max_expand_rcut=6.0;
@@ -174,7 +172,7 @@ var vestaObj = function(){
             var geometryBonds = pdb.geometryBonds;
             var json = pdb.json;
 
-            //var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 8);
+            var cylinderGeometry = new THREE.CylinderBufferGeometry(wb, wb, 1, 8);
             var boxGeometry = new THREE.BoxBufferGeometry( wb, 1, wb);
             
             var sphereGeometry = new THREE.IcosahedronBufferGeometry(1, 2);
@@ -196,9 +194,9 @@ var vestaObj = function(){
                 plot_atom();
             }
             else if (props.visualizationType == 1) {
-                plot_bond();
+                plot_bond0();
             } else if (props.visualizationType == 2) {
-                plot_bond();
+                plot_bond0();
                 plot_atom();
             }
             plot_box();
@@ -354,38 +352,120 @@ var vestaObj = function(){
                     start.multiplyScalar(sf);
                     end.multiplyScalar(sf);
                     mid.multiplyScalar(sf);
-                    if(color_start.r===color_end.r && color_start.g===color_end.g && color_start.b===color_end.b){
-                        var lineGeometry = new THREE.Geometry();
-                        lineGeometry.vertices.push(
-                            start.clone(),
-                            end.clone()
-                        );
-                        
-                        var lineMaterial = new THREE.LineBasicMaterial({ color: color_start,linewidth:wb });
-                        var object = new THREE.Line(lineGeometry, lineMaterial);
-                        root.add(object);
+
+                    var ppositions=[];
+                    var pcolors=[];
+                
+                    ppositions.push( start.x, start.y, start.z );
+                    pcolors.push( color_start.r, color_start.g, color_start.b );
+                    ppositions.push( end.x, end.y, end.z );
+                    pcolors.push( color_end.r, color_end.g, color_end.b );
+    
+                    
+                    var lineGeometry = new LineGeometry();
+                    lineGeometry.setPositions(ppositions);
+                    lineGeometry.setColors(pcolors);
+                    
+                    var lineMaterial = new LineMaterial({ 
+                        color: color_start ,
+                        linewidth: wb, // in pixels
+				        vertexColors: true,
+				        //resolution:  // to be set by renderer, eventually
+				        dashed: false
+                    });
+                    var line = new Line2(lineGeometry, lineMaterial);
+                    line.computeLineDistances();
+                    line.scale.set( 1, 1, 1 );
+                    root.add(line);
+                }
+            };
+            function plot_bond0() {
+                //plot bond
+                var start = new THREE.Vector3();
+                var end = new THREE.Vector3();
+                var mid = new THREE.Vector3();
+                var color_start = new THREE.Color();
+                var color_end = new THREE.Color();
+                var positions = geometryBonds.getAttribute('position');
+                var colors = geometryBonds.getAttribute('color');
+                for (var i = 0; i < positions.count; i += 2) {
+
+                    start.x = positions.getX(i);
+                    start.y = positions.getY(i);
+                    start.z = positions.getZ(i);
+
+                    color_start.r = colors.getX(i);
+                    color_start.g = colors.getY(i);
+                    color_start.b = colors.getZ(i);
+
+                    end.x = positions.getX(i + 1);
+                    end.y = positions.getY(i + 1);
+                    end.z = positions.getZ(i + 1);
+
+                    color_end.r = colors.getX(i + 1);
+                    color_end.g = colors.getY(i + 1);
+                    color_end.b = colors.getZ(i + 1);
+
+                    mid.x = (start.x + end.x) / 2;
+                    mid.y = (start.y + end.y) / 2;
+                    mid.z = (start.z + end.z) / 2;
+
+                    start.multiplyScalar(sf);
+                    end.multiplyScalar(sf);
+                    mid.multiplyScalar(sf);
+                    
+                    if(color_start.r==color_end.r &&color_start.g==color_end.g&&color_start.b==color_end.b ){
+
+                    
+                    var material = new THREE.MeshLambertMaterial({ color: color_start });
+                    var object = new THREE.Mesh(cylinderGeometry, material);
+                    object.position.copy(start);
+                    object.position.lerp(end, 0.5);
+
+                    var direction = new THREE.Vector3().subVectors(end, start);
+                    var axis = new THREE.Vector3(0, 1, 0);
+                    object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+
+                    object.scale.set(1, start.distanceTo(end), 1);
+                    root.add(object);
                     }else{
-                        var lineGeometry = new THREE.Geometry();
-                        lineGeometry.vertices.push(
-                            start.clone(),
-                            mid.clone()
-                        );
-                        
-                        var lineMaterial = new THREE.LineBasicMaterial({ color: color_start,linewidth:wb });
-                        var object = new THREE.Line(lineGeometry, lineMaterial);
-                        root.add(object);
+                    var material = new THREE.MeshLambertMaterial({ color: color_start });
+                    var object = new THREE.Mesh(cylinderGeometry, material);
+                    object.position.copy(start);
+                    object.position.lerp(mid, 0.5);
 
-                        var lineGeometry = new THREE.Geometry();
-                        lineGeometry.vertices.push(
-                            mid.clone(),
-                            end.clone()
-                        );
-                        
-                        var lineMaterial = new THREE.LineBasicMaterial({ color: color_end,linewidth:wb });
-                        var object = new THREE.Line(lineGeometry, lineMaterial);
+                    var direction = new THREE.Vector3().subVectors(mid, start);
+                    var axis = new THREE.Vector3(0, 1, 0);
+                    object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
 
-                        root.add(object);
+                    object.scale.set(1, start.distanceTo(mid), 1);
+                    root.add(object);
+
+                    var material = new THREE.MeshLambertMaterial({ color: color_end});
+                    var object = new THREE.Mesh(cylinderGeometry, material);
+                    object.position.copy(mid);
+                    object.position.lerp(end, 0.5);
+
+                    var direction = new THREE.Vector3().subVectors(end, mid);
+                    var axis = new THREE.Vector3(0, 1, 0);
+                    object.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+
+                    object.scale.set(1, mid.distanceTo(end), 1);
+                    root.add(object);
+
+                    // var material = new THREE.MeshPhongMaterial({ color: color_end });
+                    // var object2 = new THREE.Mesh(cylinderGeometry, material);
+                    // object2.position.copy(end);
+                    // object2.position.lerp(mid, 0.5);
+
+                    // var direction = new THREE.Vector3().subVectors(mid, end);
+                    // var axis = new THREE.Vector3(0, 1, 0);
+                    // object2.quaternion.setFromUnitVectors(axis, direction.clone().normalize());
+
+                    // object2.scale.set(1, end.distanceTo(mid), 1);
+
                     }
+
                     
 
                     
@@ -407,7 +487,7 @@ var vestaObj = function(){
                     color.g = colors.getY(i);
                     color.b = colors.getZ(i);
 
-                    var material = new THREE.MeshPhysicalMaterial({ color: color });
+                    var material = new THREE.MeshLambertMaterial({ color: color });
 
                     var atom = json.atoms[i];
 
