@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import './BtnSetting.css';
 import {Card,Row,Col,Jumbotron,Button,Container,InputGroup,FormControl,Accordion} from 'react-bootstrap';
 import { MdUndo,MdRedo,MdSettingsBackupRestore,MdRemove,MdLinearScale,MdGrain,MdShare,MdMoreHoriz,MdZoomOutMap,MdFullscreen,MdClose,MdCached,MdArrowDownward,MdArrowUpward,MdArrowBack,MdRefresh,MdArrowForward,MdRotateLeft,MdRotateRight } from 'react-icons/md';
-import { FiMove } from "react-icons/fi";
-import { AiOutlineGateway } from "react-icons/ai";
-import { WiMoonAltFull } from "react-icons/wi";
 import { TiFolderOpen } from "react-icons/ti";
 
 
