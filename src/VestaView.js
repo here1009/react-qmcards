@@ -761,7 +761,7 @@ var vestaObj = function(){
         this.gmount2.style.position="absolute";
         //this.gmount2.style.backgroundColor="#000";
         this.gmount2.style.top=(38)+"px";
-        this.gmount2.style.left=(0)+"px";
+        this.gmount2.style.left=(20)+"px";
         this.gmount2.style.margin=0;
         this.gmount2.style.padding=0;
         this.gmount2.appendChild(this.renderer2.domElement);

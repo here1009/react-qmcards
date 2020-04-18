@@ -12,7 +12,7 @@ function Structure() {
     return (
         <div>
             <Row>
-                <Col lg={12} id="vesta">
+                <Col lg={10} id="vesta" style={{margin:"0 auto",}}>
                     <VestaModal></VestaModal>
                 </Col>
 
