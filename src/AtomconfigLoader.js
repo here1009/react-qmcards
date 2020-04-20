@@ -223,31 +223,6 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 		}
 
-		function parseBond( start, length ) {
-
-			var eatom = parseInt( lines[ i ].substr( start, length ) );
-
-			if ( eatom ) {
-
-				var h = hash( satom, eatom );
-
-				if ( bhash[ h ] === undefined ) {
-
-					bonds.push( [ satom - 1, eatom - 1, 1 ] );
-					bhash[ h ] = bonds.length - 1;
-
-				} else {
-
-					// doesn't really work as almost all PDBs
-					// have just normal bonds appearing multiple
-					// times instead of being double/triple bonds
-					// bonds[bhash[h]][2] += 1;
-
-				}
-
-			}
-
-		}
 
 		function buildGeometry() {
 
@@ -361,27 +336,6 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			}
 			return neigh.slice();
 		}
-		function gen_bond_type(atoms,al,natom) {
-			var bond_type=new Map();
-			for (var i=0;i<natom;i++){
-				var ta = atoms[i][5];
-				var fa =[atoms[i][6],atoms[i][7],atoms[i][8]];
-				var neigh=gen_neigh(atoms,al,natom,fa,ta)
-				for(var j=0;j<neigh.length;j++){
-					var tb = neigh[j][5];
-					if(ta<tb) {
-						if(!bond_type.has([ta,tb].toString())){
-							bond_type.set([ta,tb].toString(), true);
-						}
-					}else{
-						if(!bond_type.has([tb,ta].toString())) {
-							bond_type.set([tb,ta].toString(), true);
-						}
-					}
-				}
-			}
-			return bond_type;
-		}
 		function check_in_range(a,l,r){
 			var [x,y,z]=[a[0],a[1],a[2]];
 			var t1 = (x >= l[0] || Math.abs(x - l[0]) < eps) && (x <= r[0] || Math.abs(x - r[0]) < eps);
@@ -484,7 +438,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			}
 		}	
 
-		var CPK = { h: [255, 255, 255], he: [217, 255, 255], li: [204, 128, 255], be: [194, 255, 0], b: [255, 181, 181], 
+		var CPK = { h: [229, 229, 229], he: [217, 255, 255], li: [204, 128, 255], be: [194, 255, 0], b: [255, 181, 181], 
 					c: [144, 144, 144], n: [48, 80, 248], o: [255, 13, 13], f: [144, 224, 80], ne: [179, 227, 245], 
 					na: [171, 92, 242], mg: [138, 255, 0], al: [191, 166, 166], si: [240, 200, 160], p: [255, 128, 0], 
 					s: [255, 255, 48], cl: [31, 240, 31], ar: [128, 209, 227], k: [143, 64, 212], ca: [61, 255, 0], 
@@ -653,10 +607,15 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var in_big=[];
 		var in_small=new Map();
 		var big_natom=0;
-		var n1=Math.floor(frcutx);
-		var n2=Math.floor(frcuty);
-		var n3=Math.floor(frcutz);
-	
+		var n1=Math.ceil(frcutx);
+		var n2=Math.ceil(frcuty);
+		var n3=Math.ceil(frcutz);
+		
+		if(this.bond_depth==0){
+			n1=0;
+			n2=0;
+			n3=0;
+		}
 		for (var ia = 0; ia < natom; ia++) {
 			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
 			for (var i = -n1; i <= n1; i++) {
@@ -765,14 +724,7 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 			check_add_neigh_out_boundary(ia,isec,this.bond_depth,"H")
 			
 		}
-		//console.log(big_atoms);
-		//atoms=big_atoms.slice();
-		//natom=big_natom;
-		//al=big_al.slice();
-
-		// calculate bond
-		//console.log(in_big);
-		//console.log(in_small);
+		
 		for ( var i=0; i<natom; i ++) {
 			var satom=i+1;
 			var dis=1.e10;

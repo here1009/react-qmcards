@@ -31,7 +31,7 @@ var vestaObj = function(){
     this.al=[];
     this.atoms=[];
     this.sf= 20;
-    this.asf= 0.05;
+    this.asf= 0.06;
     this.wb=2;
     this.visualizationType = 2;
     this.bond_depth=0;
@@ -206,17 +206,17 @@ var vestaObj = function(){
              if(text){
                  text.value=json.atoms.length.toString()+"\n";
             //     //No. type x y z color showOrnot
-            //     for(var i=0;i<json.atoms.length;i++){
-            //         var No=i+1;
-            //         var type = json.atoms[i][4];
-            //         var x = json.atoms[i][6].toFixed(3);
-            //         var y = json.atoms[i][7].toFixed(3);
-            //         var z = json.atoms[i][8].toFixed(3);
-            //         var showOrnot = true;
-            //         //var color=atoms[i]
-            //         var info=[No,type,x,y,z,showOrnot];
-            //         text.value=text.value+info.join("\t").toString()+"\n";
-            //     }
+                for(var i=0;i<json.atoms.length;i++){
+                    var No=i+1;
+                    var type = json.atoms[i][4];
+                    var x = json.atoms[i][6].toFixed(3);
+                    var y = json.atoms[i][7].toFixed(3);
+                    var z = json.atoms[i][8].toFixed(3);
+                    var showOrnot = true;
+                    //var color=atoms[i]
+                    var info=[No,type,x,y,z,showOrnot];
+                    text.value=text.value+info.join("\t").toString()+"\n";
+                }
                  }
             //
             var text=document.getElementById('txt_box');

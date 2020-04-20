@@ -39,7 +39,7 @@ function App() {
       </Navbar.Collapse>
     </Navbar>
       </div>
-      <div>
+      <div style={{width: 90+"%",margin: "0 auto"}}>
       <Switch>
       <Route exact path="/calculation" component={CALCULATION} />
       <Route path="/" component={STRUCTURE} />

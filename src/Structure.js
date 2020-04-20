@@ -19,7 +19,7 @@ function Structure() {
             </Row>
             <div className='container-fluid'>   
             <Row>
-                <Col lg={12} xs={12}>
+                <Col lg={12} xs={12} >
                     <Accordion defaultActiveKey="0">
                     <Card className="card-header">
                         <Accordion.Toggle as={Card.Header} eventKey="0" className="txt-header">
