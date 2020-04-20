@@ -202,9 +202,17 @@ var vestaObj = function(){
             plot_box();
             //
             var text=document.getElementById('txt_atoms');
+            var lines=0;
             //console.log(text);
              if(text){
                  text.value=json.atoms.length.toString()+"\n";
+                 lines=json.atoms.length+1;
+                 if(lines>20){
+                     text.rows=10;
+                 }
+                else{
+                    text.rows=lines;
+                }
             //     //No. type x y z color showOrnot
                 for(var i=0;i<json.atoms.length;i++){
                     var No=i+1;
@@ -268,6 +276,7 @@ var vestaObj = function(){
                 text.value=text.value+"\n";
                 text.value=text.value+"  Norm (inva,invb,invc):\t"+norm(ali[0]).toFixed(3).toString()+"\t"+norm(ali[1]).toFixed(3).toString()+"\t"+norm(ali[2]).toFixed(3).toString()+"\n";
                 //
+                text.rows=20;
             }
             function acos3(x,y){
                 let xy=x[0]*y[0]+x[1]*y[1]+x[2]*y[2];
