@@ -29,4 +29,6 @@ http://www.yanhuangxueyuan.com/threejs/examples/?q=text#webgl_multiple_elements_
                       +U
                       ....
 40. profile loadmodule & plot_bond
-41. 高对称K点，参考sumo
+41. 对称性，参考spglib
+42. 高对称K点，参考sumo, spglib
+43. replace js to rust
