@@ -611,11 +611,11 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 		var n2=Math.ceil(frcuty);
 		var n3=Math.ceil(frcutz);
 		
-		if(this.bond_depth==0){
-			n1=0;
-			n2=0;
-			n3=0;
-		}
+		// if(this.bond_depth==0){
+		// 	n1=0;
+		// 	n2=0;
+		// 	n3=0;
+		// }
 		for (var ia = 0; ia < natom; ia++) {
 			var atomPos=[atoms[ia][6],atoms[ia][7],atoms[ia][8]];
 			for (var i = -n1; i <= n1; i++) {
@@ -646,8 +646,8 @@ ATOMCONFIGLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 							var lt1 = (x >= 0.0 || Math.abs(x) < eps) && (x <= 1.0 || Math.abs(x - 1.0) < eps);
 							var lt2 = (y >= 0.0 || Math.abs(y) < eps) && (y <= 1.0 || Math.abs(y - 1.0) < eps);
 							var lt3 = (z >= 0.0 || Math.abs(z) < eps) && (z <= 1.0 || Math.abs(z - 1.0) < eps);
-							//if(lt1&&lt2&&lt3){
-							if(i==0 && j==0 && k==0){
+							if(lt1&&lt2&&lt3){
+							//if(i==0 && j==0 && k==0){
 								in_big.push(big_natom);
 								in_small.set(big_natom, in_big.length-1);
 								in_atoms_flag[big_natom]=1;
