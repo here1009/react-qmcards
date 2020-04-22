@@ -1,0 +1,18 @@
+[package]
+name = "firstaddon"
+version = "0.1.0"
+authors = ["here1009 <gao_yantao@yeah.net>"]
+license = "MIT"
+build = "build.rs"
+edition = "2018"
+exclude = ["artifacts.json", "index.node"]
+
+[lib]
+name = "firstaddon"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+neon-build = "0.4.0"
+
+[dependencies]
+neon = "0.4.0"
