@@ -1,5 +1,5 @@
 [package]
-name = "firstaddon"
+name = "rustaddon"
 version = "0.1.0"
 authors = ["here1009 <gao_yantao@yeah.net>"]
 license = "MIT"
@@ -8,7 +8,7 @@ edition = "2018"
 exclude = ["artifacts.json", "index.node"]
 
 [lib]
-name = "firstaddon"
+name = "rustaddon"
 crate-type = ["cdylib"]
 
 [build-dependencies]
